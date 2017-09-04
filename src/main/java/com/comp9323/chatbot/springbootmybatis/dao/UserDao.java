@@ -11,6 +11,7 @@ import com.comp9323.chatbot.springbootmybatis.model.User;
 @Mapper
 @Component
 public interface UserDao {
+
 	@Select("select * from user")
 	List<User> findAll();
 }

@@ -8,11 +8,14 @@ import org.springframework.stereotype.Service;
 import com.comp9323.chatbot.springbootmybatis.dao.UserDao;
 import com.comp9323.chatbot.springbootmybatis.model.User;
 import com.comp9323.chatbot.springbootmybatis.service.UserService;
+
 @Service
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
+
 	@Autowired
 	UserDao userDao;
-	public List<User> findAll(){
+
+	public List<User> findAll() {
 		return userDao.findAll();
 	}
 }

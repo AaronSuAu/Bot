@@ -1,7 +1,6 @@
 package com.comp9323.chatbot.springbootmybatis.controller;
 
 import java.util.HashMap;
-import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
@@ -11,9 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.comp9323.chatbot.springbootmybatis.model.User;
 import com.comp9323.chatbot.springbootmybatis.service.impl.AIService;
-import com.comp9323.chatbot.springbootmybatis.service.impl.UserServiceImpl;
 import com.google.gson.JsonElement;
 
 import ai.api.AIServiceContext;
@@ -22,19 +19,13 @@ import ai.api.model.AIResponse;
 
 @RestController
 @RequestMapping("/rest/")
-public class UserController {
-	@Autowired
-	UserServiceImpl userServiceImpl;
+public class ApiAiController {
 
 	HttpSession session = null;
 	AIServiceContext serviceContext = null;
+
 	@Autowired
 	AIService aiService;
-
-	@RequestMapping(value = "/all", method = RequestMethod.GET)
-	public List<User> getAll() {
-		return userServiceImpl.findAll();
-	}
 
 	@RequestMapping(value = "/ai", method = RequestMethod.GET)
 	public String getAIResponse(@RequestParam("query") String query) {
