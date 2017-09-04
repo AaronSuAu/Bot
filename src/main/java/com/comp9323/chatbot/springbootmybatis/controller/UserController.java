@@ -1,4 +1,4 @@
-package com.comp9323.chatbot.springbootmybatis.resource;
+package com.comp9323.chatbot.springbootmybatis.controller;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -24,7 +24,7 @@ import ai.api.model.AIResponse;
 
 @RestController
 @RequestMapping("/rest/")
-public class UserResource {
+public class UserController {
 	@Autowired
 	UserServiceImpl userServiceImpl;
 	
