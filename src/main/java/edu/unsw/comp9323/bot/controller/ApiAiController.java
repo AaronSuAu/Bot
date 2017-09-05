@@ -1,4 +1,4 @@
-package com.comp9323.chatbot.springbootmybatis.controller;
+package edu.unsw.comp9323.bot.controller;
 
 import java.util.HashMap;
 
@@ -10,12 +10,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.comp9323.chatbot.springbootmybatis.service.impl.AIService;
 import com.google.gson.JsonElement;
 
 import ai.api.AIServiceContext;
 import ai.api.AIServiceException;
 import ai.api.model.AIResponse;
+import edu.unsw.comp9323.bot.service.impl.AIService;
 
 @RestController
 @RequestMapping("/rest/")

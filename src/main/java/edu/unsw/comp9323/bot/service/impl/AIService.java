@@ -1,4 +1,4 @@
-package com.comp9323.chatbot.springbootmybatis.service.impl;
+package edu.unsw.comp9323.bot.service.impl;
 
 import javax.servlet.http.HttpSession;
 

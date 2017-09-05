@@ -1,13 +1,13 @@
-package com.comp9323.chatbot.springbootmybatis.service.impl;
+package edu.unsw.comp9323.bot.service.impl;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.comp9323.chatbot.springbootmybatis.dao.UserDao;
-import com.comp9323.chatbot.springbootmybatis.model.User;
-import com.comp9323.chatbot.springbootmybatis.service.UserService;
+import edu.unsw.comp9323.bot.dao.UserDao;
+import edu.unsw.comp9323.bot.model.User;
+import edu.unsw.comp9323.bot.service.UserService;
 
 @Service
 public class UserServiceImpl implements UserService {

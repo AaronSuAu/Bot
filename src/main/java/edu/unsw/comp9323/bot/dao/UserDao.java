@@ -1,4 +1,4 @@
-package com.comp9323.chatbot.springbootmybatis.dao;
+package edu.unsw.comp9323.bot.dao;
 
 import java.util.List;
 
@@ -6,7 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Component;
 
-import com.comp9323.chatbot.springbootmybatis.model.User;
+import edu.unsw.comp9323.bot.model.User;
 
 @Mapper
 @Component
