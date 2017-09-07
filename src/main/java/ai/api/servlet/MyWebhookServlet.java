@@ -14,7 +14,7 @@ public class MyWebhookServlet extends AIWebhookServlet {
 	protected void doWebhook(AIWebhookRequest input, Fulfillment output) {
 		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 		Date date = new Date();
-		output.setSpeech(
-				"You said: " + input.getResult().getFulfillment().getSpeech() + " at:" + dateFormat.format(date));
+		output.setSpeech("You said: " + input.getResult().getFulfillment().getSpeech() + " at:"
+				+ dateFormat.format(date) + "From Webhook Servlet");
 	}
 }
