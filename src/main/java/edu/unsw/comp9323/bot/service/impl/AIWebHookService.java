@@ -1,9 +1,6 @@
 package edu.unsw.comp9323.bot.service.impl;
 
 import java.io.Serializable;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -63,9 +60,11 @@ public class AIWebHookService {
 
 		// TODO for email
 
-		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-		Date date = new Date();
-		output.setSpeech("Webhook get: intent name:" + intentName + "return at" + dateFormat.format(date));
+		// DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+		// Date date = new Date();
+		// output.setSpeech("Webhook get: intent name:" + intentName + "return at" +
+		// dateFormat.format(date));
+		output.setSpeech(returnMsg);
 	};
 
 	/**

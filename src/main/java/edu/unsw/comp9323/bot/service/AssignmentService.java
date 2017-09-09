@@ -4,14 +4,14 @@ import edu.unsw.comp9323.bot.service.impl.AIWebHookService.AIWebhookRequest;
 
 public interface AssignmentService {
 
-	String getAllAssignment(AIWebhookRequest input);
+	public String getAllAssignment(AIWebhookRequest input);
 
-	String getAssignmentByTitle(AIWebhookRequest input);
+	public String getAssignmentByTitle(AIWebhookRequest input);
 
-	String addAssignmentByTitle(AIWebhookRequest input);
+	public String addAssignmentByTitle(AIWebhookRequest input);
 
-	String changeAssignmentByTitle(AIWebhookRequest input);
+	public String changeAssignmentByTitle(AIWebhookRequest input);
 
-	String deleteAssignmentByTitlr(AIWebhookRequest input);
+	public String deleteAssignmentByTitlr(AIWebhookRequest input);
 
 }
