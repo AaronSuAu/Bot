@@ -1,11 +1,17 @@
 package edu.unsw.comp9323.bot.model;
 
+import java.io.Serializable;
 import java.sql.Date;
 
 import org.springframework.stereotype.Component;
 
 @Component
-public class Assignment {
+public class Assignment implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	private Long id;
 	private String name;
 	private Date due_date;

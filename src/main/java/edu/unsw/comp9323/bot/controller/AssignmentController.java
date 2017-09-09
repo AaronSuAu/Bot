@@ -25,11 +25,10 @@ public class AssignmentController {
 	@RequestMapping(value = "/downloadPDF/assignment/{phase}/material/{file}", method = RequestMethod.GET, produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
 	public FileSystemResource download(HttpServletResponse response, @PathVariable("phase") String phase,
 			@PathVariable("file") String file) {
-		System.out.println(file);
+		String filePath = "assignment/" + phase + "/material/" + file + ".pdf";
 		// access file under src/main/resources
 		ClassLoader classLoader = getClass().getClassLoader();
-		File fileObj = new File(
-				classLoader.getResource("assignment/" + phase + "/material/" + file + ".pdf").getFile());
+		File fileObj = new File(classLoader.getResource(filePath).getFile());
 		response.setHeader("Content-Disposition", "attachment; filename=" + fileObj.getName());
 		return new FileSystemResource(fileObj);
 	}
@@ -43,9 +42,9 @@ public class AssignmentController {
 		System.out.println("file:" + file);
 		System.out.println("file path:" + "assignment/" + phase + "/material/" + file);
 		System.out.println();
+		String filePath = "assignment/" + phase + "/material/" + file + ".pdf";
 		ClassLoader classLoader = getClass().getClassLoader();
-		File fileObj = new File(
-				classLoader.getResource("assignment/" + phase + "/material/" + file + ".pdf").getFile());
+		File fileObj = new File(classLoader.getResource(filePath).getFile());
 		HttpHeaders httpHeaders = new HttpHeaders();
 		httpHeaders.setContentDispositionFormData("attachment", java.net.URLEncoder.encode(fileObj.getName(), "UTF-8"));
 		httpHeaders.setContentType(MediaType.parseMediaType("application/pdf"));

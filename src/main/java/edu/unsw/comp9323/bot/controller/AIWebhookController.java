@@ -10,23 +10,23 @@ import com.google.gson.Gson;
 
 import ai.api.GsonFactory;
 import ai.api.model.Fulfillment;
-import edu.unsw.comp9323.bot.service.impl.AIWebHookService;
-import edu.unsw.comp9323.bot.service.impl.AIWebHookService.AIWebhookRequest;
+import edu.unsw.comp9323.bot.service.impl.AIWebhookServiceImpl;
+import edu.unsw.comp9323.bot.service.impl.AIWebhookServiceImpl.AIWebhookRequest;
 
 @RestController
-@RequestMapping("/webhook/")
+@RequestMapping("/rest")
 public class AIWebhookController {
 
 	@Autowired
-	AIWebHookService webHookService;
+	AIWebhookServiceImpl aiWebhookServiceImpl;
 
-	@RequestMapping(value = "/", method = RequestMethod.POST)
+	@RequestMapping(value = "/webhook", method = RequestMethod.POST)
 	public String webHookAI(@RequestBody String request) {
 
 		Gson gson = GsonFactory.getDefaultFactory().getGson();
 		Fulfillment output = new Fulfillment();
 
-		webHookService.doWebhook(gson.fromJson(request, AIWebhookRequest.class), output);
+		aiWebhookServiceImpl.doWebhook(gson.fromJson(request, AIWebhookRequest.class), output);
 
 		return gson.toJson(output);
 	}

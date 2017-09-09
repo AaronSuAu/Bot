@@ -5,16 +5,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import com.google.gson.JsonElement;
 
 import ai.api.model.AIResponse;
 import ai.api.model.Fulfillment;
+import edu.unsw.comp9323.bot.service.AIWebbookService;
 import edu.unsw.comp9323.bot.service.AssignmentService;
 
-@Component
-public class AIWebHookService {
+@Service
+public class AIWebhookServiceImpl implements AIWebbookService {
 	// private static final String RESPONSE_CONTENT_TYPE = "application/json";
 	//
 	// private static final String RESPONSE_CHARACTER_ENCODING = "utf-8";
