@@ -2,6 +2,9 @@ package edu.unsw.comp9323.bot.dto;
 
 import java.io.Serializable;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class AssignmentUploadDto implements Serializable {
 	/**
 	 * 
@@ -55,6 +58,12 @@ public class AssignmentUploadDto implements Serializable {
 
 	public void setDue_date(String due_date) {
 		this.due_date = due_date;
+	}
+
+	@Override
+	public String toString() {
+		return "AssignmentUploadDto [zid=" + zid + ", password=" + password + ", name=" + name + ", due_date="
+				+ due_date + "]";
 	}
 
 }

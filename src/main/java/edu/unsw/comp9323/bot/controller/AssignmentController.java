@@ -7,7 +7,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.Date;
 import java.sql.Timestamp;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
@@ -22,7 +21,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -31,7 +29,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import edu.unsw.comp9323.bot.dao.AssignmentDao;
 import edu.unsw.comp9323.bot.dao.ResourceDao;
-import edu.unsw.comp9323.bot.dto.AssignmentUploadDto;
 import edu.unsw.comp9323.bot.model.Assignment;
 import edu.unsw.comp9323.bot.model.Resource;
 import edu.unsw.comp9323.bot.service.impl.ResourceServiceImpl;
@@ -62,18 +59,25 @@ public class AssignmentController {
 	@RequestMapping(value = "/downloadPDF/assignment/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
 	public FileSystemResource download(HttpServletResponse response, @PathVariable("id") Long id) {
 		// get filePath from database
-		resource = resourceDao.getAssignById(id);
+		System.out.println("id:" + id);
+		resource = resourceDao.getAssignmentById(id);
 		String filePath = resource.getPath();
 
 		// access file under src/main/resources
 		ClassLoader classLoader = getClass().getClassLoader();
-		File fileObj = new File(classLoader.getResource(filePath).getFile());
+		File fileObj = null;
+		try {
+			fileObj = new File(classLoader.getResource(filePath).getFile());
+		} catch (Exception e) {
+			System.out.println("file does not exit!");
+		}
+
 		response.setHeader("Content-Disposition", "attachment; filename=" + fileObj.getName());
 		return new FileSystemResource(fileObj);
 	}
 
 	/**
-	 * view PDF in broser by given resource id
+	 * view PDF in browser by given resource id
 	 * 
 	 * @param httpServletRequest
 	 * @param id
@@ -84,12 +88,22 @@ public class AssignmentController {
 	public ResponseEntity<byte[]> showPDF(HttpServletRequest httpServletRequest, @PathVariable("id") Long id)
 			throws IOException {
 		// get filePath from database
-		resource = resourceDao.getAssignById(id);
+		System.out.println("id:" + id); // debug
+		resource = resourceDao.getAssignmentById(id);
+		System.out.println(resource.toString()); // debug
+
 		String filePath = resource.getPath();
+		System.out.println(filePath); // debug
 
 		// access file under src/main/resources
 		ClassLoader classLoader = getClass().getClassLoader();
-		File fileObj = new File(classLoader.getResource(filePath).getFile());
+		File fileObj = null;
+		try {
+			fileObj = new File(classLoader.getResource(filePath).getFile());
+		} catch (Exception e) {
+			System.out.println("file does not exit!");
+		}
+
 		HttpHeaders httpHeaders = new HttpHeaders();
 		httpHeaders.setContentDispositionFormData("attachment", java.net.URLEncoder.encode(fileObj.getName(), "UTF-8"));
 		httpHeaders.setContentType(MediaType.parseMediaType("application/pdf"));
@@ -103,27 +117,28 @@ public class AssignmentController {
 	 * @param assignmentUploadDto
 	 */
 	@RequestMapping(value = "/upload/assignment", method = RequestMethod.POST)
-	public void receiveResource(@RequestParam("file") MultipartFile file,
-			@RequestBody AssignmentUploadDto assignmentUploadDto) {
+	public void receiveResource(@RequestParam("file") MultipartFile file, @RequestParam("name") String name,
+			@RequestParam("due_date_string") String due_date_string, @RequestParam("zid") String zid) {
 		/*
 		 * insert into ass table and return ass_id
 		 */
-		String name = assignmentUploadDto.getName();
-		String due_date_string = assignmentUploadDto.getDue_date();
-		// due_date need to follow certain formate: "January 2, 2010"
-		DateFormat format = new SimpleDateFormat("dd/mm/yyyy");
-		Date due_date = null;
+		java.sql.Date due_date = null;
 		try {
-			due_date = (Date) format.parse(due_date_string);
+			// due_date need to follow certain formate: "January 2, 2010"
+			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+			java.util.Date utilDate = simpleDateFormat.parse(due_date_string);
+			due_date = new Date(utilDate.getTime());
 		} catch (ParseException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		assignment.setName(name);
 		assignment.setDue_date(due_date);
-		// do insert ass
-		Long ass_id = assignmentDao.setAssignment(assignment);
 
+		// do insert ass
+		System.out.println("inserting assignment:" + assignment.toString()); // debug
+		assignmentDao.setAssignment(assignment);// return back to assignment(id)
+		System.out.println("new assignment id: " + assignment.getId().toString());
 		/*
 		 * insert into resource table
 		 */
@@ -133,16 +148,14 @@ public class AssignmentController {
 			String filePath = "src/main/resources/assignment/" + name + "/material/" + file.getOriginalFilename();
 			Path path = Paths.get(filePath);
 			Files.write(path, bytes);
-			Resource resource = new Resource();
-
-			resource.setAss_id(ass_id);
+			resource.setAss_id(assignment.getId());
 			resource.setPath(filePath);
 			resource.setTitle(file.getOriginalFilename());
 			resource.setTimestamp(new Timestamp(System.currentTimeMillis()));
-			resource.setAuthor(assignmentUploadDto.getZid());
-
+			resource.setAuthor(zid);
+			System.out.println("inserting resource:" + resource.toString()); // debug
 			resourceServiceImpl.uploadAssignResource(resource);
-
+			System.out.println("new resource id: " + resource.getId().toString());
 			// TODO jump to upload success page
 		} catch (IOException e) {
 			e.printStackTrace();

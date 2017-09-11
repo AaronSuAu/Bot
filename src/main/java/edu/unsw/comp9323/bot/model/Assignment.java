@@ -51,4 +51,9 @@ public class Assignment implements Serializable {
 		this.due_date = due_date;
 	}
 
+	@Override
+	public String toString() {
+		return "Assignment [id=" + id + ", name=" + name + ", due_date=" + due_date + "]";
+	}
+
 }

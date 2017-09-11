@@ -47,31 +47,39 @@ public class AssignmentServiceImpl implements AssignmentService {
 		System.out.println("assignment-title: " + title); // debug
 
 		List<AssignmentInfoDto> assignmentInfoDtoList = assignmentDao.findAssignmentByTitle(title);
-		System.out.println("assignment-title: " + title); // debug
 
 		return assignmentUitl.renderAssignmentReturnMsg(assignmentInfoDtoList);
 	}
 
 	/**
-	 * deprivated, add assignment can only invoke by html post, and it is handed by
-	 * AssignmentController
+	 * generate url for get file
 	 */
 	@Override
 	public String addAssignmentByTitle(AIWebhookRequest input) {
 		System.out.println("addAssignmentByTitle()"); // debug
-		System.out.println("this function has deprivated, instead, hander in AssignmenController");
-		return "this function has deprivated, instead, hander in AssignmenController";
+
+		String assignment_title = input.getResult().getParameters().get("assignment-title").getAsString();
+		String due_date_string = input.getResult().getParameters().get("assignment-due_date").getAsString();
+		String authro_zid = input.getResult().getParameters().get("assignment-author_zid").getAsString();
+		// TODO form thml for get file from user
+		return "http://localhost:8080/upload_file?assignment_title=" + assignment_title + "&due_date_string="
+				+ due_date_string + "&authro_zid=" + authro_zid;
 	}
 
 	/**
-	 * deprivated, change assignment can only invoke by html post, and it is handed
-	 * by AssignmentController
+	 * generate url for get file
+	 * 
+	 * TODO change from add assignment
 	 */
 	@Override
 	public String changeAssignmentByTitle(AIWebhookRequest input) {
-		System.out.println("changeAssignmentByTitle()"); // debug
-		System.out.println("this function has deprivated, instead, hander in AssignmenController");
-		return "this function has deprivated, instead, hander in AssignmenController";
+		System.out.println("addAssignmentByTitle()"); // debug
+
+		String assignment_title = input.getResult().getParameters().get("assignment-title").getAsString();
+		String due_date_string = input.getResult().getParameters().get("assignment-due_date").getAsString();
+		String authro_zid = input.getResult().getParameters().get("assignment-author_zid").getAsString();
+		return "http://localhost:8080/upload_file?assignment_title=" + assignment_title + "&due_date_string="
+				+ due_date_string + "&authro_zid=" + authro_zid;
 	}
 
 	/**

@@ -15,6 +15,23 @@ public class Resource {
 	private Long class_id;
 	private Timestamp upload_time;
 
+	public Resource() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	public Resource(Long id, String title, String path, String author_zid, Long ass_id, Long class_id,
+			Timestamp upload_time) {
+		super();
+		this.id = id;
+		this.title = title;
+		this.path = path;
+		this.author_zid = author_zid;
+		this.ass_id = ass_id;
+		this.class_id = class_id;
+		this.upload_time = upload_time;
+	}
+
 	public Timestamp getTimestamp() {
 		return upload_time;
 	}
@@ -69,6 +86,12 @@ public class Resource {
 
 	public void setClass_id(Long class_id) {
 		this.class_id = class_id;
+	}
+
+	@Override
+	public String toString() {
+		return "Resource [id=" + id + ", title=" + title + ", path=" + path + ", author_zid=" + author_zid + ", ass_id="
+				+ ass_id + ", class_id=" + class_id + ", upload_time=" + upload_time + "]";
 	}
 
 }

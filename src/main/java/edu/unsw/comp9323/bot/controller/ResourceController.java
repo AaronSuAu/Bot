@@ -28,41 +28,41 @@ import edu.unsw.comp9323.bot.service.impl.ResourceServiceImpl;
 public class ResourceController {
 	@Autowired
 	ResourceServiceImpl resourceServiceImpl;
-	
+
 	@RequestMapping(value = "/resource/class/{id}", method = RequestMethod.GET)
-	public List<Resource> getResourceByClass(@Param("id") Long id){
+	public List<Resource> getResourceByClass(@Param("id") Long id) {
 		return resourceServiceImpl.getResourceByClass(id);
-		
+
 	}
-	
+
 	@RequestMapping(value = "/resource/assign/{id}", method = RequestMethod.GET)
-	public List<Resource> getResourceByAssignment(@Param("id") Long id){
+	public List<Resource> getResourceByAssignment(@Param("id") Long id) {
 		return resourceServiceImpl.getResourceByAssignment(id);
 	}
-	
+
 	@RequestMapping(value = "/upload", method = RequestMethod.POST)
-	public String receiveResource(@RequestParam("file") MultipartFile file){
+	public String receiveResource(@RequestParam("file") MultipartFile file) {
 		byte[] bytes;
 		try {
 			bytes = file.getBytes();
 			String filePath = "src/main/resources/" + file.getOriginalFilename();
 			Path path = Paths.get(filePath);
-	        Files.write(path, bytes);
-	        Resource resource = new Resource();
-	        resource.setPath(filePath);
-	        resource.setTitle(file.getOriginalFilename());
-	        resource.setTimestamp(new Timestamp(System.currentTimeMillis()));
-	        resourceServiceImpl.uploadAssignResource(resource);
-	        return String.valueOf(resource.getId());
+			Files.write(path, bytes);
+			Resource resource = new Resource(); // use @autowired instead?
+			resource.setPath(filePath);
+			resource.setTitle(file.getOriginalFilename());
+			resource.setTimestamp(new Timestamp(System.currentTimeMillis()));
+			resourceServiceImpl.uploadAssignResource(resource);
+			return String.valueOf(resource.getId());
 		} catch (IOException e) {
 			e.printStackTrace();
 			return "fail";
-		}	
+		}
 	}
-	
+
 	@RequestMapping(value = "/resource/download", method = RequestMethod.GET, produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
-	public FileSystemResource getReosource(HttpServletResponse response){
+	public FileSystemResource getReosource(HttpServletResponse response) {
 		File file = new File("src/bot.sql");
-	    return new FileSystemResource(file);
+		return new FileSystemResource(file);
 	}
 }

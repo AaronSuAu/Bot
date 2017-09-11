@@ -15,8 +15,8 @@ import edu.unsw.comp9323.bot.model.Resource;
 @Component
 public interface ResourceDao {
 
-	@Select("select * from Resource where id = #{id}")
-	public Resource getAssignById(Long id);
+	@Select("select * from resource where id = #{id}")
+	Resource getAssignmentById(Long id);
 
 	@Select("select * from Resource where class_id = #{classId}")
 	public List<Resource> getResourceByClass(@Param("classId") Long classId);
