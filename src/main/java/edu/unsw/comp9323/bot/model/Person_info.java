@@ -3,7 +3,7 @@ package edu.unsw.comp9323.bot.model;
 import org.springframework.stereotype.Component;
 
 @Component
-public class User {
+public class Person_info {
 	private int id;
 	private String name;
 	private int age;

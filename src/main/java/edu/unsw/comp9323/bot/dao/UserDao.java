@@ -6,12 +6,12 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Component;
 
-import edu.unsw.comp9323.bot.model.User;
+import edu.unsw.comp9323.bot.model.Person_info;
 
 @Mapper
 @Component
 public interface UserDao {
 
 	@Select("select * from user")
-	List<User> findAll();
+	List<Person_info> findAll();
 }

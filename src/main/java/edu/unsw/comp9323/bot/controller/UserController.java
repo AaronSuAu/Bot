@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import edu.unsw.comp9323.bot.model.Resource;
-import edu.unsw.comp9323.bot.model.User;
+import edu.unsw.comp9323.bot.model.Person_info;
 import edu.unsw.comp9323.bot.service.impl.ResourceServiceImpl;
 import edu.unsw.comp9323.bot.service.impl.UserServiceImpl;
 
@@ -39,7 +39,7 @@ public class UserController {
 	ResourceServiceImpl resourceServiceImpl;
 	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public List<User> getAll() {
+	public List<Person_info> getAll() {
 		System.out.println("get all");
 		return userServiceImpl.findAll();
 	}

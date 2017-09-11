@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import edu.unsw.comp9323.bot.dao.UserDao;
-import edu.unsw.comp9323.bot.model.User;
+import edu.unsw.comp9323.bot.model.Person_info;
 import edu.unsw.comp9323.bot.service.UserService;
 
 @Service
@@ -15,7 +15,7 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	UserDao userDao;
 
-	public List<User> findAll() {
+	public List<Person_info> findAll() {
 		return userDao.findAll();
 	}
 }
