@@ -1,49 +1,34 @@
 package edu.unsw.comp9323.bot.model;
 
-import java.sql.Date;
+import java.sql.Timestamp;
 
 import org.springframework.stereotype.Component;
 
 @Component
 public class Resource {
-	private long id;
-	private long ass_id;
+
+	private Long id;
 	private String title;
 	private String path;
-	private String author;
-	private Date uploadtime;
-	private long class_id;
+	private String author_zid;
+	private Long ass_id;
+	private Long class_id;
+	private Timestamp upload_time;
 
-	public Resource() {
-		super();
-		// TODO Auto-generated constructor stub
+	public Timestamp getTimestamp() {
+		return upload_time;
 	}
 
-	public Resource(long id, long ass_id, String title, String path, String author, Date uploadtime, long class_id) {
-		super();
-		this.id = id;
-		this.ass_id = ass_id;
-		this.title = title;
-		this.path = path;
-		this.author = author;
-		this.uploadtime = uploadtime;
-		this.class_id = class_id;
+	public void setTimestamp(Timestamp timestamp) {
+		this.upload_time = timestamp;
 	}
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public long getAss_id() {
-		return ass_id;
-	}
-
-	public void setAss_id(long ass_id) {
-		this.ass_id = ass_id;
 	}
 
 	public String getTitle() {
@@ -63,26 +48,26 @@ public class Resource {
 	}
 
 	public String getAuthor() {
-		return author;
+		return author_zid;
 	}
 
 	public void setAuthor(String author) {
-		this.author = author;
+		this.author_zid = author;
 	}
 
-	public Date getUploadtime() {
-		return uploadtime;
+	public Long getAss_id() {
+		return ass_id;
 	}
 
-	public void setUploadtime(Date uploadtime) {
-		this.uploadtime = uploadtime;
+	public void setAss_id(Long assign_id) {
+		this.ass_id = assign_id;
 	}
 
-	public long getClass_id() {
+	public Long getClass_id() {
 		return class_id;
 	}
 
-	public void setClass_id(long class_id) {
+	public void setClass_id(Long class_id) {
 		this.class_id = class_id;
 	}
 
