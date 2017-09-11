@@ -4,15 +4,30 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class Person_info {
-	private int id;
+	private String zId;
+	private Long group_nb;
+	private String email;
 	private String name;
-	private int age;
-	private int number;
-	public int getId() {
-		return id;
+	private int role;
+	private String password;
+	
+	public String getzId() {
+		return zId;
 	}
-	public void setId(int id) {
-		this.id = id;
+	public void setzId(String zId) {
+		this.zId = zId;
+	}
+	public Long getGroup_nb() {
+		return group_nb;
+	}
+	public void setGroup_nb(Long group_nb) {
+		this.group_nb = group_nb;
+	}
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
 	}
 	public String getName() {
 		return name;
@@ -20,17 +35,18 @@ public class Person_info {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public int getAge() {
-		return age;
+	public int getRole() {
+		return role;
 	}
-	public void setAge(int age) {
-		this.age = age;
+	public void setRole(int role) {
+		this.role = role;
 	}
-	public int getNumber() {
-		return number;
+	public String getPassword() {
+		return password;
 	}
-	public void setNumber(int number) {
-		this.number = number;
+	public void setPassword(String password) {
+		this.password = password;
 	}
+	
 	
 }
