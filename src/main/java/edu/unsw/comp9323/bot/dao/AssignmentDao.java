@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Component;
 
 import edu.unsw.comp9323.bot.dto.AssignmentInfoDto;
@@ -31,6 +32,9 @@ public interface AssignmentDao {
 	@Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "ass.id")
 	void setAssignment(Assignment assignment);
 
-	@Delete("DELETE FROM ass WHERE name =#{title}")
+	@Delete("DELETE FROM ass WHERE name = #{title}")
 	void deleteAssignmentByTitle(String title);
+
+	@Update("UPDATE ass SET (name, due_date) WHERE id = #{id}")
+	void updateAssignment(Assignment assignment);
 }

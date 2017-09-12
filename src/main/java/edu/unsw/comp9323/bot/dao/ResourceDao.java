@@ -2,6 +2,7 @@ package edu.unsw.comp9323.bot.dao;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Options;
@@ -28,5 +29,8 @@ public interface ResourceDao {
 			+ "values (#{ass_id}, #{title}, #{path}, #{author_zid}, #{upload_time}, #{class_id})")
 	@Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "resource.id")
 	public Long uploadAssignResource(Resource resource);
+
+	@Delete("DELETE FROM resource WHERE id = #{id}")
+	void deleteResource(Resource resource);
 
 }

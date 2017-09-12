@@ -9,6 +9,7 @@ import java.sql.Date;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -116,8 +117,8 @@ public class AssignmentController {
 	 * @param file
 	 * @param assignmentUploadDto
 	 */
-	@RequestMapping(value = "/upload/assignment", method = RequestMethod.POST)
-	public void receiveResource(@RequestParam("file") MultipartFile file, @RequestParam("name") String name,
+	@RequestMapping(value = "/assignment", method = RequestMethod.POST)
+	public void setAssignment(@RequestParam("file") MultipartFile file, @RequestParam("name") String name,
 			@RequestParam("due_date_string") String due_date_string, @RequestParam("zid") String zid) {
 		/*
 		 * insert into ass table and return ass_id
@@ -139,6 +140,7 @@ public class AssignmentController {
 		System.out.println("inserting assignment:" + assignment.toString()); // debug
 		assignmentDao.setAssignment(assignment);// return back to assignment(id)
 		System.out.println("new assignment id: " + assignment.getId().toString());
+
 		/*
 		 * insert into resource table
 		 */
@@ -163,4 +165,69 @@ public class AssignmentController {
 		}
 	}
 
+	/**
+	 * update assignment and assignment resource. TODO multiple assignment materials
+	 * 
+	 * @param file
+	 * @param assignmentUploadDto
+	 */
+	@RequestMapping(value = "/assignment", method = RequestMethod.PUT)
+	public void receiveResource(@RequestParam("file") MultipartFile file, @RequestParam("ass_id") Long ass_id,
+			@RequestParam("name") String name, @RequestParam("due_date_string") String due_date_string,
+			@RequestParam("zid") String zid) {
+		/*
+		 * update ass table
+		 */
+		java.sql.Date due_date = null;
+		try {
+			// due_date need to follow certain formate: "January 2, 2010"
+			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+			java.util.Date utilDate = simpleDateFormat.parse(due_date_string);
+			due_date = new Date(utilDate.getTime());
+		} catch (ParseException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		assignment.setName(name);
+		assignment.setDue_date(due_date);
+
+		// do insert ass
+		System.out.println("update assignment:" + assignment.toString()); // debug
+		assignmentDao.updateAssignment(assignment);// return back to assignment(id)
+		System.out.println("updated assignment: " + assignment.toString());
+
+		/*
+		 * update resource table
+		 */
+		byte[] bytes;
+		try {
+			// delete old file(s) and row(s) in resource table
+			List<Resource> toDeleteResources = resourceDao.getResourceByAssignment(ass_id);
+			for (Resource toDeleteResource : toDeleteResources) {
+				File toDeletefile = new File(toDeleteResource.getPath());
+				toDeletefile.delete();
+				resourceDao.deleteResource(toDeleteResource);
+			}
+
+			// add write new file(s)
+			bytes = file.getBytes();
+			String filePath = "src/main/resources/assignment/" + name + "/material/" + file.getOriginalFilename();
+			Path path = Paths.get(filePath);
+			Files.write(path, bytes);
+
+			// update resource row, now only single file
+			resource.setAss_id(assignment.getId());
+			resource.setPath(filePath);
+			resource.setTitle(file.getOriginalFilename());
+			resource.setTimestamp(new Timestamp(System.currentTimeMillis()));
+			resource.setAuthor(zid);
+			System.out.println("inserting resource:" + resource.toString()); // debug
+			resourceDao.uploadAssignResource(resource);
+			System.out.println("new resource id: " + resource.getId().toString());
+			// TODO jump to upload success page
+		} catch (IOException e) {
+			e.printStackTrace();
+			// TODO jump to upload fail page
+		}
+	}
 }
