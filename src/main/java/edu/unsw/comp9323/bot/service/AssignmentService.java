@@ -15,4 +15,10 @@ public interface AssignmentService {
 
 	public String deleteAssignmentByTitlr(AIWebhookRequest input);
 
+	public String studentSubmitAssignment(AIWebhookRequest input);
+
+	public String getUnmarkedAssignmentZid(AIWebhookRequest input);
+
+	public String markAssignmentByZid(AIWebhookRequest input);
+
 }

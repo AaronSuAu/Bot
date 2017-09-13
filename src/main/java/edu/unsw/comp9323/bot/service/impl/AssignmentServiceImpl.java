@@ -59,10 +59,16 @@ public class AssignmentServiceImpl implements AssignmentService {
 		System.out.println("addAssignmentByTitle()"); // debug
 
 		String assignment_title = input.getResult().getParameters().get("assignment-title").getAsString();
+		List<String> allAassignmentTitles = assignmentDao.getAllAssignmentTitles();
+		if (allAassignmentTitles.contains(assignment_title)) {
+			System.out.println("titile name dupl");
+			return "assignment:" + assignment_title + " has exist, do you want to change that assignment info?";
+		}
 		String due_date_string = input.getResult().getParameters().get("assignment-due_date").getAsString();
 		String authro_zid = input.getResult().getParameters().get("assignment-author_zid").getAsString();
-		// TODO form thml for get file from user
-		return "http://localhost:8080/upload_file?assignment_title=" + assignment_title + "&due_date_string="
+		String type = "add_assignment";
+		// TODO jump to form html for get file from user, return back url is below
+		return "http://localhost:8080/assignment/add?assignment_title=" + assignment_title + "&due_date_string="
 				+ due_date_string + "&authro_zid=" + authro_zid;
 	}
 
@@ -73,12 +79,14 @@ public class AssignmentServiceImpl implements AssignmentService {
 	 */
 	@Override
 	public String changeAssignmentByTitle(AIWebhookRequest input) {
-		System.out.println("addAssignmentByTitle()"); // debug
+		System.out.println("changeAssignmentByTitle()"); // debug
 
 		String assignment_title = input.getResult().getParameters().get("assignment-title").getAsString();
 		String due_date_string = input.getResult().getParameters().get("assignment-due_date").getAsString();
 		String authro_zid = input.getResult().getParameters().get("assignment-author_zid").getAsString();
-		return "http://localhost:8080/upload_file?assignment_title=" + assignment_title + "&due_date_string="
+		String type = "update_assignment";
+		// TODO jump to form html for get file from user return back url is below
+		return "http://localhost:8080/assignment/update?&assignment_title=" + assignment_title + "&due_date_string="
 				+ due_date_string + "&authro_zid=" + authro_zid;
 	}
 
@@ -100,6 +108,24 @@ public class AssignmentServiceImpl implements AssignmentService {
 			// delete fail
 			return "delete assignment:" + title + "success.";
 		}
+	}
+
+	@Override
+	public String studentSubmitAssignment(AIWebhookRequest input) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getUnmarkedAssignmentZid(AIWebhookRequest input) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String markAssignmentByZid(AIWebhookRequest input) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

@@ -117,7 +117,7 @@ public class AssignmentController {
 	 * @param file
 	 * @param assignmentUploadDto
 	 */
-	@RequestMapping(value = "/assignment", method = RequestMethod.POST)
+	@RequestMapping(value = "/assignment/add", method = RequestMethod.POST)
 	public void setAssignment(@RequestParam("file") MultipartFile file, @RequestParam("name") String name,
 			@RequestParam("due_date_string") String due_date_string, @RequestParam("zid") String zid) {
 		/*
@@ -171,10 +171,9 @@ public class AssignmentController {
 	 * @param file
 	 * @param assignmentUploadDto
 	 */
-	@RequestMapping(value = "/assignment", method = RequestMethod.PUT)
-	public void receiveResource(@RequestParam("file") MultipartFile file, @RequestParam("ass_id") Long ass_id,
-			@RequestParam("name") String name, @RequestParam("due_date_string") String due_date_string,
-			@RequestParam("zid") String zid) {
+	@RequestMapping(value = "/assignment/update", method = RequestMethod.POST)
+	public void receiveResource(@RequestParam("file") MultipartFile file, @RequestParam("name") String name,
+			@RequestParam("due_date_string") String due_date_string, @RequestParam("zid") String zid) {
 		/*
 		 * update ass table
 		 */
@@ -188,6 +187,8 @@ public class AssignmentController {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
+		Long ass_id = assignmentDao.getAssignmentIdByTitle(name).getId();
+		assignment.setId(ass_id);
 		assignment.setName(name);
 		assignment.setDue_date(due_date);
 

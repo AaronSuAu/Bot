@@ -35,6 +35,12 @@ public interface AssignmentDao {
 	@Delete("DELETE FROM ass WHERE name = #{title}")
 	void deleteAssignmentByTitle(String title);
 
-	@Update("UPDATE ass SET (name, due_date) WHERE id = #{id}")
+	@Update("UPDATE ass SET name=#{name}, due_date = #{due_date} WHERE id = #{id}")
 	void updateAssignment(Assignment assignment);
+
+	@Select("SELECT * FROM ass  WHERE name = #{title}")
+	Assignment getAssignmentIdByTitle(String title);
+
+	@Select("SELECT name FROM ass")
+	List<String> getAllAssignmentTitles();
 }

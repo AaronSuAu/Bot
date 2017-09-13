@@ -19,10 +19,10 @@ public interface ResourceDao {
 	@Select("select * from resource where id = #{id}")
 	Resource getAssignmentById(Long id);
 
-	@Select("select * from Resource where class_id = #{classId}")
+	@Select("select * from resource where class_id = #{classId}")
 	public List<Resource> getResourceByClass(@Param("classId") Long classId);
 
-	@Select("select * from Resource where assign_id = #{assignId}")
+	@Select("select * from resource where ass_id = #{assignId}")
 	public List<Resource> getResourceByAssignment(@Param("assignId") Long assignId);
 
 	@Insert("insert into resource (ass_id, title, path, author_zid, upload_time, class_id)"
