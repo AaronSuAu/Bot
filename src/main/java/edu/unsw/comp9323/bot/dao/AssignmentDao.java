@@ -43,4 +43,7 @@ public interface AssignmentDao {
 
 	@Select("SELECT name FROM ass")
 	List<String> getAllAssignmentTitles();
+
+	@Select("SELECT name FROM ass WHERE id = #{id}")
+	String getAssignmentTitlesById(Long id);
 }

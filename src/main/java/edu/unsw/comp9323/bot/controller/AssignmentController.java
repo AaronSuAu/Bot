@@ -28,8 +28,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import edu.unsw.comp9323.bot.dao.Ass_studentDao;
 import edu.unsw.comp9323.bot.dao.AssignmentDao;
+import edu.unsw.comp9323.bot.dao.Person_infoDao;
 import edu.unsw.comp9323.bot.dao.ResourceDao;
+import edu.unsw.comp9323.bot.model.Ass_student;
 import edu.unsw.comp9323.bot.model.Assignment;
 import edu.unsw.comp9323.bot.model.Resource;
 import edu.unsw.comp9323.bot.service.impl.ResourceServiceImpl;
@@ -48,6 +51,12 @@ public class AssignmentController {
 	ResourceDao resourceDao;
 	@Autowired
 	Resource resource;
+	@Autowired
+	Ass_student ass_student;
+	@Autowired
+	Person_infoDao person_infoDao;
+	@Autowired
+	Ass_studentDao ass_studentDao;
 
 	/**
 	 * download PDF by given resource id
@@ -56,7 +65,6 @@ public class AssignmentController {
 	 * @param id
 	 * @return download file
 	 */
-
 	@RequestMapping(value = "/downloadPDF/assignment/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
 	public FileSystemResource download(HttpServletResponse response, @PathVariable("id") Long id) {
 		// get filePath from database
@@ -115,7 +123,9 @@ public class AssignmentController {
 	 * add assignment and assignment resource. TODO multiple assignment materials
 	 * 
 	 * @param file
-	 * @param assignmentUploadDto
+	 * @param name
+	 * @param due_date_string
+	 * @param zid
 	 */
 	@RequestMapping(value = "/assignment/add", method = RequestMethod.POST)
 	public void setAssignment(@RequestParam("file") MultipartFile file, @RequestParam("name") String name,
@@ -169,7 +179,9 @@ public class AssignmentController {
 	 * update assignment and assignment resource. TODO multiple assignment materials
 	 * 
 	 * @param file
-	 * @param assignmentUploadDto
+	 * @param name
+	 * @param due_date_string
+	 * @param zid
 	 */
 	@RequestMapping(value = "/assignment/update", method = RequestMethod.POST)
 	public void receiveResource(@RequestParam("file") MultipartFile file, @RequestParam("name") String name,
@@ -230,5 +242,103 @@ public class AssignmentController {
 			e.printStackTrace();
 			// TODO jump to upload fail page
 		}
+	}
+
+	/**
+	 * student submit assignment(only one file).
+	 * 
+	 * @param file
+	 * @param ass_id
+	 * @param zid
+	 */
+	@RequestMapping(value = "/assignment/submission", method = RequestMethod.POST)
+	public void submission(@RequestParam("file") MultipartFile file, @RequestParam("ass_id") Long ass_id,
+			@RequestParam("zid") String zid) {
+		System.out.println("submission");
+		/*
+		 * insert into ass_student table
+		 */
+		ass_student.setAss_id(ass_id);
+		// get group_nb
+		Long group_nb = person_infoDao.findGroupNbByZid(zid);
+		ass_student.setGroup_nb(group_nb);
+		ass_student.setSubmit_time(new Timestamp(System.currentTimeMillis()));
+		String assignment_title = assignmentDao.getAssignmentTitlesById(ass_id);
+
+		byte[] bytes;
+		try {
+			// write file
+			bytes = file.getBytes();
+			String filePath = "src/main/resources/assignment/" + assignment_title + "/submission/group" + group_nb + "/"
+					+ file.getOriginalFilename();
+			Path path = Paths.get(filePath);
+			Files.write(path, bytes);
+
+			// insert into ass_student table
+			ass_student.setPath(path.toString());
+			System.out.println("inserting ass_student:" + ass_student.toString()); // debug
+			ass_studentDao.setSubmission(ass_student);
+			System.out.println("new ass_student id: " + ass_student.getId().toString());
+			// TODO jump to upload success page
+		} catch (IOException e) {
+			e.printStackTrace();
+			// TODO jump to upload fail page
+		}
+	}
+
+	/**
+	 * download submission by given ass_student id
+	 * 
+	 * @param response
+	 * @param id
+	 * @return download file
+	 */
+	@RequestMapping(value = "/download/assignment/submission/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+	public FileSystemResource downloadSubmission(HttpServletResponse response, @PathVariable("id") Long id) {
+		// get filePath from database
+		System.out.println("downloadSubmission");
+		System.out.println("id:" + id);
+		String filePath = ass_studentDao.gePathById(id);
+		System.out.println("filePath: " + filePath);
+		// access file under src/main/resources
+		ClassLoader classLoader = getClass().getClassLoader();
+		File fileObj = null;
+		try {
+			fileObj = new File(classLoader.getResource(filePath).getFile());
+		} catch (Exception e) {
+			System.out.println("file does not exit!");
+		}
+		response.setHeader("Content-Disposition", "attachment; filename=" + fileObj.getName());
+		return new FileSystemResource(fileObj);
+	}
+
+	/**
+	 * view submission PDF in browser by given ass_student id
+	 *
+	 * @param httpServletRequest
+	 * @param id
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping(value = "/showPDF/assignment/submission/{id}", method = RequestMethod.GET)
+	public ResponseEntity<byte[]> showSubmissionPDF(HttpServletRequest httpServletRequest, @PathVariable("id") Long id)
+			throws IOException {
+		// get filePath from database
+		System.out.println("showSubmissionPDF");
+		System.out.println("id:" + id);
+		String filePath = ass_studentDao.gePathById(id);
+		System.out.println("filePath: " + filePath);
+		// access file under src/main/resources
+		ClassLoader classLoader = getClass().getClassLoader();
+		File fileObj = null;
+		try {
+			fileObj = new File(classLoader.getResource(filePath).getFile());
+		} catch (Exception e) {
+			System.out.println("file does not exit!");
+		}
+		HttpHeaders httpHeaders = new HttpHeaders();
+		httpHeaders.setContentDispositionFormData("attachment", java.net.URLEncoder.encode(fileObj.getName(), "UTF-8"));
+		httpHeaders.setContentType(MediaType.parseMediaType("application/pdf"));
+		return new ResponseEntity<byte[]>(FileUtils.readFileToByteArray(fileObj), httpHeaders, HttpStatus.OK);
 	}
 }

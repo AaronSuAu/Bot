@@ -17,8 +17,12 @@ public interface AssignmentService {
 
 	public String studentSubmitAssignment(AIWebhookRequest input);
 
-	public String getUnmarkedAssignmentZid(AIWebhookRequest input);
+	public String getAllUnmarkedAssignmentGroup(AIWebhookRequest input);
 
-	public String markAssignmentByZid(AIWebhookRequest input);
+	public String getAssSubmissionByAssTitleAndGroupNb(AIWebhookRequest input);
+
+	public String markAssignmentByGroupNb(AIWebhookRequest input);
+
+	public String getUnsubmitingGroup(AIWebhookRequest input);
 
 }
