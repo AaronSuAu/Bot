@@ -26,10 +26,11 @@ public class ReminderController {
 	private AIWebhookRequest input;
 	
 	
+	
 	@RequestMapping(value = "/getReminders", method = RequestMethod.GET)
 	public String getReminders(){
 		List<Reminder> reminders = reminderService.getAllReminders(input);
-		return reminders.size() + "size";
+		return reminders.size() + " ";
 	}
 	@RequestMapping(value = "/addReminders", method = RequestMethod.GET)
 	public void addRemindersBy(){

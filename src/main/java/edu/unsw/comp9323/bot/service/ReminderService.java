@@ -9,6 +9,6 @@ public interface ReminderService {
 	public List<Reminder> getAllReminders(AIWebhookRequest input);
 	public boolean deleteReminder(AIWebhookRequest input);
 	public boolean addReminder(AIWebhookRequest input);
-	public boolean remindByEmail(AIWebhookRequest input);
+	public void remindByEmail();
 	public boolean updateReminder(AIWebhookRequest input);
 }

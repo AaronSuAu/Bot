@@ -10,6 +10,7 @@ import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Component;
 
+import edu.unsw.comp9323.bot.model.Person_info;
 import edu.unsw.comp9323.bot.model.Reminder;
 
 @Mapper
@@ -37,15 +38,6 @@ public interface ReminderDao {
 	/*
 	 * update a reminder
 	 */
-	@Update("update from reminder " + "set date = #{date}" + ", content = #{content}, title = #{title}"
-			+ ", owner = #{owner} " + "where id = #{id}")
-	boolean updateReminder(@Param("reminder") Reminder reminder);
-
-	/*
-	 * create a new reminder
-	 */
-	@Insert("insert into reminder (date, content, title, owner) " + "values(date, content, title, owner)")
-	boolean insertReminder(@Param("reminder") Reminder reminder);
 
 	// /*
 	// * get all the receivers
@@ -55,5 +47,23 @@ public interface ReminderDao {
 	// + "where")
 	// List<User> getReceivers(@Param("id") String id);
 	//
+
+	@Update("update reminder " + "set date = #{date} " + ", content = #{content}, title = #{title} "
+			+ ", owner = #{owner} " + "where id = #{id}")
+	boolean updateReminder(Reminder reminder);
+
+	/*
+	 * create a new reminder
+	 */
+	@Insert("insert into reminder (date, content, title, owner) " + "values(#{date}, #{content}, #{title}, #{owner})")
+	boolean insertReminder(Reminder reminder);
+
+	/*
+	 * get all the receivers
+	 */
+	@Select("select p.zid, p.group_nb, p.email, p.name, p.role, p.password "
+			+ "from person_info p , reminder r, reminder_receiver rr "
+			+ "where r.id = #{id} and rr.reminder = r.id and rr.receiver = p.zid")
+	List<Person_info> getReceivers(@Param("id") String id);
 
 }

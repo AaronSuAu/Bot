@@ -67,7 +67,7 @@ public class EmailServiceImpl implements EmailService {
 	            arrays.add(stu);
 	            trueStatement+=stu+" ";
 	            Person_info find = new Person_info();
-	            find.setzId(stu);
+	            find.setZid(stu);
 	        
 	            List<Person_info> list = userDao.findUserFromZid(find);
 	            if(list.size()==0) {
@@ -81,6 +81,7 @@ public class EmailServiceImpl implements EmailService {
 	            }
 	    }
 	    trueStatement+="success.";
+
         String body = body_string;
         String subject = subject_string;
 
@@ -141,7 +142,7 @@ public class EmailServiceImpl implements EmailService {
 	            arrays.add(stu);
 	            trueStatement+=stu+" ";
 	            Person_info find = new Person_info();
-	            find.setzId(stu);
+	            find.setZid(stu);
 	        
 	            List<Person_info> list = userDao.findUserFromZid(find);
 	            if(list.size()==0) {
