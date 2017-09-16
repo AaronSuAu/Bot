@@ -19,28 +19,36 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 @RestController
-@RequestMapping("/rest")
+@RequestMapping("/resource")
 public class AccessFileController {
-	// path field can not including suffix
-	@RequestMapping(value = "/download/{path}", method = RequestMethod.GET, produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
-	public FileSystemResource download(HttpServletResponse response, @PathVariable("path") String path) {
+
+	@RequestMapping(value = "/downloadPDF/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+	public FileSystemResource download(HttpServletResponse response, @PathVariable("id") Long id) {
+
+		// TODO get fail path from id
 		// access file under src/main/resources
+		String filePath = "";
+
 		ClassLoader classLoader = getClass().getClassLoader();
-		File file = new File(classLoader.getResource("test.pdf").getFile());
-		response.setHeader("Content-Disposition", "attachment; filename=" + file.getName());
-		return new FileSystemResource(file);
+		File fileObj = new File(classLoader.getResource(filePath).getFile());
+		response.setHeader("Content-Disposition", "attachment; filename=" + fileObj.getName());
+		return new FileSystemResource(fileObj);
 	}
 
-	@RequestMapping(value = "/showPDF/{path}", method = RequestMethod.GET)
-	public ResponseEntity<byte[]> showPDF(HttpServletRequest httpServletRequest, @PathVariable("path") String path)
+	@RequestMapping(value = "/showPDF/{id}", method = RequestMethod.GET)
+	public ResponseEntity<byte[]> showPDF(HttpServletRequest httpServletRequest, @PathVariable("id") Long id)
 			throws IOException {
+
+		// TODO get fail path from id
 		// access file under src/main/resources
+		String filePath = "";
+
 		ClassLoader classLoader = getClass().getClassLoader();
-		File file = new File(classLoader.getResource("test.pdf").getFile());
+		File fileObj = new File(classLoader.getResource(filePath).getFile());
 		HttpHeaders httpHeaders = new HttpHeaders();
-		httpHeaders.setContentDispositionFormData("attachment", java.net.URLEncoder.encode(file.getName(), "UTF-8"));
+		httpHeaders.setContentDispositionFormData("attachment", java.net.URLEncoder.encode(fileObj.getName(), "UTF-8"));
 		httpHeaders.setContentType(MediaType.parseMediaType("application/pdf"));
-		return new ResponseEntity<byte[]>(FileUtils.readFileToByteArray(file), httpHeaders, HttpStatus.OK);
+		return new ResponseEntity<byte[]>(FileUtils.readFileToByteArray(fileObj), httpHeaders, HttpStatus.OK);
 	}
 	@RequestMapping(value = "/resource/download", method = RequestMethod.GET, produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
 	public FileSystemResource getReosource(HttpServletResponse response){

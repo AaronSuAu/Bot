@@ -17,7 +17,7 @@ public class AssignmentInfoDto implements Serializable {
 	private Date due_date;
 	private Date upload_time;
 	private String author_name;
-	private String material_path;
+	private String material_id;
 
 	public AssignmentInfoDto() {
 		super();
@@ -30,7 +30,7 @@ public class AssignmentInfoDto implements Serializable {
 		this.due_date = due_date;
 		this.upload_time = upload_time;
 		this.author_name = author_name;
-		this.material_path = material_path;
+		this.material_id = material_path;
 	}
 
 	public String getName() {
@@ -65,18 +65,18 @@ public class AssignmentInfoDto implements Serializable {
 		this.author_name = author_name;
 	}
 
-	public String getMaterial_path() {
-		return material_path;
+	public String getMaterial_id() {
+		return material_id;
 	}
 
-	public void setMaterial_path(String material_path) {
-		this.material_path = material_path;
+	public void setMaterial_id(String material_id) {
+		this.material_id = material_id;
 	}
 
 	@Override
 	public String toString() {
 		return "AssignmentInfoDto [name=" + name + ", due_date=" + due_date + ", upload_time=" + upload_time
-				+ ", author_name=" + author_name + ", material_path=" + material_path + "]";
+				+ ", author_name=" + author_name + ", material_id=" + material_id + "]";
 	}
 
 }

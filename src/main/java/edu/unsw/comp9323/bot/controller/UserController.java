@@ -30,32 +30,26 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import edu.unsw.comp9323.bot.model.Resource;
 import edu.unsw.comp9323.bot.model.Person_info;
-import edu.unsw.comp9323.bot.service.impl.ResourceServiceImpl;
 import edu.unsw.comp9323.bot.service.impl.Person_infoServiceImpl;
+import edu.unsw.comp9323.bot.service.impl.ResourceServiceImpl;
 
 @RestController
 @RequestMapping("/")
 public class UserController {
 	@Autowired
 	Person_infoServiceImpl person_infoServiceImpl;
-	
+
 	@Autowired
 	ResourceServiceImpl resourceServiceImpl;
-	
+
 	@RequestMapping(value = "/user", method = RequestMethod.POST)
 	public int validateUser(@Param("zid") String user, @Param("password") String password) {
 		Person_info person_info = new Person_info();
-		person_info.setzId(user);
+		person_info.setZid(user);
 		person_info.setPassword(password);
 		return person_infoServiceImpl.validateUser(person_info);
+
 	}
-	
-	@RequestMapping(value = "/uploadFile", method = RequestMethod.GET)
-	public ModelAndView returnUploadPage(@RequestParam("assignment_title") String title,
-			@RequestParam("due_date_string") String due_date_string, 
-			@RequestParam("zid") String zid){
-		return new ModelAndView("upload");
-	}
+
 }
