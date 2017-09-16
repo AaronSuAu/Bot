@@ -25,23 +25,26 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import edu.unsw.comp9323.bot.model.Resource;
-import edu.unsw.comp9323.bot.model.User;
+import edu.unsw.comp9323.bot.model.Person_info;
 import edu.unsw.comp9323.bot.service.impl.ResourceServiceImpl;
-import edu.unsw.comp9323.bot.service.impl.UserServiceImpl;
+import edu.unsw.comp9323.bot.service.impl.Person_infoServiceImpl;
 
 @RestController
-@RequestMapping("/rest/")
+@RequestMapping("/")
 public class UserController {
 	@Autowired
-	UserServiceImpl userServiceImpl;
+	Person_infoServiceImpl person_infoServiceImpl;
 	
 	@Autowired
 	ResourceServiceImpl resourceServiceImpl;
 	
-	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public List<User> getAll() {
-		System.out.println("get all");
-		return userServiceImpl.findAll();
+	@RequestMapping(value = "/user", method = RequestMethod.POST)
+	public int validateUser(@Param("zid") String user, @Param("password") String password) {
+		Person_info person_info = new Person_info();
+		person_info.setzId(user);
+		person_info.setPassword(password);
+		return person_infoServiceImpl.validateUser(person_info);
+		
 	}
 	
 }
