@@ -11,10 +11,10 @@ import edu.unsw.comp9323.bot.dao.Person_infoDao;
 import edu.unsw.comp9323.bot.dto.AssignmentInfoDto;
 import edu.unsw.comp9323.bot.model.Ass_student;
 import edu.unsw.comp9323.bot.model.Assignment;
-import edu.unsw.comp9323.bot.model.Person_info;
 import edu.unsw.comp9323.bot.service.AssignmentService;
 import edu.unsw.comp9323.bot.service.impl.AIWebhookServiceImpl.AIWebhookRequest;
-import edu.unsw.comp9323.bot.util.assignmentUitl;
+import edu.unsw.comp9323.bot.util.AssignmentUtil;
+import edu.unsw.comp9323.bot.util.ValidationUtil;
 
 @Service
 public class AssignmentServiceImpl implements AssignmentService {
@@ -24,13 +24,15 @@ public class AssignmentServiceImpl implements AssignmentService {
 	@Autowired
 	Assignment assignment;
 	@Autowired
-	Person_info person_info;
-	@Autowired
 	Person_infoDao person_infoDao;
 	@Autowired
 	Ass_student ass_student;
 	@Autowired
 	Ass_studentDao ass_studentDao;
+	@Autowired
+	ValidationUtil validationUtil;
+	@Autowired
+	AssignmentUtil assignmentUtil;
 
 	/**
 	 * return all assignments(list) including assignment name, due date, upload
@@ -41,11 +43,16 @@ public class AssignmentServiceImpl implements AssignmentService {
 	@Override
 	public String getAllAssignment(AIWebhookRequest input) {
 		System.out.println("getAllAssignment()"); // debug
-		// TODO authentication authorization
+
+		// Authorication
+		if (!validationUtil.isLecturerOrStudent(input)) {
+			return "Authorication fail";
+		}
+
 		List<AssignmentInfoDto> assignmentInfoDtoList = assignmentDao.findAll();
 		System.out.println(assignmentInfoDtoList.toString()); // debug
 
-		return assignmentUitl.renderAssignmentReturnMsg(assignmentInfoDtoList);
+		return assignmentUtil.renderAssignmentReturnMsg(assignmentInfoDtoList);
 	}
 
 	/**
@@ -57,13 +64,18 @@ public class AssignmentServiceImpl implements AssignmentService {
 	@Override
 	public String getAssignmentByTitle(AIWebhookRequest input) {
 		System.out.println("getAssignmentByTitle()"); // debug
-		// TODO authentication authorization
+
+		// Authorication
+		if (!validationUtil.isLecturer(input)) {
+			return "Authorication fail";
+		}
+
 		String title = input.getResult().getParameters().get("assignment-title").getAsString();
 		System.out.println("assignment-title: " + title); // debug
 
 		List<AssignmentInfoDto> assignmentInfoDtoList = assignmentDao.findAssignmentByTitle(title);
 
-		return assignmentUitl.renderAssignmentReturnMsg(assignmentInfoDtoList);
+		return assignmentUtil.renderAssignmentReturnMsg(assignmentInfoDtoList);
 	}
 
 	/**
@@ -72,7 +84,12 @@ public class AssignmentServiceImpl implements AssignmentService {
 	@Override
 	public String addAssignmentByTitle(AIWebhookRequest input) {
 		System.out.println("addAssignmentByTitle()"); // debug
-		// TODO authentication authorization
+
+		// Authorication
+		if (!validationUtil.isLecturer(input)) {
+			return "Authorication fail";
+		}
+
 		String assignment_title = input.getResult().getParameters().get("assignment-title").getAsString();
 		List<String> allAassignmentTitles = assignmentDao.getAllAssignmentTitles();
 		if (allAassignmentTitles.contains(assignment_title)) {
@@ -83,7 +100,7 @@ public class AssignmentServiceImpl implements AssignmentService {
 		String authro_zid = input.getResult().getParameters().get("assignment-author_zid").getAsString();
 		String type = "add_assignment";
 		// TODO jump to form html for get file from user, return back url is below
-		return "http://localhost:8080/assignment/add?assignment_title=" + assignment_title + "&due_date_string="
+		return "http://localhost:8080/uploadFile?assignment_title=" + assignment_title + "&due_date_string="
 				+ due_date_string + "&authro_zid=" + authro_zid;
 	}
 
@@ -95,7 +112,12 @@ public class AssignmentServiceImpl implements AssignmentService {
 	@Override
 	public String changeAssignmentByTitle(AIWebhookRequest input) {
 		System.out.println("changeAssignmentByTitle()"); // debug
-		// TODO authentication authorization
+
+		// Authorication
+		if (!validationUtil.isLecturer(input)) {
+			return "Authorication fail";
+		}
+
 		String assignment_title = input.getResult().getParameters().get("assignment-title").getAsString();
 		String due_date_string = input.getResult().getParameters().get("assignment-due_date").getAsString();
 		String authro_zid = input.getResult().getParameters().get("assignment-author_zid").getAsString();
@@ -111,7 +133,12 @@ public class AssignmentServiceImpl implements AssignmentService {
 	@Override
 	public String deleteAssignmentByTitlr(AIWebhookRequest input) {
 		System.out.println("deleteAssignmentByTitlr()"); // debug
-		// TODO authentication authorization
+
+		// Authorication
+		if (!validationUtil.isLecturer(input)) {
+			return "Authorication fail";
+		}
+
 		String title = input.getResult().getParameters().get("assignment-title").getAsString();
 		System.out.println("assignment-title: " + title); // debug
 
@@ -131,7 +158,12 @@ public class AssignmentServiceImpl implements AssignmentService {
 	@Override
 	public String studentSubmitAssignment(AIWebhookRequest input) {
 		System.out.println("studentSubmitAssignment()"); // debug
-		// TODO authentication authorization
+
+		// Authorication
+		if (!validationUtil.isStudent(input)) {
+			return "Authorication fail";
+		}
+
 		String title = input.getResult().getParameters().get("assignment-title").getAsString();
 		Long ass_id = null;
 		// check assignment title if is valid
@@ -154,7 +186,12 @@ public class AssignmentServiceImpl implements AssignmentService {
 	@Override
 	public String getUnsubmitingGroup(AIWebhookRequest input) {
 		System.out.println("getUnsubmitingGroup()"); // debug
-		// TODO authentication authorization
+
+		// Authorication
+		if (!validationUtil.isLecturer(input)) {
+			return "Authorication fail";
+		}
+
 		List<Ass_student> ass_students = ass_studentDao.getAllUnsubmitGroups(); // TODO sql
 		String returnMsg = "";
 		for (Ass_student ass_student : ass_students) {
@@ -172,7 +209,12 @@ public class AssignmentServiceImpl implements AssignmentService {
 	@Override
 	public String getAssSubmissionByAssTitleAndGroupNb(AIWebhookRequest input) {
 		System.out.println("getAssSubmissionByAssTitleAndGroupNb()"); // debug
-		// TODO authentication authorization
+
+		// Authorication
+		if (!validationUtil.isLecturer(input)) {
+			return "Authorication fail";
+		}
+
 		String assignment_title = input.getResult().getParameters().get("assignment-title").getAsString();
 		assignment = assignmentDao.getAssignmentIdByTitle(assignment_title);
 		if (assignment == null) {
@@ -195,7 +237,12 @@ public class AssignmentServiceImpl implements AssignmentService {
 	@Override
 	public String getAllUnmarkedAssignmentGroup(AIWebhookRequest input) {
 		System.out.println("getAllUnmarkedAssignmentGroup()"); // debug
-		// TODO authentication authorization
+
+		// Authorication
+		if (!validationUtil.isLecturer(input)) {
+			return "Authorication fail";
+		}
+
 		List<Ass_student> unmarkedAss_students = ass_studentDao.getAllUnmarkedGroup();
 		String returnMsg = "Unmarked groups:\n";
 		for (Ass_student unmarkedAss_student : unmarkedAss_students) {
@@ -215,7 +262,12 @@ public class AssignmentServiceImpl implements AssignmentService {
 	@Override
 	public String markAssignmentByGroupNb(AIWebhookRequest input) {
 		System.out.println("markAssignmentByGroupNb()"); // debug
-		// TODO authentication authorization
+
+		// Authorication
+		if (!validationUtil.isLecturer(input)) {
+			return "Authorication fail";
+		}
+
 		Long ass_studentId = Long.parseLong(input.getResult().getParameters().get("ass_studentId").getAsString());
 		Float grade = Float.parseFloat(input.getResult().getParameters().get("grade").getAsString());
 		ass_student.setId(ass_studentId);

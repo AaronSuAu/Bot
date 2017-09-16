@@ -18,6 +18,6 @@ public interface Person_infoDao {
 	@Select("select * from person_info")
 	List<Person_info> findAll();
 
-	@Select("select * from person_info where zid = #{zId} and password = #{password}")
-	List<Person_info> validateUser(Person_info person_info);
+	@Select("select * from person_info where zid = #{zid} and password = #{password}")
+	Person_info validateUser(Person_info person_info);
 }

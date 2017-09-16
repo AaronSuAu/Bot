@@ -128,8 +128,8 @@ public class AssignmentController {
 	 * @param zid
 	 */
 	@RequestMapping(value = "/assignment/add", method = RequestMethod.POST)
-	public void setAssignment(@RequestParam("file") MultipartFile file, @RequestParam("name") String name,
-			@RequestParam("due_date_string") String due_date_string, @RequestParam("zid") String zid) {
+	public String setAssignment(@RequestParam("file") MultipartFile file, @RequestParam("name") String name,
+			@RequestParam("due_date_string") String due_date_string, @RequestParam("author_zid") String author_zid) {
 		/*
 		 * insert into ass table and return ass_id
 		 */
@@ -164,14 +164,14 @@ public class AssignmentController {
 			resource.setPath(filePath);
 			resource.setTitle(file.getOriginalFilename());
 			resource.setTimestamp(new Timestamp(System.currentTimeMillis()));
-			resource.setAuthor(zid);
+			resource.setAuthor(author_zid);
 			System.out.println("inserting resource:" + resource.toString()); // debug
 			resourceServiceImpl.uploadAssignResource(resource);
 			System.out.println("new resource id: " + resource.getId().toString());
-			// TODO jump to upload success page
+			return "success add new assignment";
 		} catch (IOException e) {
 			e.printStackTrace();
-			// TODO jump to upload fail page
+			return "fail add new assignment";
 		}
 	}
 
