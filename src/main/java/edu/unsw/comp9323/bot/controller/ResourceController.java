@@ -41,7 +41,10 @@ public class ResourceController {
 	}
 	
 	@RequestMapping(value = "/upload", method = RequestMethod.POST)
-	public String receiveResource(@RequestParam("file") MultipartFile file){
+	public String receiveResource(@RequestParam("file") MultipartFile file, 
+			@RequestParam("name") String name,
+			@RequestParam("due_date_string") String due_date_string,
+			@RequestParam("zid") String zid){
 		byte[] bytes;
 		try {
 			bytes = file.getBytes();
@@ -49,6 +52,7 @@ public class ResourceController {
 			Path path = Paths.get(filePath);
 	        Files.write(path, bytes);
 	        Resource resource = new Resource();
+	        System.out.println(name+zid+due_date_string);
 	        resource.setPath(filePath);
 	        resource.setTitle(file.getOriginalFilename());
 	        resource.setTimestamp(new Timestamp(System.currentTimeMillis()));
@@ -59,10 +63,5 @@ public class ResourceController {
 			return "fail";
 		}	
 	}
-	
-	@RequestMapping(value = "/resource/download", method = RequestMethod.GET, produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
-	public FileSystemResource getReosource(HttpServletResponse response){
-		File file = new File("src/bot.sql");
-	    return new FileSystemResource(file);
-	}
+
 }
