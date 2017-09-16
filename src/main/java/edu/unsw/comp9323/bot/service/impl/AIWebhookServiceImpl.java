@@ -13,6 +13,7 @@ import ai.api.model.AIResponse;
 import ai.api.model.Fulfillment;
 import edu.unsw.comp9323.bot.service.AIWebbookService;
 import edu.unsw.comp9323.bot.service.AssignmentService;
+import edu.unsw.comp9323.bot.service.EmailService;
 
 @Service
 public class AIWebhookServiceImpl implements AIWebbookService {
@@ -26,7 +27,9 @@ public class AIWebhookServiceImpl implements AIWebbookService {
 
 	@Autowired
 	private AssignmentService assignmentService;
-
+	@Autowired
+	private EmailService emailService;
+	
 	public void doWebhook(AIWebhookRequest input, Fulfillment output) {
 		// Get intent
 		String intentName = input.getResult().getMetadata().getIntentName();
@@ -60,7 +63,9 @@ public class AIWebhookServiceImpl implements AIWebbookService {
 		// TODO for reminder
 
 		// TODO for email
-
+		if (intentName.equals("send_email_to_zid")) {
+			returnMsg = emailService.sendEmailToZid(input);
+		} 
 		// DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 		// Date date = new Date();
 		// output.setSpeech("Webhook get: intent name:" + intentName + "return at" +
