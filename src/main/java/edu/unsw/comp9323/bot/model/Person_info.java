@@ -86,5 +86,4 @@ public class Person_info implements Serializable {
 		return "Person_info [zid=" + zid + ", group_nb=" + group_nb + ", email=" + email + ", name=" + name + ", role="
 				+ role + ", password=" + password + "]";
 	}
-
 }
