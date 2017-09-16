@@ -1,9 +1,11 @@
 package edu.unsw.comp9323.bot.service.impl;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import edu.unsw.comp9323.bot.dao.ReminderDao;
@@ -46,7 +48,6 @@ public class ReminderServiceImpl implements ReminderService {
 		newReminder.setContent("1111");
 		newReminder.setOwner("z5032760");
 		newReminder.setTitle("2222");
-		System.out.println(newReminder.getDate().toString() + "!!!!!!!!!!!");
 		if(reminderDao.insertReminder(newReminder))
 			return true;
 		else
@@ -54,9 +55,10 @@ public class ReminderServiceImpl implements ReminderService {
 	}
 
 	@Override
-	public boolean remindByEmail(AIWebhookRequest input) {
+	public void remindByEmail() {
 		// TODO Auto-generated method stub
-		return false;
+		
+//		sendFromGMail(ArrayList<String> to, String subject, String body)
 	}
 
 	@Override

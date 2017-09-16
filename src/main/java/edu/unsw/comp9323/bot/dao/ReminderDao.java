@@ -59,7 +59,7 @@ public interface ReminderDao {
 	 */
 	@Select("select p.zid, p.group_nb, p.email, p.name, p.role, p.password "
 			+ "from person_info p , reminder r, reminder_receiver rr "
-			+ "where")
+			+ "where r.id = #{id} and rr.reminder = r.id and rr.receiver = p.zid")
 	List<Person_info> getReceivers(@Param("id") String id);
 	
 

@@ -81,13 +81,12 @@ public class EmailServiceImpl implements EmailService {
 	            }
 	    }
 	    trueStatement+="success.";
-		String from = "comp9323bot@gmail.com";
-        String pass = "comp9323";
+		
         String body = body_string;
         String subject = subject_string;
 
         try {
-        		EmailUtil.sendFromGMail(from, pass, receiver, subject, body);
+        		EmailUtil.sendFromGMail(receiver, subject, body);
 		}  catch (AddressException ae) {
             System.out.println("Address are incorrect ... ");
             falseStatement+= "Address are incorrect ... \n";

@@ -51,8 +51,10 @@ public class EmailUtil {
 			return result;
 		}
 
-		public static Boolean sendFromGMail(String from, String pass, ArrayList<String> to, String subject, String body)throws AddressException,MessagingException,InvalidActivityException {
-			System.out.println("sendFromGMail()");
+		public static Boolean sendFromGMail(ArrayList<String> to, String subject, String body)throws AddressException,MessagingException,InvalidActivityException {
+			String from = "comp9323bot@gmail.com";
+	        String pass = "comp9323";
+	        System.out.println("sendFromGMail()");
 			
 			Properties props = System.getProperties();
 	        String host = "smtp.gmail.com";
