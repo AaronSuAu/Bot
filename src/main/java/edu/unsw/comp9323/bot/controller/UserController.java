@@ -50,15 +50,12 @@ public class UserController {
 		person_info.setzId(user);
 		person_info.setPassword(password);
 		return person_infoServiceImpl.validateUser(person_info);
-		
 	}
 	
 	@RequestMapping(value = "/uploadFile", method = RequestMethod.GET)
 	public ModelAndView returnUploadPage(@RequestParam("assignment_title") String title,
 			@RequestParam("due_date_string") String due_date_string, 
 			@RequestParam("zid") String zid){
-		
 		return new ModelAndView("upload");
 	}
-	
 }
