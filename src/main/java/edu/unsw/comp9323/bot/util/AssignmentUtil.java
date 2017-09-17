@@ -2,8 +2,11 @@ package edu.unsw.comp9323.bot.util;
 
 import java.util.List;
 
+import org.springframework.stereotype.Component;
+
 import edu.unsw.comp9323.bot.dto.AssignmentInfoDto;
 
+@Component
 public class AssignmentUtil {
 	/**
 	 * @param assignmentInfoDtoList

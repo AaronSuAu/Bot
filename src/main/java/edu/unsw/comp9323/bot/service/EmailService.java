@@ -6,6 +6,4 @@ public interface EmailService {
 
 	public String sendEmailToZid(AIWebhookRequest input);
 
-	public String sendEmailToGroup(AIWebhookRequest input);
-
 }

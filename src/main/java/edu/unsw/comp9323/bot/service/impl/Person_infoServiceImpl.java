@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import edu.unsw.comp9323.bot.dao.Person_infoDao;
 import edu.unsw.comp9323.bot.model.Person_info;
 import edu.unsw.comp9323.bot.service.Person_infoService;
-import edu.unsw.comp9323.bot.service.UserService;
 
 @Service
 public class Person_infoServiceImpl implements Person_infoService {
@@ -40,8 +39,10 @@ public class Person_infoServiceImpl implements Person_infoService {
 		return person_info.getRole();
 
 	}
-	//*********************************the code below is for generating dummy data****
-	//encode all the password before
+
+	// *********************************the code below is for generating dummy
+	// data****
+	// encode all the password before
 	public void changePassword() {
 		List<Person_info> list = person_infoDao.findAll();
 		for (Person_info p : list) {
@@ -61,8 +62,8 @@ public class Person_infoServiceImpl implements Person_infoService {
 		String saltStr = salt.toString();
 		return saltStr;
 	}
-	
-	public void createUser(){
+
+	public void createUser() {
 		String zId = "z" + generateRandomString("1234567890", 7);
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 		String password = encoder.encode("123456");
