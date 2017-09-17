@@ -47,7 +47,7 @@ public class UserController {
 	@RequestMapping(value = "/user", method = RequestMethod.POST)
 	public int validateUser(@Param("zid") String user, @Param("password") String password) {
 		Person_info person_info = new Person_info();
-		person_info.setzId(user);
+		person_info.setZid(user);
 		person_info.setPassword(password);
 		return person_infoServiceImpl.validateUser(person_info);
 		
