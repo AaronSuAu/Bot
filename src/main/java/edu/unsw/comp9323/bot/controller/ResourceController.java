@@ -18,7 +18,7 @@ import edu.unsw.comp9323.bot.service.impl.ResourceServiceImpl;
 
 @RestController
 @RequestMapping("/resource/")
-public class MaterialController {
+public class ResourceController {
 	@Autowired
 	ResourceServiceImpl resourceServiceImpl;
 

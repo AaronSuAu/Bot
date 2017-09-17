@@ -15,6 +15,8 @@ import edu.unsw.comp9323.bot.model.Resource;
 @Mapper
 @Component
 public interface ResourceDao {
+	@Select("SELECT * FROM resource WHERE class_id is not null")
+	List<Resource> getAllLectureResource();
 
 	@Select("select * from resource where id = #{id}")
 	Resource getAssignmentById(Long id);

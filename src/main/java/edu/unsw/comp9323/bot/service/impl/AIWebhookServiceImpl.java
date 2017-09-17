@@ -14,19 +14,18 @@ import ai.api.model.Fulfillment;
 import edu.unsw.comp9323.bot.service.AIWebbookService;
 import edu.unsw.comp9323.bot.service.AssignmentService;
 import edu.unsw.comp9323.bot.service.EmailService;
+import edu.unsw.comp9323.bot.service.LectureService;
+import edu.unsw.comp9323.bot.service.ResourceService;
 
 @Service
 public class AIWebhookServiceImpl implements AIWebbookService {
-	// private static final String RESPONSE_CONTENT_TYPE = "application/json";
-	//
-	// private static final String RESPONSE_CHARACTER_ENCODING = "utf-8";
-	//
-	// private static final long serialVersionUID = 1L;
-	//
-	// private final Gson gson = GsonFactory.getDefaultFactory().getGson();
 
 	@Autowired
 	private AssignmentService assignmentService;
+	@Autowired
+	private LectureService lectureService;
+	@Autowired
+	private ResourceService resourceService;
 	@Autowired
 	private EmailService emailService;
 
@@ -69,7 +68,27 @@ public class AIWebhookServiceImpl implements AIWebbookService {
 			// not for assignment
 		}
 
-		// TODO for resource
+		// for class TODO more functions
+		if (intentName.equals("getLectureInfoByWeek")) {
+			returnMsg = lectureService.getLectureInfoByWeek(input);
+		} else {
+			// not for class
+		}
+
+		// TODO for lecture resource
+		if (intentName.equals("getAllLectureResource")) {
+			returnMsg = resourceService.getAllLectureResource(input);
+		} else if (intentName.equals("getLectureResourceByWeek")) {
+			returnMsg = assignmentService.markAssignmentByGroupNb(input);
+		} else if (intentName.equals("addLectureResourceByWeek")) {
+			returnMsg = assignmentService.markAssignmentByGroupNb(input);
+		} else if (intentName.equals("deleteLectureResourceByWeek")) {
+			returnMsg = assignmentService.markAssignmentByGroupNb(input);
+		} else if (intentName.equals("changeLectureResourceByWeek")) {
+			returnMsg = assignmentService.markAssignmentByGroupNb(input);
+		} else {
+			// not for lecture resource
+		}
 
 		// TODO for reminder
 
