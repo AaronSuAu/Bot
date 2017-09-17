@@ -34,5 +34,8 @@ public interface Person_infoDao {
 	
 	@Update("update person_info set password = #{password} where zid = #{zid}")
 	int changePassword(@Param("password") String password, @Param("zid") String zid);
+    @Select("select * from person_info where zid = #{zId} ")
+	List<Person_info> findUserFromZid(Person_info person_info);
+
 	
 }

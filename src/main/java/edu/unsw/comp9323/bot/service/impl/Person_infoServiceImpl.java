@@ -38,6 +38,7 @@ public class Person_infoServiceImpl implements Person_infoService {
 
 		// return role
 		return person_info.getRole();
+
 	}
 	//*********************************the code below is for generating dummy data****
 	//encode all the password before
