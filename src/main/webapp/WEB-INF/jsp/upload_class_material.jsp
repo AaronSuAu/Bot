@@ -14,13 +14,13 @@
   </head>
 
   <body>
-    <form method="POST" action="/resource/upload" enctype="multipart/form-data">
+    <form method="POST" action="/resource/material/add" enctype="multipart/form-data" id="form">
       <div class="form-group">
         <label for="file">Submit your File</label>
         <input type="file" name="file" class="form-control" id="file" required>
         <input type="hidden" name="name" value="" id="name">
-        <input type="hidden" name="due_date_string" value="" id="due_date_string">
-        <input type="hidden" name="zid" value="" id="zid">
+        <input type="hidden" name="author_zid" value="" id="author_zid">
+        <input type="hidden" name="class_id" value="" id="class_id">
         <input type="hidden" name="type" value="" id="type">
       </div>
       <div class="form-group">
@@ -52,14 +52,18 @@
             }
           }
         };
-        var zid = getUrlParameter("zid");
-        var due_date_string = getUrlParameter("due_date_string");
+        var author_zid = getUrlParameter("author_zid");
+        var class_id = getUrlParameter("class_id");
         var name = getUrlParameter("assignment_title");
-        var type = getUrlParameter("type")
-        $("#zid").val(zid);
+        var type = getUrlParameter("type");
+        $("#author_zid").val(author_zid);
         $("#name").val(name);
-        $("#due_date_string").val(due_date_string);
+        $("#class_id").val(class_id);
         $("#type").val(type);
+        if(type == 'update'){
+        		$("#form").attr('action', '/resource/material/update')
+        }
+        
       })
     </script>
   </body>

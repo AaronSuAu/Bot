@@ -1,52 +1,41 @@
 package edu.unsw.comp9323.bot.controller;
 
-import java.io.File;
-import java.io.IOException;
+import java.util.Optional;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.commons.io.FileUtils;
-import org.springframework.core.io.FileSystemResource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 @RestController
-@RequestMapping("/rest")
+@RequestMapping("/resource")
 public class AccessFileController {
-	// path field can not including suffix
-	@RequestMapping(value = "/download/{path}", method = RequestMethod.GET, produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
-	public FileSystemResource download(HttpServletResponse response, @PathVariable("path") String path) {
-		// access file under src/main/resources
-		ClassLoader classLoader = getClass().getClassLoader();
-		File file = new File(classLoader.getResource("test.pdf").getFile());
-		response.setHeader("Content-Disposition", "attachment; filename=" + file.getName());
-		return new FileSystemResource(file);
+
+	@RequestMapping(value = "page/assignment/add", method = RequestMethod.GET)
+	public ModelAndView returnUploadPage(@RequestParam("assignment_title") String title,
+			@RequestParam("due_date_string") String due_date_string, @RequestParam("author_zid") String zid,
+			@RequestParam("type") Optional<String> type) {
+		return new ModelAndView("upload_ass_resource");
 	}
 
-	@RequestMapping(value = "/showPDF/{path}", method = RequestMethod.GET)
-	public ResponseEntity<byte[]> showPDF(HttpServletRequest httpServletRequest, @PathVariable("path") String path)
-			throws IOException {
-		// access file under src/main/resources
-		ClassLoader classLoader = getClass().getClassLoader();
-		File file = new File(classLoader.getResource("test.pdf").getFile());
-		HttpHeaders httpHeaders = new HttpHeaders();
-		httpHeaders.setContentDispositionFormData("attachment", java.net.URLEncoder.encode(file.getName(), "UTF-8"));
-		httpHeaders.setContentType(MediaType.parseMediaType("application/pdf"));
-		return new ResponseEntity<byte[]>(FileUtils.readFileToByteArray(file), httpHeaders, HttpStatus.OK);
+	@RequestMapping(value = "page/assignment/submit", method = RequestMethod.GET)
+	public ModelAndView returnSubmitAssPage(@RequestParam("ass_id") String ass_id, @RequestParam("zid") String zid) {
+
+		return new ModelAndView("student_submit_assign");
 	}
-	@RequestMapping(value = "/resource/download", method = RequestMethod.GET, produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
-	public FileSystemResource getReosource(HttpServletResponse response){
-		File file = new File("src/bot.sql");
-	    return new FileSystemResource(file);
+
+	/*
+	 * var author_zid = getUrlParameter("author_zid"); var class_id =
+	 * getUrlParameter("class_id"); var name = getUrlParameter("assignment_title");
+	 * var type = getUrlParameter("type");
+	 */
+	@RequestMapping(value = "page/material/add", method = RequestMethod.GET)
+	public ModelAndView returnUploadMaterialPage(@RequestParam("assignment_title") String title,
+			@RequestParam("class_id") String class_id, @RequestParam("author_zid") String zid,
+			@RequestParam Optional<String> type) {
+
+		return new ModelAndView("upload_class_material");
 	}
-	
 
 }

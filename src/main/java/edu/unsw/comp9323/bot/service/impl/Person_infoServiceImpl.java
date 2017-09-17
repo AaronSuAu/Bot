@@ -28,6 +28,9 @@ public class Person_infoServiceImpl implements Person_infoService {
 		// zId doesn't exist
 		if (list.size() == 0) {
 			return -1;
+		} else {
+			System.out.println("role: " + person_info.getRole());
+			return person_info.getRole();
 		}
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 		boolean b = encoder.matches(person_info.getPassword(), list.get(0).getPassword());

@@ -14,13 +14,14 @@
   </head>
 
   <body>
-    <form method="POST" action="/resource/upload" enctype="multipart/form-data">
+    <form method="POST" action="/resource/assignment/add" enctype="multipart/form-data" id="form">
       <div class="form-group">
         <label for="file">Submit your File</label>
         <input type="file" name="file" class="form-control" id="file" required>
-        <input type="hidden" name="ass_id" value="" id="ass_id">
-        <input type="hidden" name="zid" value="" id="zid">
-        <input type="hidden" name="path" value="" id="path">
+        <input type="hidden" name="name" value="" id="name">
+        <input type="hidden" name="due_date_string" value="" id="due_date_string">
+        <input type="hidden" name="author_zid" value="" id="author_zid">
+        <input type="hidden" name="type" value="" id="type">
       </div>
       <div class="form-group">
         <input type="submit" class="btn btn-primary" id="button">
@@ -51,12 +52,17 @@
             }
           }
         };
-        var zid = getUrlParameter("zid");
-		var path = getUrlParameter("path");
-		var ass_id = getUrlParameter("ass_id");
-        $("#zid").val(zid);
-		$("#path").val(path);
-		$("#ass_id").val(ass_id);
+        var author_zid = getUrlParameter("author_zid");
+        var due_date_string = getUrlParameter("due_date_string");
+        var name = getUrlParameter("assignment_title");
+        var type = getUrlParameter("type")
+        $("#author_zid").val(author_zid);
+        $("#name").val(name);
+        $("#due_date_string").val(due_date_string);
+        $("#type").val(type);
+        if(type == "update"){
+        		$("#form").attr("action", "/resource/assignment/update")
+        }
       })
     </script>
   </body>

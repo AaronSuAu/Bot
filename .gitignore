@@ -22,4 +22,5 @@ nbbuild/
 dist/
 nbdist/
 .nb-gradle/
-/sql4cmbot ssl4charlie/
+
+src/main/resources/

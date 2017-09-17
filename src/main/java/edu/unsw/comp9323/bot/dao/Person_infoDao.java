@@ -16,6 +16,9 @@ import edu.unsw.comp9323.bot.model.Person_info;
 @Component
 public interface Person_infoDao {
 
+	@Select("select group_nb from person_info where zid=#{zid}")
+	Long findGroupNbByZid(String zid);
+
 	@Select("select * from person_info")
 	List<Person_info> findAll();
 	

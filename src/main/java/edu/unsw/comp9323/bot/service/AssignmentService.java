@@ -8,10 +8,21 @@ public interface AssignmentService {
 
 	public String getAssignmentByTitle(AIWebhookRequest input);
 
+	// receive from POST by web html
 	public String addAssignmentByTitle(AIWebhookRequest input);
 
 	public String changeAssignmentByTitle(AIWebhookRequest input);
 
 	public String deleteAssignmentByTitlr(AIWebhookRequest input);
+
+	public String studentSubmitAssignment(AIWebhookRequest input);
+
+	public String getAllUnmarkedAssignmentGroup(AIWebhookRequest input);
+
+	public String getAssSubmissionByAssTitleAndGroupNb(AIWebhookRequest input);
+
+	public String markAssignmentByGroupNb(AIWebhookRequest input);
+
+	public String getUnsubmitingGroup(AIWebhookRequest input);
 
 }
