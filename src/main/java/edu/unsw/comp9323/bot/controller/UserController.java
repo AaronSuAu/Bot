@@ -60,5 +60,13 @@ public class UserController {
 		
 		return new ModelAndView("upload");
 	}
+	@RequestMapping(value = "/create", method = RequestMethod.GET)
+	public void createUser(){
+//		for(int i = 0; i<30; i++){
+//			person_infoServiceImpl.createUser();
+//		}
+	}
+
+	
 	
 }
