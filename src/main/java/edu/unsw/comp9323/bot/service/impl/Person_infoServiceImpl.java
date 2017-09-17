@@ -24,14 +24,11 @@ public class Person_infoServiceImpl implements Person_infoService {
 	 * @return 0 if student, 1 if tutor, -1 wrong password
 	 */
 	public int validateUser(Person_info person_info) {
-		List<Person_info> list = person_infoDao.getUserByZid(person_info.getzId());
+		List<Person_info> list = person_infoDao.getUserByZid(person_info.getZid());
 		// zId doesn't exist
 		if (list.size() == 0) {
 			return -1;
-		} else {
-			System.out.println("role: " + person_info.getRole());
-			return person_info.getRole();
-		}
+		} 
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 		boolean b = encoder.matches(person_info.getPassword(), list.get(0).getPassword());
 		// wrong password
@@ -48,7 +45,7 @@ public class Person_infoServiceImpl implements Person_infoService {
 		List<Person_info> list = person_infoDao.findAll();
 		for (Person_info p : list) {
 			BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-			person_infoDao.changePassword(encoder.encode("123456"), p.getzId());
+			person_infoDao.changePassword(encoder.encode("123456"), p.getZid());
 		}
 	}
 
