@@ -29,7 +29,7 @@ public class AIWebhookServiceImpl implements AIWebbookService {
 	private AssignmentService assignmentService;
 	@Autowired
 	private EmailService emailService;
-	
+
 	public void doWebhook(AIWebhookRequest input, Fulfillment output) {
 		// Get intent
 		String intentName = input.getResult().getMetadata().getIntentName();
@@ -44,26 +44,26 @@ public class AIWebhookServiceImpl implements AIWebbookService {
 		 * Dispatch to different services
 		 */
 		// for assignment
-		if (intentName.equals("getAllAssignment")) {
+		if (intentName.equals("getAllAssignment")) {// back-end checked
 			returnMsg = assignmentService.getAllAssignment(input);
-		} else if (intentName.equals("getAssignmentByTitle")) {
+		} else if (intentName.equals("getAssignmentByTitle")) {// back-end checked
 			returnMsg = assignmentService.getAssignmentByTitle(input);
-		} else if (intentName.equals("addAssignmentByTitle")) {
+		} else if (intentName.equals("addAssignmentByTitle")) {// back-end checked
 			returnMsg = assignmentService.addAssignmentByTitle(input);
-		} else if (intentName.equals("changeAssignmentByTitle")) { // delete old and add new assignment
+		} else if (intentName.equals("changeAssignmentByTitle")) { // back-end checked
 			returnMsg = assignmentService.changeAssignmentByTitle(input);
-		} else if (intentName.equals("deleteAssignmentByTitle")) {
-			returnMsg = assignmentService.deleteAssignmentByTitlr(input);
-		} else if (intentName.equals("studentSubmitAssignment")) {
+		} else if (intentName.equals("deleteAssignmentByTitle")) { // back-end checked
+			returnMsg = assignmentService.deleteAssignmentByTitle(input);
+		} else if (intentName.equals("studentSubmitAssignment")) { // back-end checked
 			returnMsg = assignmentService.studentSubmitAssignment(input);
 		} else if (intentName.equals("getUnsubmitingGroup")) {
 			// TODO
 			returnMsg = assignmentService.getUnsubmitingGroup(input);
-		} else if (intentName.equals("getAssSubmissionByAssTitleAndGroupNb")) {
+		} else if (intentName.equals("getAssSubmissionByAssTitleAndGroupNb")) { // back-end checked
 			returnMsg = assignmentService.getAssSubmissionByAssTitleAndGroupNb(input);
-		} else if (intentName.equals("getAllUnmarkedAssignmentGroup")) {
+		} else if (intentName.equals("getAllUnmarkedAssignmentGroup")) { // back-end checked
 			returnMsg = assignmentService.getAllUnmarkedAssignmentGroup(input);
-		} else if (intentName.equals("markAssignmentByGroupNb")) {
+		} else if (intentName.equals("markAssignmentByGroupNb")) { // back-end checked
 			returnMsg = assignmentService.markAssignmentByGroupNb(input);
 		} else {
 			// not for assignment
@@ -76,7 +76,7 @@ public class AIWebhookServiceImpl implements AIWebbookService {
 		// TODO for email
 		if (intentName.equals("send_email_to_zid")) {
 			returnMsg = emailService.sendEmailToZid(input);
-		} 
+		}
 		// DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 		// Date date = new Date();
 		// output.setSpeech("Webhook get: intent name:" + intentName + "return at" +

@@ -2,11 +2,12 @@ package edu.unsw.comp9323.bot.util;
 
 import java.util.List;
 
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import edu.unsw.comp9323.bot.dto.AssignmentInfoDto;
+import edu.unsw.comp9323.bot.model.Ass_student;
 
-@Component
+@Service
 public class AssignmentUtil {
 	/**
 	 * @param assignmentInfoDtoList
@@ -19,18 +20,43 @@ public class AssignmentUtil {
 		String hostStringGCloud = "cmbot-b3f5e.appspot.com";
 
 		for (AssignmentInfoDto assignmentInfoDto : assignmentInfoDtoList) {
-			String info = "-" + assignmentInfoDto.toString();
-			String show_url_localhost = "\nhttp://" + hostStringLocal + "/resource/showPDF/assignment/"
-					+ assignmentInfoDto.getMaterial_id() + "\n";
-			String show_url_gcloud = "\nhttp://" + hostStringGCloud + "/resource/showPDF/assignment/"
-					+ assignmentInfoDto.getMaterial_id() + "\n";
-			String download_url_localhost = "\nhttp://" + hostStringLocal + "/resource/downloadPDF/assignment/"
-					+ assignmentInfoDto.getMaterial_id() + "\n";
-			String download_url_gcloud = "\nhttp://" + hostStringGCloud + "/resource/downloadPDF/assignment/"
-					+ assignmentInfoDto.getMaterial_id() + "\n";
-			returnMsg = returnMsg + info + show_url_localhost + show_url_gcloud + download_url_localhost
-					+ download_url_gcloud + "\n";
+			String info = " -" + assignmentInfoDto.toString();
+			String show_url_localhost = " http://" + hostStringLocal + "/resource/showPDF/assignment/"
+					+ assignmentInfoDto.getMaterial_id();
+			String download_url_localhost = " http://" + hostStringLocal + "/resource/downloadPDF/assignment/"
+					+ assignmentInfoDto.getMaterial_id();
+			returnMsg = returnMsg + info + show_url_localhost + " " + download_url_localhost;
 		}
+
+		// for (AssignmentInfoDto assignmentInfoDto : assignmentInfoDtoList) {
+		// String info = "-" + assignmentInfoDto.toString();
+		// String show_url_localhost = "\nhttp://" + hostStringLocal +
+		// "/resource/showPDF/assignment/"
+		// + assignmentInfoDto.getMaterial_id() + "\n";
+		// String show_url_gcloud = "\nhttp://" + hostStringGCloud +
+		// "/resource/showPDF/assignment/"
+		// + assignmentInfoDto.getMaterial_id() + "\n";
+		// String download_url_localhost = "\nhttp://" + hostStringLocal +
+		// "/resource/downloadPDF/assignment/"
+		// + assignmentInfoDto.getMaterial_id() + "\n";
+		// String download_url_gcloud = "\nhttp://" + hostStringGCloud +
+		// "/resource/downloadPDF/assignment/"
+		// + assignmentInfoDto.getMaterial_id() + "\n";
+		// returnMsg = returnMsg + info + show_url_localhost + show_url_gcloud +
+		// download_url_localhost
+		// + download_url_gcloud + "\n";
+		// }
+
+		return returnMsg;
+	}
+
+	public String renderSubmissionReturnMsg(Ass_student ass_student) {
+		String returnMsg = ass_student.toString();
+		String hostStringLocal = "localhost:8080";
+		String hostStringGCloud = "cmbot-b3f5e.appspot.com";
+
+		returnMsg += " to get submission: http://" + hostStringLocal + "/resource/showPDF/submission/"
+				+ ass_student.getId();
 
 		return returnMsg;
 	}

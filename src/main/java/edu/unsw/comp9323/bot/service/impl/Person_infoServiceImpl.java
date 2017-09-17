@@ -16,22 +16,28 @@ public class Person_infoServiceImpl implements Person_infoService {
 
 	@Autowired
 	Person_infoDao person_infoDao;
+	@Autowired
+	Person_info person_info;
 
 	/**
 	 * 
 	 * @param person_info
 	 * @return 0 if student, 1 if tutor, -1 wrong password
 	 */
-	public int validateUser(Person_info person_info) {
-		List<Person_info> list = person_infoDao.getUserByZid(person_info.getZid());
-		// zId doesn't exist
-		if (list.size() == 0) {
+	public int validateUser(Person_info recived_person_info) {
+		person_info = person_infoDao.getUserByZid(recived_person_info.getZid());
+		// zid doesn't exist
+		if (person_info == null) {
+			System.out.println("zid doesn't exist");
 			return -1;
 		}
+
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-		boolean b = encoder.matches(person_info.getPassword(), list.get(0).getPassword());
+		// @param: plain,code
+		boolean b = encoder.matches(recived_person_info.getPassword(), person_info.getPassword());
 		// wrong password
 		if (!b) {
+			System.out.println("wrong password");
 			return -1;
 		}
 
@@ -64,9 +70,9 @@ public class Person_infoServiceImpl implements Person_infoService {
 	}
 
 	public void createUser() {
-		String zId = "z" + generateRandomString("1234567890", 7);
+		String zid = "z" + generateRandomString("1234567890", 7);
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 		String password = encoder.encode("123456");
-		person_infoDao.createPerson_info(zId, password);
+		person_infoDao.createPerson_info(zid, password);
 	}
 }

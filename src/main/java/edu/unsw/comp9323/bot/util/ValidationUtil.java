@@ -16,6 +16,7 @@ public class ValidationUtil {
 	Person_info person_info;
 
 	public Boolean isLecturer(AIWebhookRequest input) {
+		System.out.println("Validtion: isLecturer");
 		String zid = input.getResult().getParameters().get("zid").getAsString();
 		String password = input.getResult().getParameters().get("password").getAsString();
 		person_info.setZid(zid);
@@ -27,6 +28,7 @@ public class ValidationUtil {
 	}
 
 	public Boolean isStudent(AIWebhookRequest input) {
+		System.out.println("Validtion: isStudent");
 		String zid = input.getResult().getParameters().get("zid").getAsString();
 		String password = input.getResult().getParameters().get("password").getAsString();
 		person_info.setZid(zid);
@@ -38,6 +40,7 @@ public class ValidationUtil {
 	}
 
 	public Boolean isLecturerOrStudent(AIWebhookRequest input) {
+		System.out.println("Validtion: isLecturerOrStudent");
 		String zid = input.getResult().getParameters().get("zid").getAsString();
 		String password = input.getResult().getParameters().get("password").getAsString();
 		person_info.setZid(zid);

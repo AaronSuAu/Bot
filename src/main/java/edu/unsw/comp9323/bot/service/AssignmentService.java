@@ -13,7 +13,7 @@ public interface AssignmentService {
 
 	public String changeAssignmentByTitle(AIWebhookRequest input);
 
-	public String deleteAssignmentByTitlr(AIWebhookRequest input);
+	public String deleteAssignmentByTitle(AIWebhookRequest input);
 
 	public String studentSubmitAssignment(AIWebhookRequest input);
 

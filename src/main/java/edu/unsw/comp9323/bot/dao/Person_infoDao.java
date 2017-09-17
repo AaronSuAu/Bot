@@ -22,13 +22,13 @@ public interface Person_infoDao {
 	List<Person_info> findAll();
 
 	@Select("select * from person_info where zid = #{zid} and password = #{password}")
-	List<Person_info> validateUser(Person_info person_info);
+	Person_info validateUser(Person_info person_info);
 
 	@Select("select * from person_info where zid = #{zid}")
-	List<Person_info> getUserByZid(@Param("zid") String zid);
+	Person_info getUserByZid(@Param("zid") String zid);
 
 	@Insert("insert into person_info (zid, password) " + "values(#{zId}, #{password})")
-	int createPerson_info(@Param("zId") String zId, @Param("password") String password);
+	int createPerson_info(@Param("zid") String zid, @Param("password") String password);
 
 	@Update("update person_info set password = #{password} where zid = #{zid}")
 	int changePassword(@Param("password") String password, @Param("zid") String zid);

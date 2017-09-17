@@ -32,6 +32,9 @@ public class EmailServiceImpl implements EmailService {
 	@Autowired
 	ValidationUtil validationUtil;
 
+	@Autowired
+	Person_info person_info;
+
 	@Override
 	public String sendEmailToZid(AIWebhookRequest input) {
 
@@ -127,9 +130,7 @@ public class EmailServiceImpl implements EmailService {
 	}
 
 	private Person_info getSender(AIWebhookRequest input) {
-		List<Person_info> list = person_infoDao
-				.getUserByZid(input.getResult().getParameters().get("zid").getAsString());
-		return list.get(0);
+		return person_infoDao.getUserByZid(input.getResult().getParameters().get("zid").getAsString());
 	}
 
 }

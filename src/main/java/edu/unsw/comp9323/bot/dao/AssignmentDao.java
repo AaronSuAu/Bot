@@ -32,18 +32,18 @@ public interface AssignmentDao {
 	@Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "ass.id")
 	void setAssignment(Assignment assignment);
 
-	@Delete("DELETE FROM ass WHERE name = #{title}")
-	void deleteAssignmentByTitle(String title);
+	@Delete("DELETE FROM ass WHERE name = #{name}")
+	void deleteAssignmentByTitle(Assignment assignment);
 
 	@Update("UPDATE ass SET name=#{name}, due_date = #{due_date} WHERE id = #{id}")
 	void updateAssignment(Assignment assignment);
 
 	@Select("SELECT * FROM ass  WHERE name = #{title}")
-	Assignment getAssignmentIdByTitle(String title);
+	Assignment getAssignmentIdByTitle(@Param("title") String title);
 
 	@Select("SELECT name FROM ass")
 	List<String> getAllAssignmentTitles();
 
 	@Select("SELECT name FROM ass WHERE id = #{id}")
-	String getAssignmentTitlesById(Long id);
+	String getAssignmentTitlesById(@Param("id") Long id);
 }
