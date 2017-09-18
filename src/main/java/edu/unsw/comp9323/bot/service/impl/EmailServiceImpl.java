@@ -133,4 +133,10 @@ public class EmailServiceImpl implements EmailService {
 		return person_infoDao.getUserByZid(input.getResult().getParameters().get("zid").getAsString());
 	}
 
+	@Override
+	public String sendEmailTemplate(AIWebhookRequest input) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

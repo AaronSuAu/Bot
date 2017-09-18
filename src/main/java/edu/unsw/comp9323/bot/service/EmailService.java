@@ -6,4 +6,6 @@ public interface EmailService {
 
 	public String sendEmailToZid(AIWebhookRequest input);
 
+	public String sendEmailTemplate(AIWebhookRequest input);
+
 }
