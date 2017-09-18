@@ -23,6 +23,13 @@ public interface ReminderDao {
 	@Select("select * from reminder where owner = #{owner}")
 	List<Reminder> findRemindersByOwner(@Param("owner") String owner);
 
+	@Select("select * from reminder where owner = #{owner} and date BETWEEN #{start} AND #{end} ")
+	List<Reminder> findRemindersByDatePeriod(@Param("owner") String owner, @Param("start") String start,
+			@Param("end") String end);
+
+	@Select("select * from reminder where owner = #{owner} and date = #{date} ")
+	List<Reminder> findRemindersByDate(@Param("owner") String owner, @Param("date") String date);
+
 	/*
 	 * select reminder by a id
 	 */

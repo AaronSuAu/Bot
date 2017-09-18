@@ -15,6 +15,7 @@ import edu.unsw.comp9323.bot.service.AIWebbookService;
 import edu.unsw.comp9323.bot.service.AssignmentService;
 import edu.unsw.comp9323.bot.service.EmailService;
 import edu.unsw.comp9323.bot.service.LectureService;
+import edu.unsw.comp9323.bot.service.ReminderService;
 import edu.unsw.comp9323.bot.service.ResourceService;
 
 @Service
@@ -28,6 +29,8 @@ public class AIWebhookServiceImpl implements AIWebbookService {
 	private ResourceService resourceService;
 	@Autowired
 	private EmailService emailService;
+	@Autowired
+	private ReminderService reminderService;
 
 	public void doWebhook(AIWebhookRequest input, Fulfillment output) {
 		// Get intent
@@ -45,24 +48,32 @@ public class AIWebhookServiceImpl implements AIWebbookService {
 		// for assignment
 		if (intentName.equals("getAllAssignment")) {// back-end checked
 			returnMsg = assignmentService.getAllAssignment(input);
-		} else if (intentName.equals("getAssignmentByTitle")) {// back-end checked
+		} else if (intentName.equals("getAssignmentByTitle")) {// back-end
+																// checked
 			returnMsg = assignmentService.getAssignmentByTitle(input);
-		} else if (intentName.equals("addAssignmentByTitle")) {// back-end checked
+		} else if (intentName.equals("addAssignmentByTitle")) {// back-end
+																// checked
 			returnMsg = assignmentService.addAssignmentByTitle(input);
-		} else if (intentName.equals("changeAssignmentByTitle")) { // back-end checked
+		} else if (intentName.equals("changeAssignmentByTitle")) { // back-end
+																	// checked
 			returnMsg = assignmentService.changeAssignmentByTitle(input);
-		} else if (intentName.equals("deleteAssignmentByTitle")) { // back-end checked
+		} else if (intentName.equals("deleteAssignmentByTitle")) { // back-end
+																	// checked
 			returnMsg = assignmentService.deleteAssignmentByTitle(input);
-		} else if (intentName.equals("studentSubmitAssignment")) { // back-end checked
+		} else if (intentName.equals("studentSubmitAssignment")) { // back-end
+																	// checked
 			returnMsg = assignmentService.studentSubmitAssignment(input);
 		} else if (intentName.equals("getUnsubmitingGroup")) {
 			// TODO
 			returnMsg = assignmentService.getUnsubmitingGroup(input);
-		} else if (intentName.equals("getAssSubmissionByAssTitleAndGroupNb")) { // back-end checked
+		} else if (intentName.equals("getAssSubmissionByAssTitleAndGroupNb")) { // back-end
+																				// checked
 			returnMsg = assignmentService.getAssSubmissionByAssTitleAndGroupNb(input);
-		} else if (intentName.equals("getAllUnmarkedAssignmentGroup")) { // back-end checked
+		} else if (intentName.equals("getAllUnmarkedAssignmentGroup")) { // back-end
+																			// checked
 			returnMsg = assignmentService.getAllUnmarkedAssignmentGroup(input);
-		} else if (intentName.equals("markAssignmentByGroupNb")) { // back-end checked
+		} else if (intentName.equals("markAssignmentByGroupNb")) { // back-end
+																	// checked
 			returnMsg = assignmentService.markAssignmentByGroupNb(input);
 		} else {
 			// not for assignment
@@ -91,16 +102,28 @@ public class AIWebhookServiceImpl implements AIWebbookService {
 		}
 
 		// TODO for reminder
+		if (intentName.equals("getReminders")) {
+			returnMsg = reminderService.getAllReminders(input);
+		} else if (intentName.equals("deleteReminder")) {
+			if (reminderService.deleteReminder(input)) {
+				returnMsg = "Reminder Removed Successfully!";
+			} else {
+				returnMsg = "Failed To Remove!";
+			}
+		}
 
 		// TODO for email
-		if (intentName.equals("send_email_to_zid")) {
+		if (intentName.equals("send_email_to_zid"))
+
+		{
 			returnMsg = emailService.sendEmailToZid(input);
 		} else if (intentName.equals("send-email-template")) {
 			returnMsg = emailService.sendEmailTemplate(input);
 		}
 		// DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 		// Date date = new Date();
-		// output.setSpeech("Webhook get: intent name:" + intentName + "return at" +
+		// output.setSpeech("Webhook get: intent name:" + intentName + "return
+		// at" +
 		// dateFormat.format(date));
 		output.setSpeech(returnMsg);
 	};
@@ -116,7 +139,8 @@ public class AIWebhookServiceImpl implements AIWebbookService {
 		/**
 		 * Get original request object
 		 * 
-		 * @return <code>null</code> if original request undefined in request object
+		 * @return <code>null</code> if original request undefined in request
+		 *         object
 		 */
 		public OriginalRequest getOriginalRequest() {
 			return originalRequest;
