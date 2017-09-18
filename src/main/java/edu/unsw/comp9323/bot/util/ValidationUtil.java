@@ -3,6 +3,7 @@ package edu.unsw.comp9323.bot.util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import edu.unsw.comp9323.bot.model.Identity;
 import edu.unsw.comp9323.bot.model.Person_info;
 import edu.unsw.comp9323.bot.service.impl.AIWebhookServiceImpl.AIWebhookRequest;
 import edu.unsw.comp9323.bot.service.impl.Person_infoServiceImpl;
@@ -14,11 +15,15 @@ public class ValidationUtil {
 	Person_infoServiceImpl person_infoServiceImpl;
 	@Autowired
 	Person_info person_info;
+	@Autowired
+	Identity identity;
+	@Autowired
+	UserIdentityUtil userIdentityUtil;
 
 	public Boolean isLecturer(AIWebhookRequest input) {
 		System.out.println("Validtion: isLecturer");
-		String zid = input.getResult().getParameters().get("zid").getAsString();
-		String password = input.getResult().getParameters().get("password").getAsString();
+		String zid = userIdentityUtil.getIdentity(input).getZid();
+		String password = userIdentityUtil.getIdentity(input).getPassword();
 		person_info.setZid(zid);
 		person_info.setPassword(password);
 		if (person_infoServiceImpl.validateUser(person_info) == 1) {
@@ -29,8 +34,8 @@ public class ValidationUtil {
 
 	public Boolean isStudent(AIWebhookRequest input) {
 		System.out.println("Validtion: isStudent");
-		String zid = input.getResult().getParameters().get("zid").getAsString();
-		String password = input.getResult().getParameters().get("password").getAsString();
+		String zid = userIdentityUtil.getIdentity(input).getZid();
+		String password = userIdentityUtil.getIdentity(input).getPassword();
 		person_info.setZid(zid);
 		person_info.setPassword(password);
 		if (person_infoServiceImpl.validateUser(person_info) == 0) {
@@ -41,8 +46,8 @@ public class ValidationUtil {
 
 	public Boolean isLecturerOrStudent(AIWebhookRequest input) {
 		System.out.println("Validtion: isLecturerOrStudent");
-		String zid = input.getResult().getParameters().get("zid").getAsString();
-		String password = input.getResult().getParameters().get("password").getAsString();
+		String zid = userIdentityUtil.getIdentity(input).getZid();
+		String password = userIdentityUtil.getIdentity(input).getPassword();
 		person_info.setZid(zid);
 		person_info.setPassword(password);
 		if (person_infoServiceImpl.validateUser(person_info) != -1) {

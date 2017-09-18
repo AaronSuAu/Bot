@@ -95,6 +95,8 @@ public class AIWebhookServiceImpl implements AIWebbookService {
 		// TODO for email
 		if (intentName.equals("send_email_to_zid")) {
 			returnMsg = emailService.sendEmailToZid(input);
+		} else if (intentName.equals("send-email-template")) {
+			returnMsg = emailService.sendEmailTemplate(input);
 		}
 		// DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 		// Date date = new Date();
