@@ -34,5 +34,8 @@ public interface ResourceDao {
 
 	@Delete("DELETE FROM resource WHERE id = #{id}")
 	void deleteResource(Resource resource);
-
+	
+	@Delete("delete from resource where class_id = #{id}")
+	int deleteResourceByClassId(@Param("id") int id);
+	
 }

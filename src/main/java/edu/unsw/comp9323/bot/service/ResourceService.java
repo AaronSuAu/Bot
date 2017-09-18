@@ -14,5 +14,8 @@ public interface ResourceService {
 	List<Resource> getResourceByClass(Long classId);
 
 	Long uploadAssignResource(Resource resource);
-
+	String getClassMaterialUrlByWeek(AIWebhookRequest input);
+	String addClassMaterialUrlByWeek(AIWebhookRequest input);
+	String deleteLectureResourceByWeek(AIWebhookRequest input);
+	String updateClassMaterialUrlByWeek(AIWebhookRequest input);
 }

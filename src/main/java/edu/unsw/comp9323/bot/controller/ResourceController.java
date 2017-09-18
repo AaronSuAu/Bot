@@ -1,12 +1,18 @@
 package edu.unsw.comp9323.bot.controller;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.Timestamp;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -33,7 +39,7 @@ public class ResourceController {
 		byte[] bytes;
 		try {
 			bytes = file.getBytes();
-			String filePath = "src/main/resources/assignment/" + name + "/material/" + file.getOriginalFilename();
+			String filePath = "src/main/resources/lecture/" + file.getOriginalFilename();
 			Path path = Paths.get(filePath);
 			Files.write(path, bytes);
 			resource.setTitle(name);
@@ -79,5 +85,4 @@ public class ResourceController {
 			return "fail add new material";
 		}
 	}
-
 }

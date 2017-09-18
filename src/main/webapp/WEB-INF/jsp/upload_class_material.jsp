@@ -54,7 +54,7 @@
         };
         var author_zid = getUrlParameter("author_zid");
         var class_id = getUrlParameter("class_id");
-        var name = getUrlParameter("assignment_title");
+        var name = getUrlParameter("name");
         var type = getUrlParameter("type");
         $("#author_zid").val(author_zid);
         $("#name").val(name);

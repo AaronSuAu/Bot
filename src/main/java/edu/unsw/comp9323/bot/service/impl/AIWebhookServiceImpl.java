@@ -79,13 +79,13 @@ public class AIWebhookServiceImpl implements AIWebbookService {
 		if (intentName.equals("getAllLectureResource")) {
 			returnMsg = resourceService.getAllLectureResource(input);
 		} else if (intentName.equals("getLectureResourceByWeek")) {
-			returnMsg = assignmentService.markAssignmentByGroupNb(input);
+			returnMsg = resourceService.getClassMaterialUrlByWeek(input);
 		} else if (intentName.equals("addLectureResourceByWeek")) {
-			returnMsg = assignmentService.markAssignmentByGroupNb(input);
+			returnMsg = resourceService.addClassMaterialUrlByWeek(input);
 		} else if (intentName.equals("deleteLectureResourceByWeek")) {
-			returnMsg = assignmentService.markAssignmentByGroupNb(input);
+			returnMsg = resourceService.deleteLectureResourceByWeek(input);
 		} else if (intentName.equals("changeLectureResourceByWeek")) {
-			returnMsg = assignmentService.markAssignmentByGroupNb(input);
+			returnMsg = resourceService.updateClassMaterialUrlByWeek(input);
 		} else {
 			// not for lecture resource
 		}

@@ -105,7 +105,7 @@ public class AssignmentServiceImpl implements AssignmentService {
 		// due_date format: dd/MM/yyyy
 		String due_date_string = input.getResult().getParameters().get("assignment-due_date").getAsString();
 		String authro_zid = input.getResult().getParameters().get("zid").getAsString();
-		String type = "add_assignment";
+		String type = "add";
 		return "to upload assignment material: http://localhost:8080/page/upload/assignment_material?type=add&assignment_title="
 				+ assignment_title + "&due_date_string=" + due_date_string + "&author_zid=" + authro_zid;
 	}
