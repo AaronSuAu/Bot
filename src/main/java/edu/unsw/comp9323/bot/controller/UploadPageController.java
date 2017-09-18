@@ -37,11 +37,10 @@ public class UploadPageController {
 	 * getUrlParameter("class_id"); var name = getUrlParameter("assignment_title");
 	 * var type = getUrlParameter("type");
 	 */
-	@RequestMapping(value = "page/material/add", method = RequestMethod.GET)
-	public ModelAndView returnUploadMaterialPage(@RequestParam("assignment_title") String title,
+	@RequestMapping(value = "/material/add", method = RequestMethod.GET)
+	public ModelAndView returnUploadMaterialPage(@RequestParam("name") String name,
 			@RequestParam("class_id") String class_id, @RequestParam("author_zid") String zid,
 			@RequestParam Optional<String> type) {
-
 		return new ModelAndView("upload_class_material");
 	}
 
