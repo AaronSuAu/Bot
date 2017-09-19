@@ -23,7 +23,7 @@ public class AssignmentUtil {
 			String info = " -" + assignmentInfoDto.toString();
 			String show_url_localhost = " http://" + hostStringLocal + "/resource/showPDF/assignment/"
 					+ assignmentInfoDto.getMaterial_id();
-			String download_url_localhost = " http://" + hostStringLocal + "/resource/downloadPDF/assignment/"
+			String download_url_localhost = " http://" + hostStringLocal + "/file/download/resource/"
 					+ assignmentInfoDto.getMaterial_id();
 			returnMsg = returnMsg + info + show_url_localhost + " " + download_url_localhost;
 		}

@@ -17,7 +17,7 @@ public class ResourceUtil {
 
 		for (Resource resource : resources) {
 			String info = " -" + resource.toString();
-			String show_url_localhost = " http://" + hostStringLocal + "/resource/showPDF/resource/" + resource.getId();
+			String show_url_localhost = " http://" + hostStringLocal + "/file/download/resource/" + resource.getId();
 			returnMsg = returnMsg + info + show_url_localhost;
 		}
 		return returnMsg;

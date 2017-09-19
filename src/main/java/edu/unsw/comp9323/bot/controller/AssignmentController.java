@@ -67,7 +67,7 @@ public class AssignmentController {
 	public FileSystemResource downloadPDF_ass(HttpServletResponse response, @PathVariable("id") Long id) {
 		System.out.println("downloadPDF");
 		// get filePath from database
-		resource = resourceDao.getAssignmentById(id);
+		resource = resourceDao.getResourceById(id);
 		String filePath = resource.getPath();
 
 		// access file under src/main/resources
@@ -98,7 +98,7 @@ public class AssignmentController {
 
 		// get filePath from database
 		System.out.println("id:" + id); // debug
-		resource = resourceDao.getAssignmentById(id);
+		resource = resourceDao.getResourceById(id);
 		System.out.println("resource: " + resource.toString()); // debug
 
 		String filePath = resource.getPath();

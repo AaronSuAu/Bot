@@ -19,7 +19,7 @@ public interface ResourceDao {
 	List<Resource> getAllLectureResource();
 
 	@Select("select * from resource where id = #{id}")
-	Resource getAssignmentById(Long id);
+	Resource getResourceById(Long id);
 
 	@Select("select * from resource where class_id = #{classId}")
 	public List<Resource> getResourceByClass(@Param("classId") Long classId);
@@ -37,5 +37,6 @@ public interface ResourceDao {
 	
 	@Delete("delete from resource where class_id = #{id}")
 	int deleteResourceByClassId(@Param("id") int id);
+	
 	
 }

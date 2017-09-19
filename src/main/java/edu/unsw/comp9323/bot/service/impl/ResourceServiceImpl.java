@@ -58,7 +58,7 @@ public class ResourceServiceImpl implements ResourceService {
 			return "Authorization fail";
 		}
 
-		String classId = input.getResult().getParameters().get("material-week-number").getAsString();
+		String classId = input.getResult().getParameters().get("week-number").getAsString();
 
 		List<Resource> list = resourceDao.getResourceByClass(Long.parseLong(classId));
 		if(list.size() == 0){
@@ -71,7 +71,7 @@ public class ResourceServiceImpl implements ResourceService {
 		System.out.println("add Class Material by week"); // debug
 
 		// Authorization
-		if (!validationUtil.isLecturerOrStudent(input)) {
+		if (!validationUtil.isLecturer(input)) {
 			return "Authorization fail";
 		}
 
@@ -91,10 +91,10 @@ public class ResourceServiceImpl implements ResourceService {
 		System.out.println("delete Class Material by week"); // debug
 
 		// Authorization
-		if (!validationUtil.isLecturerOrStudent(input)) {
+		if (!validationUtil.isLecturer(input)) {
 			return "Authorization fail";
 		}
-		String classId = input.getResult().getParameters().get("material-week-number").getAsString();
+		String classId = input.getResult().getParameters().get("week-number").getAsString();
 
 		if(resourceDao.deleteResourceByClassId(Integer.parseInt(classId)) == 0){
 			return "Fail. Check the week number";
@@ -107,18 +107,18 @@ public class ResourceServiceImpl implements ResourceService {
 		System.out.println("update Class Material by week"); // debug
 
 		// Authorization
-		if (!validationUtil.isLecturerOrStudent(input)) {
+		if (!validationUtil.isLecturer(input)) {
 			return "Authorization fail";
 		}
 
-		String classId = input.getResult().getParameters().get("material-week-number").getAsString();
+		String classId = input.getResult().getParameters().get("week-number").getAsString();
 		List<Lecture> list = lectureDao.getLectureByWeek(Integer.parseInt(classId));
 		if(list.size() == 0){
 			return "Wrong lecture number";
 		}
 		String name = input.getResult().getParameters().get("material-title").getAsString();
 		String author_zid = input.getResult().getParameters().get("zid").getAsString();
-		return "To add material, go to http://localhost:8080/page/material/add?"
+		return "To update material, go to http://localhost:8080/page/material/add?"
 				+ "name="+name+"&author_zid="+author_zid+"&class_id="+classId+"&type=update";
 	}
 
