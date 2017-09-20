@@ -244,6 +244,7 @@ public class EmailServiceImpl implements EmailService {
 
 	private String getBodyOfTemplatedEmail(String emailTemplate) {
 		String result = "";
+
 		if (emailTemplate.toLowerCase().contains("cancel")) {
 			result = "Hello Class,\nI'm sorry to inform you that due to personal issue I need to cancel ";
 			if (emailTemplate.toLowerCase().contains("today")) {
