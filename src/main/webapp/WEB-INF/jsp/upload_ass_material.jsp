@@ -72,11 +72,11 @@
 			$("#due_date_string").val(due_date_string);
 			$("#type").val(type);
 			if (type === "add") {
-				$("#label").append(" for adding assignment material");			
+				$("#label").append(" for adding assignment material of "+ name);			
 				$("#form").attr("action", "/resource/assignment/add");
 			}else if(type === "update") {
 				console.log("update");
-				$("#label").append(" for updating assignment material");
+				$("#label").append(" for updating assignment material of "+ name);
 				$("#form").attr("action", "/resource/assignment/update");
 			}
 		})

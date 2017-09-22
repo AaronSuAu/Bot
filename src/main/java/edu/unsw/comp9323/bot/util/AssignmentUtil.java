@@ -21,7 +21,7 @@ public class AssignmentUtil {
 
 		for (AssignmentInfoDto assignmentInfoDto : assignmentInfoDtoList) {
 			String info = " -" + assignmentInfoDto.toString();
-			String show_url_localhost = " http://" + hostStringLocal + "/resource/showPDF/assignment/"
+			String show_url_localhost = " http://" + hostStringLocal + "/file/showPDF/resource/"
 					+ assignmentInfoDto.getMaterial_id();
 			String download_url_localhost = " http://" + hostStringLocal + "/file/download/resource/"
 					+ assignmentInfoDto.getMaterial_id();

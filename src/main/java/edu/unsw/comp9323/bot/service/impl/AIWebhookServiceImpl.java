@@ -13,24 +13,30 @@ import ai.api.model.AIResponse;
 import ai.api.model.Fulfillment;
 import edu.unsw.comp9323.bot.service.AIWebbookService;
 import edu.unsw.comp9323.bot.service.AssignmentService;
+import edu.unsw.comp9323.bot.service.AuthenticationService;
 import edu.unsw.comp9323.bot.service.EmailService;
 import edu.unsw.comp9323.bot.service.LectureService;
 import edu.unsw.comp9323.bot.service.ReminderService;
 import edu.unsw.comp9323.bot.service.ResourceService;
+import edu.unsw.comp9323.bot.util.ValidationUtil;
 
 @Service
 public class AIWebhookServiceImpl implements AIWebbookService {
 
 	@Autowired
-	private AssignmentService assignmentService;
+	AssignmentService assignmentService;
 	@Autowired
-	private LectureService lectureService;
+	LectureService lectureService;
 	@Autowired
-	private ResourceService resourceService;
+	ResourceService resourceService;
 	@Autowired
-	private EmailService emailService;
+	EmailService emailService;
 	@Autowired
-	private ReminderService reminderService;
+	ReminderService reminderService;
+	@Autowired
+	ValidationUtil validationUtil;
+	@Autowired
+	AuthenticationService authenticationService;
 
 	public void doWebhook(AIWebhookRequest input, Fulfillment output) {
 		// Get intent
@@ -45,86 +51,88 @@ public class AIWebhookServiceImpl implements AIWebbookService {
 		/**
 		 * Dispatch to different services
 		 */
-		// for assignment
-		if (intentName.equals("getAllAssignment")) {// back-end checked
-			returnMsg = assignmentService.getAllAssignment(input);
-		} else if (intentName.equals("getAssignmentByTitle")) {// back-end
-																// checked
-			returnMsg = assignmentService.getAssignmentByTitle(input);
-		} else if (intentName.equals("addAssignmentByTitle")) {// back-end
-																// checked
-			returnMsg = assignmentService.addAssignmentByTitle(input);
-		} else if (intentName.equals("changeAssignmentByTitle")) { // back-end
-																	// checked
-			returnMsg = assignmentService.changeAssignmentByTitle(input);
-		} else if (intentName.equals("deleteAssignmentByTitle")) { // back-end
-																	// checked
-			returnMsg = assignmentService.deleteAssignmentByTitle(input);
-		} else if (intentName.equals("studentSubmitAssignment")) { // back-end
-																	// checked
-			returnMsg = assignmentService.studentSubmitAssignment(input);
-		} else if (intentName.equals("getUnsubmitingGroup")) {
-			// TODO
-			returnMsg = assignmentService.getUnsubmitingGroup(input);
-		} else if (intentName.equals("getAssSubmissionByAssTitleAndGroupNb")) { // back-end
-																				// checked
-			returnMsg = assignmentService.getAssSubmissionByAssTitleAndGroupNb(input);
-		} else if (intentName.equals("getAllUnmarkedAssignmentGroup")) { // back-end
-																			// checked
-			returnMsg = assignmentService.getAllUnmarkedAssignmentGroup(input);
-		} else if (intentName.equals("markAssignmentByGroupNb")) { // back-end
-																	// checked
-			returnMsg = assignmentService.markAssignmentByGroupNb(input);
-		} else {
-			// not for assignment
-		}
+		try {
 
-		// for class TODO more functions
-		if (intentName.equals("getLectureInfoByWeek")) {
-			returnMsg = lectureService.getLectureInfoByWeek(input);
-		} else {
-			// not for class
-		}
-
-		// TODO for lecture resource
-		if (intentName.equals("getAllLectureResource")) {
-			returnMsg = resourceService.getAllLectureResource(input);
-		} else if (intentName.equals("getLectureResourceByWeek")) {
-			returnMsg = resourceService.getClassMaterialUrlByWeek(input);
-		} else if (intentName.equals("addLectureResourceByWeek")) {
-			returnMsg = resourceService.addClassMaterialUrlByWeek(input);
-		} else if (intentName.equals("deleteLectureResourceByWeek")) {
-			returnMsg = resourceService.deleteLectureResourceByWeek(input);
-		} else if (intentName.equals("changeLectureResourceByWeek")) {
-			returnMsg = resourceService.updateClassMaterialUrlByWeek(input);
-		} else {
-			// not for lecture resource
-		}
-
-		// TODO for reminder
-		if (intentName.equals("getReminders")) {
-			returnMsg = reminderService.getAllReminders(input);
-		} else if (intentName.equals("deleteReminder")) {
-			if (reminderService.deleteReminder(input)) {
-				returnMsg = "Reminder Removed Successfully!";
-			} else {
-				returnMsg = "Failed To Remove!";
+			// for authorization
+			if (intentName.equals("login")) {
+				returnMsg = authenticationService.isValidUser(input);
 			}
+
+			// for assignment
+			if (intentName.equals("getAllAssignment")) {
+				returnMsg = assignmentService.getAllAssignment(input);
+			} else if (intentName.equals("getAssignmentByTitle")) {
+				returnMsg = assignmentService.getAssignmentByTitle(input);
+			} else if (intentName.equals("addAssignmentByTitle")) {
+				returnMsg = assignmentService.addAssignmentByTitle(input);
+			} else if (intentName.equals("changeAssignmentByTitle")) {
+				returnMsg = assignmentService.changeAssignmentByTitle(input);
+			} else if (intentName.equals("deleteAssignmentByTitle")) {
+				returnMsg = assignmentService.deleteAssignmentByTitle(input);
+			} else if (intentName.equals("studentSubmitAssignment")) {
+				returnMsg = assignmentService.studentSubmitAssignment(input);
+			} else if (intentName.equals("getUnsubmitingGroup")) {
+				// TODO
+				returnMsg = assignmentService.getUnsubmitingGroup(input);
+			} else if (intentName.equals("getAssSubmissionByAssTitleAndGroupNb")) {
+				returnMsg = assignmentService.getAssSubmissionByAssTitleAndGroupNb(input);
+			} else if (intentName.equals("getAllUnmarkedAssignmentGroup")) {
+				returnMsg = assignmentService.getAllUnmarkedAssignmentGroup(input);
+			} else if (intentName.equals("markAssignmentByGroupNb")) {
+				returnMsg = assignmentService.markAssignmentByGroupNb(input);
+			} else {
+				// not for assignment
+			}
+
+			if (intentName.equals("getLectureInfoByWeek")) {
+				returnMsg = lectureService.getLectureInfoByWeek(input);
+			} else {
+				// not for class
+			}
+
+			if (intentName.equals("getAllLectureResource")) {
+				returnMsg = resourceService.getAllLectureResource(input);
+			} else if (intentName.equals("getLectureResourceByWeek")) {
+				returnMsg = resourceService.getClassMaterialUrlByWeek(input);
+			} else if (intentName.equals("addLectureResourceByWeek")) {
+				returnMsg = resourceService.addClassMaterialUrlByWeek(input);
+			} else if (intentName.equals("deleteLectureResourceByWeek")) {
+				returnMsg = resourceService.deleteLectureResourceByWeek(input);
+			} else if (intentName.equals("changeLectureResourceByWeek")) {
+				returnMsg = resourceService.updateClassMaterialUrlByWeek(input);
+			} else {
+				// not for lecture resource
+			}
+
+			if (intentName.equals("getReminders")) {
+				returnMsg = reminderService.getAllReminders(input);
+			} else if (intentName.equals("deleteReminder")) {
+				if (reminderService.deleteReminder(input)) {
+					returnMsg = "Reminder Removed Successfully!";
+				} else {
+					returnMsg = "Failed To Remove!";
+				}
+			}
+
+			if (intentName.equals("send_email_to_zid"))
+
+			{
+				returnMsg = emailService.sendEmailToZid(input);
+			} else if (intentName.equals("send-email-template")) {
+				returnMsg = emailService.sendEmailTemplate(input);
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			returnMsg = "500 check log for detail";
 		}
 
-		// TODO for email
-		if (intentName.equals("send_email_to_zid"))
-
-		{
-			returnMsg = emailService.sendEmailToZid(input);
-		} else if (intentName.equals("send-email-template")) {
-			returnMsg = emailService.sendEmailTemplate(input);
-		}
 		// DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 		// Date date = new Date();
 		// output.setSpeech("Webhook get: intent name:" + intentName + "return
 		// at" +
 		// dateFormat.format(date));
+
 		output.setSpeech(returnMsg);
 	};
 
@@ -139,8 +147,7 @@ public class AIWebhookServiceImpl implements AIWebbookService {
 		/**
 		 * Get original request object
 		 * 
-		 * @return <code>null</code> if original request undefined in request
-		 *         object
+		 * @return <code>null</code> if original request undefined in request object
 		 */
 		public OriginalRequest getOriginalRequest() {
 			return originalRequest;

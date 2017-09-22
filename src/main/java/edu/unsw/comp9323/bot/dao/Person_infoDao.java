@@ -39,4 +39,7 @@ public interface Person_infoDao {
 	@Select("select * from person_info where group_nb = #{group_nb}")
 	List<Person_info> getUserByGroupNb(@Param("group_nb") Long group_nb);
 
+	@Select("select * from person_info where role = 0")
+	List<Person_info> getAllStudent();
+
 }

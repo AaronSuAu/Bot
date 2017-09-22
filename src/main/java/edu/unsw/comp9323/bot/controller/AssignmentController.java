@@ -36,6 +36,7 @@ import edu.unsw.comp9323.bot.dao.ResourceDao;
 import edu.unsw.comp9323.bot.model.Ass_student;
 import edu.unsw.comp9323.bot.model.Assignment;
 import edu.unsw.comp9323.bot.model.Resource;
+import edu.unsw.comp9323.bot.service.EmailService;
 
 @RestController
 @RequestMapping("/resource") // only hande rest request from url or upload html
@@ -55,69 +56,8 @@ public class AssignmentController {
 	Person_infoDao person_infoDao;
 	@Autowired
 	Ass_studentDao ass_studentDao;
-
-	/**
-	 * download PDF by given resource id
-	 * 
-	 * @param response
-	 * @param id
-	 * @return download file
-	 */
-	@RequestMapping(value = "/downloadPDF/assignment/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
-	public FileSystemResource downloadPDF_ass(HttpServletResponse response, @PathVariable("id") Long id) {
-		System.out.println("downloadPDF");
-		// get filePath from database
-		resource = resourceDao.getResourceById(id);
-		String filePath = resource.getPath();
-
-		// access file under src/main/resources
-		ClassLoader classLoader = getClass().getClassLoader();
-		File fileObj = null;
-		try {
-			fileObj = new File(classLoader.getResource(filePath).getFile());
-		} catch (Exception e) {
-			System.out.println("file does not exit!");
-		}
-
-		response.setHeader("Content-Disposition", "attachment; filename=" + fileObj.getName());
-		return new FileSystemResource(fileObj);
-	}
-
-	/**
-	 * view PDF in browser by given resource id
-	 * 
-	 * @param httpServletRequest
-	 * @param id
-	 * @return
-	 * @throws IOException
-	 */
-	@RequestMapping(value = "/showPDF/assignment/{id}", method = RequestMethod.GET)
-	public ResponseEntity<byte[]> showPDF_ass(HttpServletRequest httpServletRequest, @PathVariable("id") Long id)
-			throws IOException {
-		System.out.println("showPDF");
-
-		// get filePath from database
-		System.out.println("id:" + id); // debug
-		resource = resourceDao.getResourceById(id);
-		System.out.println("resource: " + resource.toString()); // debug
-
-		String filePath = resource.getPath();
-		System.out.println("filePath: " + filePath); // debug
-
-		// access file under src/main/resources
-		ClassLoader classLoader = getClass().getClassLoader();
-		File fileObj = null;
-		try {
-			fileObj = new File(classLoader.getResource(filePath).getFile());
-		} catch (Exception e) {
-			System.out.println("file does not exit!");
-		}
-
-		HttpHeaders httpHeaders = new HttpHeaders();
-		httpHeaders.setContentDispositionFormData("attachment", java.net.URLEncoder.encode(fileObj.getName(), "UTF-8"));
-		httpHeaders.setContentType(MediaType.parseMediaType("application/pdf"));
-		return new ResponseEntity<byte[]>(FileUtils.readFileToByteArray(fileObj), httpHeaders, HttpStatus.OK);
-	}
+	@Autowired
+	EmailService emailService;
 
 	/**
 	 * add assignment and assignment resource. TODO multiple assignment materials
@@ -137,14 +77,16 @@ public class AssignmentController {
 		 */
 		java.sql.Date due_date = null;
 		try {
-			// due_date need to follow certain formate: "January 2, 2010"
-			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+			// due_date need to follow certain formate: yyyy-MM-dd
+			System.out.println("due_date_string: " + due_date_string);
+			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 			java.util.Date utilDate = simpleDateFormat.parse(due_date_string);
 			due_date = new Date(utilDate.getTime());
 		} catch (ParseException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
+			return "<h1>fail to add new assignment material</h1>";
 		}
+
 		assignment.setName(name);
 		assignment.setDue_date(due_date);
 
@@ -170,6 +112,10 @@ public class AssignmentController {
 			System.out.println("inserting resource:" + resource.toString()); // debug
 			resourceDao.uploadAssignResource(resource);
 			System.out.println("new resource id: " + resource.getId().toString());
+
+			// send email to all student
+			emailService.sendEmailToAllStudent();
+
 			return "<h1>success to add new assignment material</h1>";
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -196,12 +142,13 @@ public class AssignmentController {
 		java.sql.Date due_date = null;
 		try {
 			// due_date need to follow certain formate: "January 2, 2010"
-			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 			java.util.Date utilDate = simpleDateFormat.parse(due_date_string);
 			due_date = new Date(utilDate.getTime());
 		} catch (ParseException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
+			return "<h1>fail to update new assignment material</h1>";
 		}
 		Long ass_id = assignmentDao.getAssignmentIdByTitle(name).getId();
 		assignment.setId(ass_id);
@@ -241,6 +188,10 @@ public class AssignmentController {
 			System.out.println("inserting resource:" + resource.toString()); // debug
 			resourceDao.uploadAssignResource(resource);
 			System.out.println("new resource id: " + resource.getId().toString());
+
+			// send email to all student
+			emailService.sendEmailToAllStudent();
+
 			return "<h1>success to update new assignment material</h1>";
 		} catch (IOException e) {
 			e.printStackTrace();

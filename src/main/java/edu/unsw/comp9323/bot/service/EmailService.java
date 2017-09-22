@@ -8,4 +8,11 @@ public interface EmailService {
 
 	public String sendEmailTemplate(AIWebhookRequest input);
 
+	public String sendEmailToAllStudent();
+
+	// TODO
+	public void sendEmailToZid(String zid);
+
+	public void sendEmailToGroup(Long group_nb);
+
 }

@@ -45,6 +45,9 @@ public class EmailServiceImpl implements EmailService {
 	@Autowired
 	AssignmentDao assignmentDao;
 
+	@Autowired
+	EmailService emailService;
+
 	@Override
 	public String sendEmailToZid(AIWebhookRequest input) {
 
@@ -277,6 +280,32 @@ public class EmailServiceImpl implements EmailService {
 
 		Identity identity = userIdentityUtil.getIdentity(input);
 		return person_infoDao.getUserByZid(identity.getZid());
+	}
+
+	@Override
+	public String sendEmailToAllStudent() {
+		List<Person_info> students = person_infoDao.getAllStudent();
+		try {
+			for (Person_info student : students) {
+				emailService.sendEmailToZid(student.getZid());
+			}
+		} catch (Exception e) {
+			return "Fail to email all students email for informing new assignment";
+		}
+
+		return "Sent to all students email of informing new assignment";
+	}
+
+	@Override
+	public void sendEmailToZid(String zid) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void sendEmailToGroup(Long group_nb) {
+		// TODO Auto-generated method stub
+
 	}
 
 }
