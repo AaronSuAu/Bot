@@ -104,6 +104,7 @@ public class AIWebhookServiceImpl implements AIWebbookService {
 				// not for lecture resource
 			}
 
+			// reminder
 			if (intentName.equals("getReminders")) {
 				returnMsg = reminderService.getAllReminders(input);
 			} else if (intentName.equals("deleteReminder")) {
