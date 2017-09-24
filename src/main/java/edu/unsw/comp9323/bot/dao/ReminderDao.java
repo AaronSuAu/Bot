@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
@@ -59,6 +60,7 @@ public interface ReminderDao {
 	 * create a new reminder
 	 */
 	@Insert("insert into reminder (date, content, title, owner) " + "values(#{date}, #{content}, #{title}, #{owner})")
+	@Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "reminder.id")
 	boolean insertReminder(Reminder reminder);
 
 	/*
@@ -74,5 +76,17 @@ public interface ReminderDao {
 	 */
 	@Select("select * from person_info where zid = #{zid} ")
 	Person_info getPersonInfo(@Param("zid") String zid);
+
+	/*
+	 * add receiver_reminder
+	 */
+	@Insert("insert into reminder_receiver (reminder, receiver) values(#{reminder}, #{receiver})")
+	boolean addReceivers(@Param("reminder") long reminder, @Param("receiver") String receiver);
+
+	/*
+	 * get all persons
+	 */
+	@Select("select * from person_info")
+	List<Person_info> getAllReceivers();
 
 }

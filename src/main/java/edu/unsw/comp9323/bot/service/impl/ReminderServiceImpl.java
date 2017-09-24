@@ -5,6 +5,7 @@ import java.sql.Date;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,11 +51,11 @@ public class ReminderServiceImpl implements ReminderService {
 			reminders = reminderDao.findRemindersByDate(zid, date);
 		}
 
-		if (reminders == null) {
+		if (reminders == null || reminders.size() == 0) {
 			returnMsg += "No reminder found !";
 		} else {
 			for (Reminder r : reminders) {
-				returnMsg += r.getId() + ". " + r.getTitle() + ": " + r.getDate() + "; ";
+				returnMsg += r.getId() + ". " + r.getTitle() + ": " + r.getDate() + ";\n";
 			}
 		}
 
@@ -86,12 +87,13 @@ public class ReminderServiceImpl implements ReminderService {
 	public String addReminder(AIWebhookRequest input) {
 		// TODO Auto-generated method stub
 		JsonArray reminder_no = input.getResult().getParameters().get("student-no").getAsJsonArray();
-		String dateString = input.getResult().getParameters().get("reminder_date").getAsString();
+		String dateString = input.getResult().getParameters().get("date").getAsString();
 		String content = input.getResult().getParameters().get("reminder_content").getAsString();
 		String title = input.getResult().getParameters().get("reminder_title").getAsString();
 		String zid = userIdentityUtil.getIdentity(input).getZid();
 		// init a new reminder object
 		Reminder newReminder = new Reminder();
+		// get date
 		DateFormat sdf = new SimpleDateFormat("yyyy-mm-dd");
 		Date date;
 		try {
@@ -101,20 +103,61 @@ public class ReminderServiceImpl implements ReminderService {
 			e.printStackTrace();
 			return "Date format error.";
 		}
+
 		newReminder.setDate(date);
 		newReminder.setContent(content);
 		newReminder.setOwner(zid);
 		newReminder.setTitle(title);
 		try {
-			if (reminderDao.insertReminder(newReminder))
-				return "Reminder created";
-			else
+			if (reminderDao.insertReminder(newReminder)) {
+				return addReceivers(reminder_no, newReminder.getId());
+			} else
 				return "Fail to create the reminder.";
 		} catch (DataIntegrityViolationException e) {
 			// TODO: handle exception
 			return "Date format error";
 		}
 
+	}
+
+	/*
+	 * add receivers to a reminder
+	 */
+	private String addReceivers(JsonArray reminder_no, long reminder_id) {
+		// TODO Auto-generated method stub
+		// get receiver
+		List<String> receivers = getListFromJsonArray(reminder_no);
+		if (receivers.contains("all") || receivers.contains("everybody") || receivers.contains("class")
+				|| receivers.contains("everyone") || receivers.contains("whole class")
+				|| receivers.contains("all members")) {
+			List<Person_info> persons = reminderDao.getAllReceivers();
+			for (Person_info person_info : persons) {
+				if (!reminderDao.addReceivers(reminder_id, person_info.getZid()))
+					return "Fail to create a Reminder (cannot add a receiver: " + person_info.getZid() + ")";
+			}
+		} else {
+
+			for (String r : receivers) {
+				if (r.contains("group")) {
+					return "add reminders to group(TODO)";
+				} else if (r.contains("z")) {
+					Person_info receiver = getPersonInfo(r);
+					if (receiver != null) {
+						if (!reminderDao.addReceivers(reminder_id, receiver.getZid()))
+							return "Fail to create a Reminder (cannot add a receiver: " + receiver.getZid() + ")";
+					}
+				}
+			} // end of for loop
+		}
+		return "Reminder created!";
+	}
+
+	public ArrayList<String> getListFromJsonArray(JsonArray ja) {
+		ArrayList<String> aList = new ArrayList<String>();
+		for (JsonElement element : ja) {
+			aList.add(ja.getAsString());
+		}
+		return aList;
 	}
 
 	@Override
