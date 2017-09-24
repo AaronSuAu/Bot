@@ -1,6 +1,7 @@
 package edu.unsw.comp9323.bot.service.impl;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
@@ -15,10 +16,12 @@ import edu.unsw.comp9323.bot.dao.ResourceDao;
 import edu.unsw.comp9323.bot.dto.AssignmentInfoDto;
 import edu.unsw.comp9323.bot.model.Ass_student;
 import edu.unsw.comp9323.bot.model.Assignment;
+import edu.unsw.comp9323.bot.model.Person_info;
 import edu.unsw.comp9323.bot.service.AssignmentService;
 import edu.unsw.comp9323.bot.service.EmailService;
 import edu.unsw.comp9323.bot.service.impl.AIWebhookServiceImpl.AIWebhookRequest;
 import edu.unsw.comp9323.bot.util.AssignmentUtil;
+import edu.unsw.comp9323.bot.util.EmailUtil;
 import edu.unsw.comp9323.bot.util.UserIdentityUtil;
 import edu.unsw.comp9323.bot.util.ValidationUtil;
 
@@ -45,6 +48,10 @@ public class AssignmentServiceImpl implements AssignmentService {
 	UserIdentityUtil userIdentityUtil;
 	@Autowired
 	EmailService emailService;
+	@Autowired
+	EmailUtil emailUtil;
+	@Autowired
+	Person_info person_info;
 
 	/**
 	 * return all assignments(list) including assignment name, due date, upload
@@ -292,10 +299,18 @@ public class AssignmentServiceImpl implements AssignmentService {
 		if (ass_studentDao.markById(ass_student)) {
 
 			// send email to this group student for inform assignment mark release
-			emailService.sendEmailToGroup(ass_student.getGroup_nb());
-
+			ArrayList<String> toEmails = person_infoDao.getEmailByGroupNb(group_nb);
+			String subject = "Mark for Group" + group_nb.toString() + " is released";
+			String body = "Hi, there\n you get " + grade + " for assignment of " + title + ".";
+			String zid = userIdentityUtil.getIdentity(input).getZid();
+			person_info = person_infoDao.getUserByZid(zid);
 			// TODO ask if send email
-			return "mark has set, sent to group for inform assignment mark release.";
+			if (emailUtil.sendFromGMail(toEmails, subject, body, person_info)) {
+				return "mark has set, sent to group for inform assignment mark release.";
+			} else {
+				return "fail to send email";
+			}
+
 		} else {
 			return "something wrong, can you mark again";
 		}

@@ -1,5 +1,6 @@
 package edu.unsw.comp9323.bot.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Insert;
@@ -40,6 +41,12 @@ public interface Person_infoDao {
 	List<Person_info> getUserByGroupNb(@Param("group_nb") Long group_nb);
 
 	@Select("select * from person_info where role = 0")
-	List<Person_info> getAllStudent();
+	ArrayList<Person_info> getAllStudent();
+
+	@Select("select email from person_info where role = 0")
+	ArrayList<String> getAllStudentEmails();
+
+	@Select("select email from person_info where group_nb = #{group_nb}")
+	ArrayList<String> getEmailByGroupNb(@Param("group_nb") Long group_nb);
 
 }

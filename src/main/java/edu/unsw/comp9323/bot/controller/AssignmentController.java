@@ -35,6 +35,7 @@ import edu.unsw.comp9323.bot.dao.Person_infoDao;
 import edu.unsw.comp9323.bot.dao.ResourceDao;
 import edu.unsw.comp9323.bot.model.Ass_student;
 import edu.unsw.comp9323.bot.model.Assignment;
+import edu.unsw.comp9323.bot.model.Person_info;
 import edu.unsw.comp9323.bot.model.Resource;
 import edu.unsw.comp9323.bot.service.EmailService;
 
@@ -58,6 +59,8 @@ public class AssignmentController {
 	Ass_studentDao ass_studentDao;
 	@Autowired
 	EmailService emailService;
+	@Autowired
+	Person_info person_info;
 
 	/**
 	 * add assignment and assignment resource. TODO multiple assignment materials
@@ -114,7 +117,10 @@ public class AssignmentController {
 			System.out.println("new resource id: " + resource.getId().toString());
 
 			// send email to all student
-			emailService.sendEmailToAllStudent();
+			String subject = "New assignment release";
+			String body = "Hi, there\nAssignment of " + name + " has released.";
+			person_info = person_infoDao.getUserByZid(author_zid);
+			emailService.sendEmailToAllStudent(subject, body, person_info);
 
 			return "<h1>success to add new assignment material</h1>";
 		} catch (IOException e) {
@@ -190,7 +196,10 @@ public class AssignmentController {
 			System.out.println("new resource id: " + resource.getId().toString());
 
 			// send email to all student
-			emailService.sendEmailToAllStudent();
+			String subject = "Update assignment";
+			String body = "Hi, there\nAssignment of " + name + " has updated.";
+			person_info = person_infoDao.getUserByZid(author_zid);
+			emailService.sendEmailToAllStudent(subject, body, person_info);
 
 			return "<h1>success to update new assignment material</h1>";
 		} catch (IOException e) {

@@ -272,6 +272,8 @@ public class EmailServiceImpl implements EmailService {
 				result += "next week's ";
 			}
 			result += "class.";
+		} else {
+			result = emailTemplate;
 		}
 		return result;
 	}
@@ -283,29 +285,16 @@ public class EmailServiceImpl implements EmailService {
 	}
 
 	@Override
-	public String sendEmailToAllStudent() {
-		List<Person_info> students = person_infoDao.getAllStudent();
+	public String sendEmailToAllStudent(String subject, String body, Person_info from) {
+		ArrayList<String> toEmails = person_infoDao.getAllStudentEmails();
 		try {
-			for (Person_info student : students) {
-				emailService.sendEmailToZid(student.getZid());
-			}
+			emailUtil.sendFromGMail(toEmails, subject, body, from);
 		} catch (Exception e) {
+			e.printStackTrace();
 			return "Fail to email all students email for informing new assignment";
 		}
 
 		return "Sent to all students email of informing new assignment";
-	}
-
-	@Override
-	public void sendEmailToZid(String zid) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void sendEmailToGroup(Long group_nb) {
-		// TODO Auto-generated method stub
-
 	}
 
 }

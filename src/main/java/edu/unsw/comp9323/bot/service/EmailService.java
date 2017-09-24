@@ -1,5 +1,6 @@
 package edu.unsw.comp9323.bot.service;
 
+import edu.unsw.comp9323.bot.model.Person_info;
 import edu.unsw.comp9323.bot.service.impl.AIWebhookServiceImpl.AIWebhookRequest;
 
 public interface EmailService {
@@ -8,11 +9,6 @@ public interface EmailService {
 
 	public String sendEmailTemplate(AIWebhookRequest input);
 
-	public String sendEmailToAllStudent();
-
-	// TODO
-	public void sendEmailToZid(String zid);
-
-	public void sendEmailToGroup(Long group_nb);
+	public String sendEmailToAllStudent(String subject, String body, Person_info from);
 
 }

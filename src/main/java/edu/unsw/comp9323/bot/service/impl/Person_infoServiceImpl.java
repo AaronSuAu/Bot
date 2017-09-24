@@ -79,4 +79,5 @@ public class Person_infoServiceImpl implements Person_infoService {
 		String password = encoder.encode("123456");
 		person_infoDao.createPerson_info(zid, password);
 	}
+
 }

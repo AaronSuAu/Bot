@@ -10,4 +10,5 @@ public interface Person_infoService {
 	public String generateRandomString(String str, int length);
 
 	public void createUser();
+
 }
