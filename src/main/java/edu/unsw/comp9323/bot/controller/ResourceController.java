@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.Timestamp;
+import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -19,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import edu.unsw.comp9323.bot.constant.Constant;
+import edu.unsw.comp9323.bot.dao.ResourceDao;
 import edu.unsw.comp9323.bot.model.Resource;
 import edu.unsw.comp9323.bot.service.impl.ResourceServiceImpl;
 
@@ -27,6 +30,8 @@ import edu.unsw.comp9323.bot.service.impl.ResourceServiceImpl;
 public class ResourceController {
 	@Autowired
 	ResourceServiceImpl resourceServiceImpl;
+	@Autowired
+	ResourceDao resourceDao;
 
 	@RequestMapping(value = "/material/add", method = RequestMethod.POST)
 	public String setMaterial(@RequestParam("file") MultipartFile file, @RequestParam("name") String name,
@@ -39,7 +44,7 @@ public class ResourceController {
 		byte[] bytes;
 		try {
 			bytes = file.getBytes();
-			String filePath = "src/main/resources/lecture/" + file.getOriginalFilename();
+			String filePath = "src/main/resources/lecture/" + file.getOriginalFilename().replace(" ", "");
 			Path path = Paths.get(filePath);
 			Files.write(path, bytes);
 			resource.setTitle(name);
@@ -61,14 +66,22 @@ public class ResourceController {
 	public String updateMaterial(@RequestParam("file") MultipartFile file, @RequestParam("name") String name,
 			@RequestParam("class_id") Long class_id, @RequestParam("author_zid") String author_zid) {
 		Resource resource = new Resource();
-
+		/*
+		 * Delete 
+		 */
 		/*
 		 * insert into resource table
 		 */
 		byte[] bytes;
 		try {
+			List<Resource> list = resourceDao.getResourceByClass(class_id);
+			for (Resource toDeleteResource : list) {
+				File toDeletefile = new File(toDeleteResource.getPath());
+				toDeletefile.delete();
+				resourceDao.deleteResource(toDeleteResource);
+			}
 			bytes = file.getBytes();
-			String filePath = "src/main/resources/assignment/" + name + "/material/" + file.getOriginalFilename();
+			String filePath = "src/main/resources/assignment/" + name + "/material/" + file.getOriginalFilename().replace(" ", "");
 			Path path = Paths.get(filePath);
 			Files.write(path, bytes);
 			resource.setTitle(name);

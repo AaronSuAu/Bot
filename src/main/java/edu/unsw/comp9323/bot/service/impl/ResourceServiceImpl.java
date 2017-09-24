@@ -16,6 +16,7 @@ import edu.unsw.comp9323.bot.model.Resource;
 import edu.unsw.comp9323.bot.service.ResourceService;
 import edu.unsw.comp9323.bot.service.impl.AIWebhookServiceImpl.AIWebhookRequest;
 import edu.unsw.comp9323.bot.util.ResourceUtil;
+import edu.unsw.comp9323.bot.util.UserIdentityUtil;
 import edu.unsw.comp9323.bot.util.ValidationUtil;
 
 @Service
@@ -30,6 +31,8 @@ public class ResourceServiceImpl implements ResourceService {
 	ValidationUtil validationUtil;
 	@Autowired
 	LectureDao lectureDao;
+	@Autowired
+	UserIdentityUtil userIdentityUtil;
 
 	@Override
 	public String getAllLectureResource(AIWebhookRequest input) {
@@ -81,7 +84,7 @@ public class ResourceServiceImpl implements ResourceService {
 			return "Wrong lecture number";
 		}
 		String name = input.getResult().getParameters().get("material-title").getAsString();
-		String author_zid = input.getResult().getParameters().get("zid").getAsString();
+		String author_zid = userIdentityUtil.getIdentity(input).getZid();
 		return "To add material, go to http://localhost:8080/page/material/add?"
 				+ "name="+name+"&author_zid="+author_zid+"&class_id="+classId+"&type=add";
 	}
@@ -117,7 +120,7 @@ public class ResourceServiceImpl implements ResourceService {
 			return "Wrong lecture number";
 		}
 		String name = input.getResult().getParameters().get("material-title").getAsString();
-		String author_zid = input.getResult().getParameters().get("zid").getAsString();
+		String author_zid = userIdentityUtil.getIdentity(input).getZid();
 		return "To update material, go to http://localhost:8080/page/material/add?"
 				+ "name="+name+"&author_zid="+author_zid+"&class_id="+classId+"&type=update";
 	}

@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import edu.unsw.comp9323.bot.constant.Constant;
 import edu.unsw.comp9323.bot.dto.AssignmentInfoDto;
 import edu.unsw.comp9323.bot.model.Ass_student;
 
@@ -21,9 +22,9 @@ public class AssignmentUtil {
 
 		for (AssignmentInfoDto assignmentInfoDto : assignmentInfoDtoList) {
 			String info = " -" + assignmentInfoDto.toString();
-			String show_url_localhost = " http://" + hostStringLocal + "/file/showPDF/resource/"
+			String show_url_localhost = Constant.DOMAIN_NAME + "/file/showPDF/resource/"
 					+ assignmentInfoDto.getMaterial_id();
-			String download_url_localhost = " http://" + hostStringLocal + "/file/download/resource/"
+			String download_url_localhost = Constant.DOMAIN_NAME + "/file/download/resource/"
 					+ assignmentInfoDto.getMaterial_id();
 			returnMsg = returnMsg + info + show_url_localhost + " " + download_url_localhost;
 		}
@@ -55,7 +56,7 @@ public class AssignmentUtil {
 		String hostStringLocal = "localhost:8080";
 		String hostStringGCloud = "cmbot-b3f5e.appspot.com";
 
-		returnMsg += " to get submission: http://" + hostStringLocal + "/resource/showPDF/submission/"
+		returnMsg += " to get submission: "+Constant.DOMAIN_NAME + "/resource/showPDF/submission/"
 				+ ass_student.getId();
 
 		return returnMsg;

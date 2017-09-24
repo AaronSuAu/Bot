@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import edu.unsw.comp9323.bot.constant.Constant;
 import edu.unsw.comp9323.bot.model.Resource;
 
 @Service
@@ -17,7 +18,7 @@ public class ResourceUtil {
 
 		for (Resource resource : resources) {
 			String info = " -" + resource.toString();
-			String show_url_localhost = " http://" + hostStringLocal + "/file/download/resource/" + resource.getId();
+			String show_url_localhost = Constant.DOMAIN_NAME + "/file/download/resource/" + resource.getId();
 			returnMsg = returnMsg + info + show_url_localhost;
 		}
 		return returnMsg;
