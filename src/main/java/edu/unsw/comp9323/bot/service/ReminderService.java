@@ -21,8 +21,6 @@ public interface ReminderService {
 
 	public List<Reminder> getReminderToSend();
 
-	public Person_info getPersonInfo();
-
 	public Person_info getPersonInfo(String zid);
 
 	public boolean updateReminderFlag(int flag, long id);

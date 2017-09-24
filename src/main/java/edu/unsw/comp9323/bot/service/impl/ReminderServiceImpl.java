@@ -183,12 +183,6 @@ public class ReminderServiceImpl implements ReminderService {
 	}
 
 	@Override
-	public Person_info getPersonInfo() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public Person_info getPersonInfo(String zid) {
 		// TODO Auto-generated method stub
 		return reminderDao.getPersonInfo(zid);
