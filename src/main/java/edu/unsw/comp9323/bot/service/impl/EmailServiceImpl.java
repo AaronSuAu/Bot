@@ -249,7 +249,7 @@ public class EmailServiceImpl implements EmailService {
 		String result = "";
 
 		if (emailTemplate.toLowerCase().contains("cancel")) {
-			result = "Hello Class,\nI'm sorry to inform you that due to personal issue I need to cancel ";
+			result = "Hello All,\nI'm sorry to inform you that due to personal issue I need to cancel ";
 			if (emailTemplate.toLowerCase().contains("today")) {
 				result += "today's ";
 			} else if (emailTemplate.toLowerCase().contains("tomorrow")) {

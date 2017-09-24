@@ -107,11 +107,11 @@ public class AIWebhookServiceImpl implements AIWebbookService {
 			if (intentName.equals("getReminders")) {
 				returnMsg = reminderService.getAllReminders(input);
 			} else if (intentName.equals("deleteReminder")) {
-				if (reminderService.deleteReminder(input)) {
-					returnMsg = "Reminder Removed Successfully!";
-				} else {
-					returnMsg = "Failed To Remove!";
-				}
+				returnMsg = reminderService.deleteReminder(input);
+			} else if (intentName.equals("updateReminder")) {
+				returnMsg = reminderService.updateReminder(input);
+			} else if (intentName.equals("createReminder")) {
+				returnMsg = reminderService.addReminder(input);
 			}
 
 			if (intentName.equals("send_email_to_zid"))
@@ -147,7 +147,8 @@ public class AIWebhookServiceImpl implements AIWebbookService {
 		/**
 		 * Get original request object
 		 * 
-		 * @return <code>null</code> if original request undefined in request object
+		 * @return <code>null</code> if original request undefined in request
+		 *         object
 		 */
 		public OriginalRequest getOriginalRequest() {
 			return originalRequest;

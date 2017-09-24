@@ -58,7 +58,7 @@ public class ResourceServiceImpl implements ResourceService {
 			return "Authorization fail";
 		}
 
-		String classId = input.getResult().getParameters().get("week-number").getAsString();
+		String classId = input.getResult().getParameters().get("week-number").getAsString().replaceAll("\\D+","");;
 
 		List<Resource> list = resourceDao.getResourceByClass(Long.parseLong(classId));
 		if(list.size() == 0){
@@ -75,7 +75,7 @@ public class ResourceServiceImpl implements ResourceService {
 			return "Authorization fail";
 		}
 
-		String classId = input.getResult().getParameters().get("material-week-number").getAsString();
+		String classId = input.getResult().getParameters().get("week-number").getAsString().replaceAll("\\D+","");;
 		List<Lecture> list = lectureDao.getLectureByWeek(Integer.parseInt(classId));
 		if(list.size() == 0){
 			return "Wrong lecture number";
@@ -94,7 +94,7 @@ public class ResourceServiceImpl implements ResourceService {
 		if (!validationUtil.isLecturer(input)) {
 			return "Authorization fail";
 		}
-		String classId = input.getResult().getParameters().get("week-number").getAsString();
+		String classId = input.getResult().getParameters().get("week-number").getAsString().replaceAll("\\D+","");;
 
 		if(resourceDao.deleteResourceByClassId(Integer.parseInt(classId)) == 0){
 			return "Fail. Check the week number";
@@ -111,7 +111,7 @@ public class ResourceServiceImpl implements ResourceService {
 			return "Authorization fail";
 		}
 
-		String classId = input.getResult().getParameters().get("week-number").getAsString();
+		String classId = input.getResult().getParameters().get("week-number").getAsString().replaceAll("\\D+","");;
 		List<Lecture> list = lectureDao.getLectureByWeek(Integer.parseInt(classId));
 		if(list.size() == 0){
 			return "Wrong lecture number";
