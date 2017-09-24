@@ -238,10 +238,12 @@ public class EmailServiceImpl implements EmailService {
 			System.out.println("One or more email is invalid.");
 			falseStatement += "One or more email is invalid.\n";
 		}
-
-		if (falseStatement.length() == 0)
+		System.out.println("true: " + trueStatement);
+		System.out.println("false :" + falseStatement + " " + falseStatement.length());
+		if (falseStatement.length() == 0) {
+			System.out.println("true: " + trueStatement);
 			return trueStatement;
-		else
+		} else
 			return falseStatement;
 	}
 
@@ -261,7 +263,7 @@ public class EmailServiceImpl implements EmailService {
 			}
 			result += "class.";
 		} else if (emailTemplate.toLowerCase().contains("sick")) {
-			result = "Hello Class,\nI'm sorry to inform you I am terribly sick these days so I need to cancel ";
+			result = "Hello All,\nI'm sorry to inform you I am terribly sick these days so I need to cancel ";
 			if (emailTemplate.toLowerCase().contains("today")) {
 				result += "today's ";
 			} else if (emailTemplate.toLowerCase().contains("tomorrow")) {
