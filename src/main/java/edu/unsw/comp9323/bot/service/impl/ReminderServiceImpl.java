@@ -85,6 +85,7 @@ public class ReminderServiceImpl implements ReminderService {
 	@Override
 	public String addReminder(AIWebhookRequest input) {
 		// TODO Auto-generated method stub
+		JsonArray reminder_no = input.getResult().getParameters().get("student-no").getAsJsonArray();
 		String dateString = input.getResult().getParameters().get("reminder_date").getAsString();
 		String content = input.getResult().getParameters().get("reminder_content").getAsString();
 		String title = input.getResult().getParameters().get("reminder_title").getAsString();
