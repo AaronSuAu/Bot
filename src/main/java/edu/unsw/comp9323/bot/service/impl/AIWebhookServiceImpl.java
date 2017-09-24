@@ -117,9 +117,7 @@ public class AIWebhookServiceImpl implements AIWebbookService {
 				returnMsg = reminderService.getReminderDetails(input);
 			}
 
-			if (intentName.equals("send_email_to_zid"))
-
-			{
+			if (intentName.equals("send_email_to_zid")) {
 				returnMsg = emailService.sendEmailToZid(input);
 			} else if (intentName.equals("send-email-template")) {
 				returnMsg = emailService.sendEmailTemplate(input);
@@ -150,8 +148,7 @@ public class AIWebhookServiceImpl implements AIWebbookService {
 		/**
 		 * Get original request object
 		 * 
-		 * @return <code>null</code> if original request undefined in request
-		 *         object
+		 * @return <code>null</code> if original request undefined in request object
 		 */
 		public OriginalRequest getOriginalRequest() {
 			return originalRequest;
