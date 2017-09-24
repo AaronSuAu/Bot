@@ -24,6 +24,7 @@ public class Person_infoServiceImpl implements Person_infoService {
 	 * @param person_info
 	 * @return 0 if student, 1 if tutor, -1 wrong password
 	 */
+	@Override
 	public int validateUser(Person_info recived_person_info) {
 		person_info = person_infoDao.getUserByZid(recived_person_info.getZid());
 		// zid doesn't exist
@@ -49,6 +50,7 @@ public class Person_infoServiceImpl implements Person_infoService {
 	// *********************************the code below is for generating dummy
 	// data****
 	// encode all the password before
+	@Override
 	public void changePassword() {
 		List<Person_info> list = person_infoDao.findAll();
 		for (Person_info p : list) {
@@ -57,6 +59,7 @@ public class Person_infoServiceImpl implements Person_infoService {
 		}
 	}
 
+	@Override
 	public String generateRandomString(String str, int length) {
 		String SALTCHARS = str;
 		StringBuilder salt = new StringBuilder();
@@ -69,6 +72,7 @@ public class Person_infoServiceImpl implements Person_infoService {
 		return saltStr;
 	}
 
+	@Override
 	public void createUser() {
 		String zid = "z" + generateRandomString("1234567890", 7);
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();

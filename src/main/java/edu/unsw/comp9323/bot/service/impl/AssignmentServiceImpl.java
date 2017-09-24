@@ -16,8 +16,10 @@ import edu.unsw.comp9323.bot.dto.AssignmentInfoDto;
 import edu.unsw.comp9323.bot.model.Ass_student;
 import edu.unsw.comp9323.bot.model.Assignment;
 import edu.unsw.comp9323.bot.service.AssignmentService;
+import edu.unsw.comp9323.bot.service.EmailService;
 import edu.unsw.comp9323.bot.service.impl.AIWebhookServiceImpl.AIWebhookRequest;
 import edu.unsw.comp9323.bot.util.AssignmentUtil;
+import edu.unsw.comp9323.bot.util.UserIdentityUtil;
 import edu.unsw.comp9323.bot.util.ValidationUtil;
 
 @Service
@@ -39,6 +41,10 @@ public class AssignmentServiceImpl implements AssignmentService {
 	AssignmentUtil assignmentUtil;
 	@Autowired
 	ResourceDao resourceDao;
+	@Autowired
+	UserIdentityUtil userIdentityUtil;
+	@Autowired
+	EmailService emailService;
 
 	/**
 	 * return all assignments(list) including assignment name, due date, upload
@@ -56,7 +62,6 @@ public class AssignmentServiceImpl implements AssignmentService {
 		}
 
 		List<AssignmentInfoDto> assignmentInfoDtoList = assignmentDao.findAll();
-		System.out.println(assignmentInfoDtoList.toString()); // debug
 
 		return assignmentUtil.renderAssignmentReturnMsg(assignmentInfoDtoList);
 	}
@@ -68,7 +73,7 @@ public class AssignmentServiceImpl implements AssignmentService {
 	 * TODO refine return format
 	 */
 	@Override
-	public String getAssignmentByTitle(AIWebhookRequest input) {
+	public String getAssignmentByTitle(AIWebhookRequest input) throws Exception {
 		System.out.println("getAssignmentByTitle()"); // debug
 
 		// Authorization
@@ -79,7 +84,6 @@ public class AssignmentServiceImpl implements AssignmentService {
 		String title = input.getResult().getParameters().get("assignment-title").getAsString();
 
 		List<AssignmentInfoDto> assignmentInfoDtoList = assignmentDao.findAssignmentByTitle(title);
-		System.out.println(assignmentInfoDtoList.toString()); // debug
 
 		return assignmentUtil.renderAssignmentReturnMsg(assignmentInfoDtoList);
 	}
@@ -88,7 +92,7 @@ public class AssignmentServiceImpl implements AssignmentService {
 	 * generate url for get file
 	 */
 	@Override
-	public String addAssignmentByTitle(AIWebhookRequest input) {
+	public String addAssignmentByTitle(AIWebhookRequest input) throws Exception {
 		System.out.println("addAssignmentByTitle()"); // debug
 
 		// Authorization
@@ -102,12 +106,13 @@ public class AssignmentServiceImpl implements AssignmentService {
 			System.out.println("titile name dupl");
 			return "assignment:" + assignment_title + " has exist, do you want to change that assignment info?";
 		}
-		// due_date format: dd/MM/yyyy
+
 		String due_date_string = input.getResult().getParameters().get("assignment-due_date").getAsString();
-		String authro_zid = input.getResult().getParameters().get("zid").getAsString();
+		String author_zid = userIdentityUtil.getIdentity(input).getZid();
 		String type = "add";
-		return "to upload assignment material: http://localhost:8080/page/upload/assignment_material?type=add&assignment_title="
-				+ assignment_title + "&due_date_string=" + due_date_string + "&author_zid=" + authro_zid;
+		return "to upload assignment material: http://localhost:8080/page/upload/assignment_material?type=" + type
+				+ "&assignment_title=" + assignment_title + "&due_date_string=" + due_date_string + "&author_zid="
+				+ author_zid;
 	}
 
 	/**
@@ -116,7 +121,7 @@ public class AssignmentServiceImpl implements AssignmentService {
 	 * TODO change from add assignment
 	 */
 	@Override
-	public String changeAssignmentByTitle(AIWebhookRequest input) {
+	public String changeAssignmentByTitle(AIWebhookRequest input) throws Exception {
 		System.out.println("changeAssignmentByTitle()"); // debug
 
 		// Authorization
@@ -126,17 +131,18 @@ public class AssignmentServiceImpl implements AssignmentService {
 
 		String assignment_title = input.getResult().getParameters().get("assignment-title").getAsString();
 		String due_date_string = input.getResult().getParameters().get("assignment-due_date").getAsString();
-		String authro_zid = input.getResult().getParameters().get("zid").getAsString();
-		String type = "update_assignment";
-		return "to upload assignment material: http://localhost:8080/page/upload/assignment_material?type=update&assignment_title="
-				+ assignment_title + "&due_date_string=" + due_date_string + "&author_zid=" + authro_zid;
+		String authro_zid = userIdentityUtil.getIdentity(input).getZid();
+		String type = "update";
+		return "to upload assignment material: http://localhost:8080/page/upload/assignment_material?type=" + type
+				+ "&assignment_title=" + assignment_title + "&due_date_string=" + due_date_string + "&author_zid="
+				+ authro_zid;
 	}
 
 	/**
 	 * delete ass and corresponding materials
 	 */
 	@Override
-	public String deleteAssignmentByTitle(AIWebhookRequest input) {
+	public String deleteAssignmentByTitle(AIWebhookRequest input) throws Exception {
 		System.out.println("deleteAssignmentByTitle()"); // debug
 
 		// Authorization
@@ -150,15 +156,15 @@ public class AssignmentServiceImpl implements AssignmentService {
 
 		try {
 			assignmentDao.deleteAssignmentByTitle(assignment);
-			// // delete success do delete file
+			// delete success do delete file
 			String filesDir = "assignment/" + assignment.getName() + "/material";
 			File toDeletefiles = new File(Constant.ROOTPATH + filesDir);
 			FileUtils.cleanDirectory(toDeletefiles);
 
 			return "success to delete assignment: " + title;
-		} catch (Exception e) { // TODO how to catch exception
+		} catch (Exception e) {
 			// delete fail
-			System.out.println(e);
+			e.printStackTrace();
 			return "fail to delete assignment: " + title;
 		}
 	}
@@ -167,7 +173,7 @@ public class AssignmentServiceImpl implements AssignmentService {
 	 * student submit assignment by group
 	 */
 	@Override
-	public String studentSubmitAssignment(AIWebhookRequest input) {
+	public String studentSubmitAssignment(AIWebhookRequest input) throws Exception {
 		System.out.println("studentSubmitAssignment()"); // debug
 
 		// Authorization
@@ -184,7 +190,7 @@ public class AssignmentServiceImpl implements AssignmentService {
 		} else {
 			ass_id = assignment.getId();
 		}
-		String zid = input.getResult().getParameters().get("zid").getAsString();
+		String zid = userIdentityUtil.getIdentity(input).getZid();
 		return "to upload your assignment: http://localhost:8080/page/upload/student_sbumission?ass_id=" + ass_id
 				+ "&zid=" + zid;
 	}
@@ -195,7 +201,7 @@ public class AssignmentServiceImpl implements AssignmentService {
 	 * TODO sql and after action: email group
 	 */
 	@Override
-	public String getUnsubmitingGroup(AIWebhookRequest input) {
+	public String getUnsubmitingGroup(AIWebhookRequest input) throws Exception {
 		System.out.println("getUnsubmitingGroup()"); // debug
 
 		// Authorization
@@ -218,7 +224,7 @@ public class AssignmentServiceImpl implements AssignmentService {
 	 * get assignment submission by assignment title and group number
 	 */
 	@Override
-	public String getAssSubmissionByAssTitleAndGroupNb(AIWebhookRequest input) {
+	public String getAssSubmissionByAssTitleAndGroupNb(AIWebhookRequest input) throws Exception {
 		System.out.println("getAssSubmissionByAssTitleAndGroupNb()"); // debug
 
 		// Authorization
@@ -243,7 +249,7 @@ public class AssignmentServiceImpl implements AssignmentService {
 	 * get all not submission groups which submitted their assignments
 	 */
 	@Override
-	public String getAllUnmarkedAssignmentGroup(AIWebhookRequest input) {
+	public String getAllUnmarkedAssignmentGroup(AIWebhookRequest input) throws Exception {
 		System.out.println("getAllUnmarkedAssignmentGroup()"); // debug
 
 		// Authorization
@@ -268,7 +274,7 @@ public class AssignmentServiceImpl implements AssignmentService {
 	 * mark assignment by group nb, set grade in ass_student table
 	 */
 	@Override
-	public String markAssignmentByGroupNb(AIWebhookRequest input) {
+	public String markAssignmentByGroupNb(AIWebhookRequest input) throws Exception {
 		System.out.println("markAssignmentByGroupNb()"); // debug
 
 		// Authorization
@@ -284,7 +290,12 @@ public class AssignmentServiceImpl implements AssignmentService {
 		ass_student.setGroup_nb(group_nb);
 		ass_student.setGrade(grade);
 		if (ass_studentDao.markById(ass_student)) {
-			return "mark has set";
+
+			// send email to this group student for inform assignment mark release
+			emailService.sendEmailToGroup(ass_student.getGroup_nb());
+
+			// TODO ask if send email
+			return "mark has set, sent to group for inform assignment mark release.";
 		} else {
 			return "something wrong, can you mark again";
 		}

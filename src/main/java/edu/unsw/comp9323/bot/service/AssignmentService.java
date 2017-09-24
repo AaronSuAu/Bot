@@ -6,23 +6,23 @@ public interface AssignmentService {
 
 	public String getAllAssignment(AIWebhookRequest input);
 
-	public String getAssignmentByTitle(AIWebhookRequest input);
+	public String getAssignmentByTitle(AIWebhookRequest input) throws Exception;
 
 	// receive from POST by web html
-	public String addAssignmentByTitle(AIWebhookRequest input);
+	public String addAssignmentByTitle(AIWebhookRequest input) throws Exception;
 
-	public String changeAssignmentByTitle(AIWebhookRequest input);
+	public String changeAssignmentByTitle(AIWebhookRequest input) throws Exception;
 
-	public String deleteAssignmentByTitle(AIWebhookRequest input);
+	public String deleteAssignmentByTitle(AIWebhookRequest input) throws Exception;
 
-	public String studentSubmitAssignment(AIWebhookRequest input);
+	public String studentSubmitAssignment(AIWebhookRequest input) throws Exception;
 
-	public String getAllUnmarkedAssignmentGroup(AIWebhookRequest input);
+	public String getAllUnmarkedAssignmentGroup(AIWebhookRequest input) throws Exception;
 
-	public String getAssSubmissionByAssTitleAndGroupNb(AIWebhookRequest input);
+	public String getAssSubmissionByAssTitleAndGroupNb(AIWebhookRequest input) throws Exception;
 
-	public String markAssignmentByGroupNb(AIWebhookRequest input);
+	public String markAssignmentByGroupNb(AIWebhookRequest input) throws Exception;
 
-	public String getUnsubmitingGroup(AIWebhookRequest input);
+	public String getUnsubmitingGroup(AIWebhookRequest input) throws Exception;
 
 }

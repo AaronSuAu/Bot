@@ -15,11 +15,14 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 
+import edu.unsw.comp9323.bot.dao.AssignmentDao;
 import edu.unsw.comp9323.bot.dao.Person_infoDao;
+import edu.unsw.comp9323.bot.model.Identity;
 import edu.unsw.comp9323.bot.model.Person_info;
 import edu.unsw.comp9323.bot.service.EmailService;
 import edu.unsw.comp9323.bot.service.impl.AIWebhookServiceImpl.AIWebhookRequest;
 import edu.unsw.comp9323.bot.util.EmailUtil;
+import edu.unsw.comp9323.bot.util.UserIdentityUtil;
 import edu.unsw.comp9323.bot.util.ValidationUtil;
 
 @Service
@@ -31,7 +34,19 @@ public class EmailServiceImpl implements EmailService {
 	ValidationUtil validationUtil;
 
 	@Autowired
+	EmailUtil emailUtil;
+
+	@Autowired
 	Person_info person_info;
+
+	@Autowired
+	UserIdentityUtil userIdentityUtil;
+
+	@Autowired
+	AssignmentDao assignmentDao;
+
+	@Autowired
+	EmailService emailService;
 
 	@Override
 	public String sendEmailToZid(AIWebhookRequest input) {
@@ -114,7 +129,9 @@ public class EmailServiceImpl implements EmailService {
 		String subject = subject_string;
 
 		try {
-			EmailUtil.sendFromGMail(receiver, subject, body, from_person);
+
+			emailUtil.sendFromGMail(receiver, subject, body, from_person);
+
 		} catch (AddressException ae) {
 			System.out.println("Address are incorrect ... ");
 			falseStatement += "Address are incorrect ... \n";
@@ -131,10 +148,6 @@ public class EmailServiceImpl implements EmailService {
 		else
 			return falseStatement;
 
-	}
-
-	private Person_info getSender(AIWebhookRequest input) {
-		return person_infoDao.getUserByZid(input.getResult().getParameters().get("zid").getAsString());
 	}
 
 	@Override
@@ -214,7 +227,7 @@ public class EmailServiceImpl implements EmailService {
 		String body = getBodyOfTemplatedEmail(emailTemplate);
 
 		try {
-			EmailUtil.sendFromGMail(receiver, subject, body, from_person);
+			emailUtil.sendFromGMail(receiver, subject, body, from_person);
 		} catch (AddressException ae) {
 			System.out.println("Address are incorrect ... ");
 			falseStatement += "Address are incorrect ... \n";
@@ -234,8 +247,9 @@ public class EmailServiceImpl implements EmailService {
 
 	private String getBodyOfTemplatedEmail(String emailTemplate) {
 		String result = "";
+
 		if (emailTemplate.toLowerCase().contains("cancel")) {
-			result = "Hello Class,\nI'm sorry to inform you that due to personal issue I need to cancel ";
+			result = "Hello All,\nI'm sorry to inform you that due to personal issue I need to cancel ";
 			if (emailTemplate.toLowerCase().contains("today")) {
 				result += "today's ";
 			} else if (emailTemplate.toLowerCase().contains("tomorrow")) {
@@ -260,6 +274,38 @@ public class EmailServiceImpl implements EmailService {
 			result += "class.";
 		}
 		return result;
+	}
+
+	private Person_info getSender(AIWebhookRequest input) {
+
+		Identity identity = userIdentityUtil.getIdentity(input);
+		return person_infoDao.getUserByZid(identity.getZid());
+	}
+
+	@Override
+	public String sendEmailToAllStudent() {
+		List<Person_info> students = person_infoDao.getAllStudent();
+		try {
+			for (Person_info student : students) {
+				emailService.sendEmailToZid(student.getZid());
+			}
+		} catch (Exception e) {
+			return "Fail to email all students email for informing new assignment";
+		}
+
+		return "Sent to all students email of informing new assignment";
+	}
+
+	@Override
+	public void sendEmailToZid(String zid) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void sendEmailToGroup(Long group_nb) {
+		// TODO Auto-generated method stub
+
 	}
 
 }

@@ -3,7 +3,6 @@ package edu.unsw.comp9323.bot.util;
 import java.util.ArrayList;
 import java.util.Properties;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.activity.InvalidActivityException;
 import javax.mail.Message;
@@ -14,21 +13,22 @@ import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+import org.springframework.stereotype.Service;
+
+import edu.unsw.comp9323.bot.constant.Constant;
 import edu.unsw.comp9323.bot.model.GMailAuthenticator;
 import edu.unsw.comp9323.bot.model.Person_info;
 
+@Service
 public class EmailUtil {
 	// GMail user name (just the part before "@gmail.com")
 
-	public static final Pattern VALID_EMAIL_ADDRESS_REGEX = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$",
-			Pattern.CASE_INSENSITIVE);
-
-	public static boolean validate(String emailStr) {
-		Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(emailStr);
+	public boolean validate(String emailStr) {
+		Matcher matcher = Constant.VALID_EMAIL_ADDRESS_REGEX.matcher(emailStr);
 		return matcher.find();
 	}
 
-	public static boolean isInteger(String s) {
+	public boolean isInteger(String s) {
 		try {
 			Integer.parseInt(s);
 		} catch (NumberFormatException e) {
@@ -39,7 +39,7 @@ public class EmailUtil {
 		return true;
 	}
 
-	public static boolean isValidEmailAddress(String email) {
+	public boolean isValidEmailAddress(String email) {
 		boolean result = true;
 		try {
 			InternetAddress emailAddr = new InternetAddress(email);
@@ -50,7 +50,7 @@ public class EmailUtil {
 		return result;
 	}
 
-	public static Boolean sendFromGMail(ArrayList<String> to, String subject, String body, Person_info from_person)
+	public Boolean sendFromGMail(ArrayList<String> to, String subject, String body, Person_info from_person)
 			throws AddressException, MessagingException, InvalidActivityException {
 		String from = "comp9323bot@gmail.com";
 		String pass = "comp9323";
@@ -73,6 +73,10 @@ public class EmailUtil {
 		InternetAddress[] toAddress = new InternetAddress[to.size()];
 
 		// To get the array of addresses
+		if (to.size() == 0) {
+			InvalidActivityException email = new InvalidActivityException("One or more email is invalid.");
+			throw email;
+		}
 		for (int i = 0; i < to.size(); i++) {
 			toAddress[i] = new InternetAddress(to.get(i));
 		}
