@@ -18,6 +18,12 @@ import edu.unsw.comp9323.bot.model.Reminder;
 public interface ReminderDao {
 
 	/*
+	 * get all unsent reminders
+	 */
+	@Select("select * from reminder where flag = 1 and date = #{date}")
+	List<Reminder> findReminderBySendDate(@Param("date") String date);
+
+	/*
 	 * select users' reminders
 	 */
 	@Select("select * from reminder where owner = #{owner}")
@@ -42,22 +48,12 @@ public interface ReminderDao {
 	@Delete("delete from reminder where id = #{id}")
 	boolean deleteReminder(@Param("id") Long id);
 
-	/*
-	 * update a reminder
-	 */
-
-	// /*
-	// * get all the receivers
-	// */
-	// @Select("select p.zid, p.group_nb, p.email, p.name, p.role "
-	// + "from person_info p , reminder r, reminder_receiver rr "
-	// + "where")
-	// List<User> getReceivers(@Param("id") String id);
-	//
-
 	@Update("update reminder " + "set date = #{date} " + ", content = #{content}, title = #{title} "
 			+ ", owner = #{owner} " + "where id = #{id}")
 	boolean updateReminder(Reminder reminder);
+
+	@Update("update reminder set flag = #{flag} where id = #{id} ")
+	boolean updateReminderFlag(@Param("flag") int flag, @Param("id") Long id);
 
 	/*
 	 * create a new reminder
@@ -71,6 +67,12 @@ public interface ReminderDao {
 	@Select("select p.zid, p.group_nb, p.email, p.name, p.role, p.password "
 			+ "from person_info p , reminder r, reminder_receiver rr "
 			+ "where r.id = #{id} and rr.reminder = r.id and rr.receiver = p.zid")
-	List<Person_info> getReceivers(@Param("id") String id);
+	List<Person_info> getReceivers(@Param("id") long id);
+
+	/*
+	 * get person Info
+	 */
+	@Select("select * from person_info where zid = #{zid} ")
+	Person_info getPersonInfo(@Param("zid") String zid);
 
 }
