@@ -104,7 +104,7 @@ public class AssignmentController {
 		byte[] bytes;
 		try {
 			bytes = file.getBytes();
-			String filePath = "assignment/" + name + "/material/" + file.getOriginalFilename();
+			String filePath = "assignment/" + name + "/material/" + file.getOriginalFilename().replace(" ", "_");
 			Path path = Paths.get(Constant.ROOTPATH + filePath);
 			Files.write(path, bytes);
 			resource.setAss_id(assignment.getId());
@@ -181,7 +181,7 @@ public class AssignmentController {
 
 			// add write new file(s)
 			bytes = file.getBytes();
-			String filePath = "assignment/" + name + "/material/" + file.getOriginalFilename();
+			String filePath = "assignment/" + name + "/material/" + file.getOriginalFilename().replace(" ", "_");
 			Path path = Paths.get(Constant.ROOTPATH + filePath);
 			Files.write(path, bytes);
 
