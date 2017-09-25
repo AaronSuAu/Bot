@@ -115,6 +115,8 @@ public class AIWebhookServiceImpl implements AIWebbookService {
 			} else if (intentName.equals("createReminder")) {
 				System.out.println("111111111");
 				returnMsg = reminderService.addReminder(input);
+			} else if (intentName.equals("getReminderDetails")) {
+				returnMsg = reminderService.getReminderDetails(input);
 			}
 
 			if (intentName.equals("send_email_to_zid")) {

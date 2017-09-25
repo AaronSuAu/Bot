@@ -4,10 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import javax.activity.InvalidActivityException;
-import javax.mail.MessagingException;
-import javax.mail.internet.AddressException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +12,9 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 
 import edu.unsw.comp9323.bot.dao.AssignmentDao;
+import edu.unsw.comp9323.bot.dao.EmailDao;
 import edu.unsw.comp9323.bot.dao.Person_infoDao;
+import edu.unsw.comp9323.bot.model.Email;
 import edu.unsw.comp9323.bot.model.Identity;
 import edu.unsw.comp9323.bot.model.Person_info;
 import edu.unsw.comp9323.bot.service.EmailService;
@@ -47,6 +45,9 @@ public class EmailServiceImpl implements EmailService {
 
 	@Autowired
 	EmailService emailService;
+
+	@Autowired
+	EmailDao emaildao;
 
 	@Override
 	public String sendEmailToZid(AIWebhookRequest input) {
@@ -86,9 +87,14 @@ public class EmailServiceImpl implements EmailService {
 			}
 			for (Person_info person : list) {
 
-				if (person.getEmail() != null) {
-					System.out.println(person.getName() + ":" + person.getEmail());
-					receiver.add(person.getEmail().toString());
+				if (person.getEmail() == null) {
+					System.out.println("Unable to find email for student " + person.getZid() + ". Please check again");
+					falseStatement += "Unable to find email for student " + person.getZid() + ". Please check again\n";
+				} else {
+					trueStatement += person.getZid();
+					System.out.println(person.getZid() + ":" + person.getEmail());
+					// receiver.add(person.getEmail().toString());
+					receiver.add(person.getZid());
 				}
 
 			}
@@ -96,16 +102,22 @@ public class EmailServiceImpl implements EmailService {
 			// sending to some of the students
 			for (int i = 0; i < student.size(); i++) {
 				String stu = student.get(i).toString().replace("\"", "");
-				// if sending to group
-				if (stu.toLowerCase().contains("group")) {
+				if (stu.toLowerCase().contains("group")) {// if sending to group
 					System.out.println("sending to " + stu);
 					Long group_nb = Long.valueOf(stu.toLowerCase().replace("group", "")).longValue();
 					List<Person_info> list = person_infoDao.getUserByGroupNb(group_nb);
 					for (Person_info person : list) {
-						System.out.println(person.getZid() + ":" + person.getEmail());
-						receiver.add(person.getEmail().toString());
+						if (person.getEmail() == null) {
+							System.out.println("Unable to find email for student " + stu + ". Please check again");
+							falseStatement += "Unable to find email for student " + stu + ". Please check again\n";
+						} else {
+							trueStatement += person.getZid() + "(" + stu + ") ";
+							System.out.println(person.getZid() + ":" + person.getEmail());
+							// receiver.add(person.getEmail().toString());
+							receiver.add(person.getZid());
+						}
 					}
-				} else {
+				} else {// sending to individual
 					trueStatement += stu + " ";
 					Person_info find = new Person_info();
 					find.setZid(stu);
@@ -116,8 +128,14 @@ public class EmailServiceImpl implements EmailService {
 						falseStatement += "Unable to find student " + stu + ". Please check again\n";
 					}
 					for (Person_info person : list) {
-						System.out.println(stu + ":" + person.getEmail());
-						receiver.add(person.getEmail().toString());
+						if (person.getEmail() == null) {
+							System.out.println("Unable to find email for student " + stu + ". Please check again");
+							falseStatement += "Unable to find email for student " + stu + ". Please check again\n";
+						} else {
+							System.out.println(person.getZid() + ":" + person.getEmail());
+							// receiver.add(person.getEmail().toString());
+							receiver.add(person.getZid());
+						}
 
 					}
 				}
@@ -128,25 +146,38 @@ public class EmailServiceImpl implements EmailService {
 		String body = body_string;
 		String subject = subject_string;
 
-		try {
-
-			emailUtil.sendFromGMail(receiver, subject, body, from_person);
-
-		} catch (AddressException ae) {
-			System.out.println("Address are incorrect ... ");
-			falseStatement += "Address are incorrect ... \n";
-		} catch (MessagingException me) {
-			System.out.println("Username or Password are incorrect ...");
-			falseStatement += "Username or Password are incorrect ...\n";
-		} catch (InvalidActivityException e) {
+		System.out.println("insert into email table...");
+		// create a email object
+		Email email = new Email(from_person.getZid(), subject, body, (long) 0);
+		// insert into db
+		emaildao.insertEmail(email);
+		if (receiver.size() == 0) {
 			System.out.println("One or more email is invalid.");
-			falseStatement += "One or more email is invalid.\n";
 		}
+		for (String s : receiver) {
+			System.out.println(email.getId() + ": " + s);
+			emaildao.addReceivers(email.getId(), s);
+		}
+		// try {
+		// emailUtil.sendFromGMail(receiver, subject, body, from_person);
+		//
+		// } catch (AddressException ae) {
+		// System.out.println("Address are incorrect ... ");
+		// falseStatement += "Address are incorrect ... \n";
+		// } catch (MessagingException me) {
+		// System.out.println("Username or Password are incorrect ...");
+		// falseStatement += "Username or Password are incorrect ...\n";
+		// } catch (InvalidActivityException e) {
+		// System.out.println("One or more email is invalid.");
+		// falseStatement += "One or more email is invalid.\n";
+		// }
 
+		System.out.println("trueStatement" + trueStatement);
+		System.out.println("falseStatement" + falseStatement);
 		if (falseStatement.length() == 0)
 			return trueStatement;
 		else
-			return falseStatement;
+			return falseStatement + trueStatement;
 
 	}
 
@@ -181,9 +212,14 @@ public class EmailServiceImpl implements EmailService {
 			}
 			for (Person_info person : list) {
 
-				if (person.getEmail() != null) {
-					System.out.println(person.getName() + ":" + person.getEmail());
-					receiver.add(person.getEmail().toString());
+				if (person.getEmail() == null) {
+					System.out.println("Unable to find email for student " + person.getZid() + ". Please check again");
+					falseStatement += "Unable to find email for student " + person.getZid() + ". Please check again\n";
+				} else {
+					trueStatement += person.getZid();
+					System.out.println(person.getZid() + ":" + person.getEmail());
+					// receiver.add(person.getEmail().toString());
+					receiver.add(person.getZid());
 				}
 
 			}
@@ -191,16 +227,22 @@ public class EmailServiceImpl implements EmailService {
 			// sending to some of the students
 			for (int i = 0; i < student.size(); i++) {
 				String stu = student.get(i).toString().replace("\"", "");
-				// if sending to group
-				if (stu.toLowerCase().contains("group")) {
+				if (stu.toLowerCase().contains("group")) {// if sending to group
 					System.out.println("sending to " + stu);
 					Long group_nb = Long.valueOf(stu.toLowerCase().replace("group", "")).longValue();
 					List<Person_info> list = person_infoDao.getUserByGroupNb(group_nb);
 					for (Person_info person : list) {
-						System.out.println(person.getZid() + ":" + person.getEmail());
-						receiver.add(person.getEmail().toString());
+						if (person.getEmail() == null) {
+							System.out.println("Unable to find email for student " + stu + ". Please check again");
+							falseStatement += "Unable to find email for student " + stu + ". Please check again\n";
+						} else {
+							trueStatement += person.getZid() + "(" + stu + ") ";
+							System.out.println(person.getZid() + ":" + person.getEmail());
+							// receiver.add(person.getEmail().toString());
+							receiver.add(person.getZid());
+						}
 					}
-				} else {
+				} else {// sending to individual
 					trueStatement += stu + " ";
 					Person_info find = new Person_info();
 					find.setZid(stu);
@@ -211,8 +253,14 @@ public class EmailServiceImpl implements EmailService {
 						falseStatement += "Unable to find student " + stu + ". Please check again\n";
 					}
 					for (Person_info person : list) {
-						System.out.println(stu + ":" + person.getEmail());
-						receiver.add(person.getEmail().toString());
+						if (person.getEmail() == null) {
+							System.out.println("Unable to find email for student " + stu + ". Please check again");
+							falseStatement += "Unable to find email for student " + stu + ". Please check again\n";
+						} else {
+							System.out.println(person.getZid() + ":" + person.getEmail());
+							// receiver.add(person.getEmail().toString());
+							receiver.add(person.getZid());
+						}
 
 					}
 				}
@@ -226,25 +274,37 @@ public class EmailServiceImpl implements EmailService {
 		String subject = Character.toUpperCase(emailTemplate.charAt(0)) + emailTemplate.substring(1);
 		String body = getBodyOfTemplatedEmail(emailTemplate);
 
-		try {
-			emailUtil.sendFromGMail(receiver, subject, body, from_person);
-		} catch (AddressException ae) {
-			System.out.println("Address are incorrect ... ");
-			falseStatement += "Address are incorrect ... \n";
-		} catch (MessagingException me) {
-			System.out.println("Username or Password are incorrect ...");
-			falseStatement += "Username or Password are incorrect ...\n";
-		} catch (InvalidActivityException e) {
+		System.out.println("insert into email table...");
+		// create a email object
+		Email email = new Email(from_person.getZid(), subject, body, (long) 0);
+		// insert into db
+		emaildao.insertEmail(email);
+		if (receiver.size() == 0) {
 			System.out.println("One or more email is invalid.");
-			falseStatement += "One or more email is invalid.\n";
 		}
+		for (String s : receiver) {
+			System.out.println(email.getId() + ": " + s);
+			emaildao.addReceivers(email.getId(), s);
+		}
+		// try {
+		// emailUtil.sendFromGMail(receiver, subject, body, from_person);
+		// } catch (AddressException ae) {
+		// System.out.println("Address are incorrect ... ");
+		// falseStatement += "Address are incorrect ... \n";
+		// } catch (MessagingException me) {
+		// System.out.println("Username or Password are incorrect ...");
+		// falseStatement += "Username or Password are incorrect ...\n";
+		// } catch (InvalidActivityException e) {
+		// System.out.println("One or more email is invalid.");
+		// falseStatement += "One or more email is invalid.\n";
+		// }
 		System.out.println("true: " + trueStatement);
 		System.out.println("false :" + falseStatement + " " + falseStatement.length());
 		if (falseStatement.length() == 0) {
 			System.out.println("true: " + trueStatement);
 			return trueStatement;
 		} else
-			return falseStatement;
+			return falseStatement + trueStatement;
 	}
 
 	private String getBodyOfTemplatedEmail(String emailTemplate) {
@@ -287,14 +347,26 @@ public class EmailServiceImpl implements EmailService {
 	}
 
 	@Override
-	public String sendEmailToAllStudent(String subject, String body, Person_info from) {
-		ArrayList<String> toEmails = person_infoDao.getAllStudentEmails();
-		try {
-			emailUtil.sendFromGMail(toEmails, subject, body, from);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return "Fail to email all students email for informing new assignment";
+	public String sendEmailToAllStudent(String subject, String body, Person_info from_person) {
+		ArrayList<String> receiver = person_infoDao.getAllStudentEmails();
+		System.out.println("insert into email table...");
+		// create a email object
+		Email email = new Email(from_person.getZid(), subject, body, (long) 0);
+		// insert into db
+		emaildao.insertEmail(email);
+		if (receiver.size() == 0) {
+			return "Fail to email all students email for informing new assignment. One or more email is invalid.";
 		}
+		for (String s : receiver) {
+			System.out.println(email.getId() + ": " + s);
+			emaildao.addReceivers(email.getId(), s);
+		}
+		// try {
+		// emailUtil.sendFromGMail(toEmails, subject, body, from);
+		// } catch (Exception e) {
+		// e.printStackTrace();
+		// return "Fail to email all students email for informing new assignment";
+		// }
 
 		return "Sent to all students email of informing new assignment";
 	}

@@ -24,4 +24,6 @@ public interface ReminderService {
 	public Person_info getPersonInfo(String zid);
 
 	public boolean updateReminderFlag(int flag, long id);
+
+	public String getReminderDetails(AIWebhookRequest input);
 }

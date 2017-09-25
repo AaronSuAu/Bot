@@ -238,4 +238,29 @@ public class ReminderServiceImpl implements ReminderService {
 		return reminderDao.updateReminderFlag(flag, id);
 	}
 
+	@Override
+	public String getReminderDetails(AIWebhookRequest input) {
+		// TODO Auto-generated method stub
+		long id = input.getResult().getParameters().get("number").getAsLong();
+		String zid = userIdentityUtil.getIdentity(input).getZid();
+		List<Reminder> reminders = reminderDao.findReminderById(id);
+		if (reminders == null || reminders.size() == 0 || reminders.get(0) == null) {
+			return "No such reminder";
+		}
+		Reminder reminder = reminders.get(0);
+		if (!zid.equals(reminder.getOwner())) {
+			return "No access to this reminder.";
+		}
+		List<Person_info> receivers = reminderDao.getReceivers(reminder.getId());
+		String receiver_string = "";
+		for (Person_info p : receivers) {
+			receiver_string += p.getZid() + ", ";
+		}
+		receiver_string.substring(0, receiver_string.length() - 1);
+		return "Reminder ID: " + reminder.getId() + "\n" + "Title: " + reminder.getTitle() + "\n" + "Content: "
+				+ reminder.getContent() + "\n" + "Remind Date: " + reminder.getDate() + "\n" + "Send to: "
+				+ receiver_string;
+
+	}
+
 }
