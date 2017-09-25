@@ -3,9 +3,6 @@ package edu.unsw.comp9323.bot.scheduler;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.activity.InvalidActivityException;
-import javax.mail.MessagingException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -25,6 +22,7 @@ public class ReminderScheduler {
 	@Scheduled(cron = "*/5 * * * * *")
 	public void remindByEmail() {
 		// TODO Auto-generated method stub
+		// System.out.println("?????????");
 		List<Reminder> reminders = reminderService.getReminderToSend();
 		List<Person_info> receivers;
 		ArrayList<String> receiver_email;
@@ -36,13 +34,13 @@ public class ReminderScheduler {
 					receiver_email.add(p.getEmail());
 				}
 			}
-			try {
-				emailUtil.sendFromGMail(receiver_email, r.getTitle(), r.getContent(),
-						reminderService.getPersonInfo(r.getOwner()));
-			} catch (InvalidActivityException | MessagingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			// try {
+			emailUtil.sendFromGMail(receiver_email, r.getTitle(), r.getContent(),
+					reminderService.getPersonInfo(r.getOwner()));
+			// } catch (InvalidActivityException | MessagingException e) {
+			// // TODO Auto-generated catch block
+			// e.printStackTrace();
+			// }
 			reminderService.updateReminderFlag(0, r.getId());
 		}
 	}
