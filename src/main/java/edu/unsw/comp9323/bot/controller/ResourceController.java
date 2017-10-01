@@ -44,8 +44,8 @@ public class ResourceController {
 		byte[] bytes;
 		try {
 			bytes = file.getBytes();
-			String filePath = "src/main/resources/lecture/" + file.getOriginalFilename().replace(" ", "");
-			Path path = Paths.get(filePath);
+			String filePath = "lecture/" + file.getOriginalFilename().replace(" ", "");			
+			Path path = Paths.get(Constant.ROOTPATH + filePath);
 			Files.write(path, bytes);
 			resource.setTitle(name);
 			resource.setPath(filePath);
@@ -81,8 +81,8 @@ public class ResourceController {
 				resourceDao.deleteResource(toDeleteResource);
 			}
 			bytes = file.getBytes();
-			String filePath = "src/main/resources/assignment/" + name + "/material/" + file.getOriginalFilename().replace(" ", "");
-			Path path = Paths.get(filePath);
+			String filePath = "lecture/" + file.getOriginalFilename().replace(" ", "");			
+			Path path = Paths.get(Constant.ROOTPATH + filePath);
 			Files.write(path, bytes);
 			resource.setTitle(name);
 			resource.setPath(filePath);
