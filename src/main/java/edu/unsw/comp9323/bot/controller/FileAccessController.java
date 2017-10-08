@@ -45,7 +45,7 @@ public class FileAccessController {
 		// get filePath from database
 		resource = resourceDao.getResourceById(id);
 		String filePath = resource.getPath();
-
+		System.out.println(filePath);
 		// access file under src/main/resources
 		ClassLoader classLoader = getClass().getClassLoader();
 		File fileObj = null;

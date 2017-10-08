@@ -150,7 +150,8 @@ public class AIWebhookServiceImpl implements AIWebbookService {
 		/**
 		 * Get original request object
 		 * 
-		 * @return <code>null</code> if original request undefined in request object
+		 * @return <code>null</code> if original request undefined in request
+		 *         object
 		 */
 		public OriginalRequest getOriginalRequest() {
 			return originalRequest;

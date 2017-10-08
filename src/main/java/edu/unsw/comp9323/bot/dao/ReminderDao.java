@@ -78,6 +78,12 @@ public interface ReminderDao {
 	Person_info getPersonInfo(@Param("zid") String zid);
 
 	/*
+	 * get person_info by group number
+	 */
+	@Select("select * from person_info where group_nb = #{group_nb} ")
+	List<Person_info> getPersonInfoByGroup(@Param("group_nb") int group_nb);
+
+	/*
 	 * add receiver_reminder
 	 */
 	@Insert("insert into reminder_receiver (reminder, receiver) values(#{reminder}, #{receiver})")

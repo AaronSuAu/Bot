@@ -7,6 +7,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -125,6 +127,8 @@ public class ReminderServiceImpl implements ReminderService {
 	 */
 	private String addReceivers(JsonArray reminder_no, long reminder_id) {
 		// TODO Auto-generated method stub
+		String regEx = "[^0-9]";
+		Pattern p = Pattern.compile(regEx);
 		// get receiver
 		List<String> receivers = getListFromJsonArray(reminder_no);
 		if (receivers.contains("all") || receivers.contains("everybody") || receivers.contains("class")
@@ -138,9 +142,25 @@ public class ReminderServiceImpl implements ReminderService {
 		} else {
 
 			for (String r : receivers) {
+				// add group receivers
 				if (r.contains("group")) {
-					return "add reminders to group(TODO)";
-				} else if (r.contains("z")) {
+					Matcher m = p.matcher(r);
+					try {
+						int group_nb = Integer.parseInt(m.replaceAll("").trim());
+						List<Person_info> group_reveivers = reminderDao.getPersonInfoByGroup(group_nb);
+						if (group_reveivers != null) {
+							for (Person_info receiver : group_reveivers) {
+								if (!reminderDao.addReceivers(reminder_id, receiver.getZid()))
+									return "Fail to create a Reminder (cannot add a receiver: " + receiver.getZid()
+											+ ")";
+							}
+						}
+					} catch (NumberFormatException e) {
+						return "Invalid group number input!";
+					} catch (Exception e) {
+						return "Sql operation failed";
+					}
+				} else if (r.contains("z")) { // add single receiver
 					Person_info receiver = getPersonInfo(r);
 					if (receiver != null) {
 						if (!reminderDao.addReceivers(reminder_id, receiver.getZid()))
@@ -257,9 +277,9 @@ public class ReminderServiceImpl implements ReminderService {
 			receiver_string += p.getZid() + ", ";
 		}
 		receiver_string.substring(0, receiver_string.length() - 1);
-		return "Reminder ID: " + reminder.getId() + "\n" + "Title: " + reminder.getTitle() + "\n" + "Content: "
-				+ reminder.getContent() + "\n" + "Remind Date: " + reminder.getDate() + "\n" + "Send to: "
-				+ receiver_string;
+		return "Reminder ID: \n  " + reminder.getId() + "\n" + "Title: \n  " + reminder.getTitle() + "\n"
+				+ "Content: \n  " + reminder.getContent() + "\n" + "Remind Date: \n  " + reminder.getDate() + "\n"
+				+ "Send to: \n  " + receiver_string;
 
 	}
 
