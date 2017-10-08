@@ -96,7 +96,7 @@ public class ReminderServiceImpl implements ReminderService {
 		// init a new reminder object
 		Reminder newReminder = new Reminder();
 		// get date
-		DateFormat sdf = new SimpleDateFormat("yyyy-mm-dd");
+		DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		Date date;
 		try {
 			date = new Date(sdf.parse(dateString).getTime());
