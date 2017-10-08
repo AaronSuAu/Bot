@@ -77,6 +77,8 @@ public class AIWebhookServiceImpl implements AIWebbookService {
 				returnMsg = assignmentService.getUnsubmitingGroup(input);
 			} else if (intentName.equals("getAssSubmissionByAssTitleAndGroupNb")) {
 				returnMsg = assignmentService.getAssSubmissionByAssTitleAndGroupNb(input);
+			} else if (intentName.equals("getAssMarkByAssTitle")) {
+				returnMsg = assignmentService.getAssMarkByAssTitle(input);
 			} else if (intentName.equals("getAllUnmarkedAssignmentGroup")) {
 				returnMsg = assignmentService.getAllUnmarkedAssignmentGroup(input);
 			} else if (intentName.equals("markAssignmentByGroupNb")) {
@@ -113,7 +115,6 @@ public class AIWebhookServiceImpl implements AIWebbookService {
 			} else if (intentName.equals("updateReminder")) {
 				returnMsg = reminderService.updateReminder(input);
 			} else if (intentName.equals("createReminder")) {
-				System.out.println("111111111");
 				returnMsg = reminderService.addReminder(input);
 			} else if (intentName.equals("getReminderDetails")) {
 				returnMsg = reminderService.getReminderDetails(input);
@@ -150,8 +151,7 @@ public class AIWebhookServiceImpl implements AIWebbookService {
 		/**
 		 * Get original request object
 		 * 
-		 * @return <code>null</code> if original request undefined in request
-		 *         object
+		 * @return <code>null</code> if original request undefined in request object
 		 */
 		public OriginalRequest getOriginalRequest() {
 			return originalRequest;

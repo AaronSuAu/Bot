@@ -253,6 +253,34 @@ public class AssignmentServiceImpl implements AssignmentService {
 	}
 
 	/**
+	 * student get assignment submission by assignment title and group number
+	 */
+	@Override
+	public String getAssMarkByAssTitle(AIWebhookRequest input) throws Exception {
+		System.out.println("getAssMarkByAssTitle()"); // debug
+
+		// Authorization
+		if (!validationUtil.isStudent(input)) {
+			return "Authorization fail";
+		}
+
+		String assignment_title = input.getResult().getParameters().get("assignment-title").getAsString();
+		assignment = assignmentDao.getAssignmentIdByTitle(assignment_title);
+		if (assignment == null) {
+			return "assignment title is wrong";
+		} else {
+			ass_student.setAss_id(assignment.getId());
+		}
+
+		String zid = userIdentityUtil.getIdentity(input).getZid();
+		person_info = person_infoDao.getUserByZid(zid);
+		Long group_nb = person_info.getGroup_nb();
+		ass_student.setGroup_nb(group_nb);
+		ass_student = ass_studentDao.getSubmissionByIdAndGroup(ass_student);
+		return "your assignment of " + assignment_title + "'s mark is " + ass_student.getGrade();
+	}
+
+	/**
 	 * get all not submission groups which submitted their assignments
 	 */
 	@Override
