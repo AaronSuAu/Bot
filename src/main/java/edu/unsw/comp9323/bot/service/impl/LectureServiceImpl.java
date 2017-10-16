@@ -20,7 +20,7 @@ public class LectureServiceImpl implements LectureService {
 		Integer week_nb = Integer.parseInt(input.getResult().getParameters().get("week-nb").getAsString().replaceAll("\\D+",""));
 		lecture.setWeek(week_nb);
 		lecture = lectureDao.getLectureInfoByWeek(lecture);
-		return lecture.toString();
+		return "Week" + week_nb + " on " + lecture.getDate() + " at " + lecture.getLocation();
 	}
 
 }

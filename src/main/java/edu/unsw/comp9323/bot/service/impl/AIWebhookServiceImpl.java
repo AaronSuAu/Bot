@@ -39,6 +39,7 @@ public class AIWebhookServiceImpl implements AIWebbookService {
 	AuthenticationService authenticationService;
 
 	public void doWebhook(AIWebhookRequest input, Fulfillment output) {
+
 		// Get intent
 		String intentName = input.getResult().getMetadata().getIntentName();
 
@@ -76,6 +77,8 @@ public class AIWebhookServiceImpl implements AIWebbookService {
 				returnMsg = assignmentService.getUnsubmitingGroup(input);
 			} else if (intentName.equals("getAssSubmissionByAssTitleAndGroupNb")) {
 				returnMsg = assignmentService.getAssSubmissionByAssTitleAndGroupNb(input);
+			} else if (intentName.equals("getAssMarkByAssTitle")) {
+				returnMsg = assignmentService.getAssMarkByAssTitle(input);
 			} else if (intentName.equals("getAllUnmarkedAssignmentGroup")) {
 				returnMsg = assignmentService.getAllUnmarkedAssignmentGroup(input);
 			} else if (intentName.equals("markAssignmentByGroupNb")) {
@@ -148,8 +151,7 @@ public class AIWebhookServiceImpl implements AIWebbookService {
 		/**
 		 * Get original request object
 		 * 
-		 * @return <code>null</code> if original request undefined in request
-		 *         object
+		 * @return <code>null</code> if original request undefined in request object
 		 */
 		public OriginalRequest getOriginalRequest() {
 			return originalRequest;
