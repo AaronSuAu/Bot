@@ -17,7 +17,7 @@ public class LectureServiceImpl implements LectureService {
 
 	@Override
 	public String getLectureInfoByWeek(AIWebhookRequest input) {
-		Integer week_nb = Integer.parseInt(input.getResult().getParameters().get("week-nb").getAsString());
+		Integer week_nb = Integer.parseInt(input.getResult().getParameters().get("week-nb").getAsString().replaceAll("\\D+",""));
 		lecture.setWeek(week_nb);
 		lecture = lectureDao.getLectureInfoByWeek(lecture);
 		return lecture.toString();

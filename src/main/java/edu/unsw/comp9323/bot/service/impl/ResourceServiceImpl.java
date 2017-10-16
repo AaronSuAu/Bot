@@ -61,11 +61,11 @@ public class ResourceServiceImpl implements ResourceService {
 			return "Authorization fail";
 		}
 
-		String classId = input.getResult().getParameters().get("week-number").getAsString().replaceAll("\\D+","");;
+		String classId = input.getResult().getParameters().get("week-number").getAsString().replaceAll("\\D+","");
 
 		List<Resource> list = resourceDao.getResourceByClass(Long.parseLong(classId));
 		if(list.size() == 0){
-			return "Wrong week number";
+			return "Wrong week number Or no resources for the week";
 		}
 		return resourceUtil.renderResourceReturnMsg(list);
 	}
@@ -78,7 +78,7 @@ public class ResourceServiceImpl implements ResourceService {
 			return "Authorization fail";
 		}
 
-		String classId = input.getResult().getParameters().get("week-number").getAsString().replaceAll("\\D+","");;
+		String classId = input.getResult().getParameters().get("week-number").getAsString().replaceAll("\\D+","");
 		List<Lecture> list = lectureDao.getLectureByWeek(Integer.parseInt(classId));
 		if(list.size() == 0){
 			return "Wrong lecture number";
@@ -97,7 +97,7 @@ public class ResourceServiceImpl implements ResourceService {
 		if (!validationUtil.isLecturer(input)) {
 			return "Authorization fail";
 		}
-		String classId = input.getResult().getParameters().get("week-number").getAsString().replaceAll("\\D+","");;
+		String classId = input.getResult().getParameters().get("week-number").getAsString().replaceAll("\\D+","");
 
 		if(resourceDao.deleteResourceByClassId(Integer.parseInt(classId)) == 0){
 			return "Fail. Check the week number";
@@ -114,7 +114,7 @@ public class ResourceServiceImpl implements ResourceService {
 			return "Authorization fail";
 		}
 
-		String classId = input.getResult().getParameters().get("week-number").getAsString().replaceAll("\\D+","");;
+		String classId = input.getResult().getParameters().get("week-number").getAsString().replaceAll("\\D+","");
 		List<Lecture> list = lectureDao.getLectureByWeek(Integer.parseInt(classId));
 		if(list.size() == 0){
 			return "Wrong lecture number";
