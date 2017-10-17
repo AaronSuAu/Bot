@@ -1,12 +1,15 @@
 package edu.unsw.comp9323.bot.service.impl;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -20,6 +23,9 @@ import edu.unsw.comp9323.bot.service.EmailService;
 import edu.unsw.comp9323.bot.service.LectureService;
 import edu.unsw.comp9323.bot.service.ReminderService;
 import edu.unsw.comp9323.bot.service.ResourceService;
+import edu.unsw.comp9323.bot.util.BasicButton;
+import edu.unsw.comp9323.bot.util.ButtonBuilder;
+import edu.unsw.comp9323.bot.util.Inline_Keyboard;
 import edu.unsw.comp9323.bot.util.ValidationUtil;
 
 @Service
@@ -55,18 +61,26 @@ public class AIWebhookServiceImpl implements AIWebbookService {
 		 * Dispatch to different services
 		 */
 		try {
-				
+
 			// for authorization
-			if(intentName.equals("ExitContent")){
-				//https://discuss.api.ai/t/send-structured-facebook-message-from-webhook/1174/5
-				//https://dialogflow.com/docs/rich-messages#custom-payload
-				String jsonString = "{\r\n    \"text\": \"Google\",\r\n    \"reply_markup\": {\r\n      \"inline_keyboard\": [\r\n        [\r\n          {\r\n            \"text\": \"google\",\r\n            \"url\": \"www.google.com\"\r\n          }\r\n        ]\r\n      ]\r\n    }\r\n  }";
-				JsonParser jsonParser = new JsonParser();
-				JsonObject jo = (JsonObject)jsonParser.parse(jsonString);
+			if (intentName.equals("ExitContent")) {
+				// https://discuss.api.ai/t/send-structured-facebook-message-from-webhook/1174/5
+				// https://dialogflow.com/docs/rich-messages#custom-payload
+				BasicButton bB = new BasicButton("GoogleText", "www.google.com");
+				List<BasicButton> bList = new ArrayList<>();
+				List<List<BasicButton>> bOuterList= new ArrayList<List<BasicButton>>();
+				bList.add(bB);
+				bOuterList.add(bList);
+				Inline_Keyboard iKeyboard = new Inline_Keyboard(bOuterList);
+				ButtonBuilder builder = new ButtonBuilder("Button list", iKeyboard);
+				System.out.println(new Gson().toJson(builder));
+				 //String jsonString = "{\r\n \"text\": \"Google\",\r\n\"reply_markup\": {\r\n \"inline_keyboard\": [\r\n [\r\n{\r\n \"text\": \"google\",\r\n \"url\": \"www.google.com\"\r\n }\r\n ]\r\n ]\r\n }\r\n }";
+				 JsonParser jsonParser = new JsonParser();
+				 JsonObject jo = (JsonObject)jsonParser.parse(new Gson().toJson(builder));
 				Map<String, JsonElement> map = new HashMap<>();
 				map.put("telegram", jo);
 				output.setData(map);
-				//returnMsg ="exit";
+				// returnMsg ="exit";
 			}
 			if (intentName.equals("login")) {
 				returnMsg = authenticationService.isValidUser(input);
@@ -164,7 +178,8 @@ public class AIWebhookServiceImpl implements AIWebbookService {
 		/**
 		 * Get original request object
 		 * 
-		 * @return <code>null</code> if original request undefined in request object
+		 * @return <code>null</code> if original request undefined in request
+		 *         object
 		 */
 		public OriginalRequest getOriginalRequest() {
 			return originalRequest;
