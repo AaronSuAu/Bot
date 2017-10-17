@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import ai.api.model.AIResponse;
 import ai.api.model.Fulfillment;
@@ -53,8 +55,19 @@ public class AIWebhookServiceImpl implements AIWebbookService {
 		 * Dispatch to different services
 		 */
 		try {
-
+				
 			// for authorization
+			if(intentName.equals("ExitContent")){
+				//https://discuss.api.ai/t/send-structured-facebook-message-from-webhook/1174/5
+				//https://dialogflow.com/docs/rich-messages#custom-payload
+				String jsonString = "{\r\n    \"text\": \"Google\",\r\n    \"reply_markup\": {\r\n      \"inline_keyboard\": [\r\n        [\r\n          {\r\n            \"text\": \"google\",\r\n            \"url\": \"www.google.com\"\r\n          }\r\n        ]\r\n      ]\r\n    }\r\n  }";
+				JsonParser jsonParser = new JsonParser();
+				JsonObject jo = (JsonObject)jsonParser.parse(jsonString);
+				Map<String, JsonElement> map = new HashMap<>();
+				map.put("telegram", jo);
+				output.setData(map);
+				//returnMsg ="exit";
+			}
 			if (intentName.equals("login")) {
 				returnMsg = authenticationService.isValidUser(input);
 			}
