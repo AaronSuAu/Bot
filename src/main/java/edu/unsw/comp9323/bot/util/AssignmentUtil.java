@@ -1,5 +1,6 @@
 package edu.unsw.comp9323.bot.util;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -26,6 +27,7 @@ public class AssignmentUtil {
 					+ assignmentInfoDto.getMaterial_id();
 			String download_url_localhost = Constant.DOMAIN_NAME + "/file/download/resource/"
 					+ assignmentInfoDto.getMaterial_id();
+			
 			returnMsg = returnMsg + info + show_url_localhost + " " + download_url_localhost;
 		}
 

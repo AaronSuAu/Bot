@@ -6,6 +6,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -46,6 +49,14 @@ public class AIWebhookServiceImpl implements AIWebbookService {
 	@Autowired
 	AuthenticationService authenticationService;
 
+	public void addButton(String returnMsg, Fulfillment output, Map<String, JsonElement> telegramMap){
+		if(returnMsg.contains("{")){
+			JsonParser jsonParser = new JsonParser();
+			JsonObject jo = (JsonObject) jsonParser.parse(returnMsg);
+			telegramMap.put("telegram", jo);
+			output.setData(telegramMap);
+		}
+	}
 	public void doWebhook(AIWebhookRequest input, Fulfillment output) {
 
 		// Get intent
@@ -53,7 +64,8 @@ public class AIWebhookServiceImpl implements AIWebbookService {
 
 		// Get parameter
 		HashMap<String, JsonElement> params = input.getResult().getParameters();
-
+		Map<String, JsonElement> telegramMap = new HashMap<>();
+		
 		// return string
 		String returnMsg = null;
 
@@ -68,18 +80,19 @@ public class AIWebhookServiceImpl implements AIWebbookService {
 				// https://dialogflow.com/docs/rich-messages#custom-payload
 				BasicButton bB = new BasicButton("GoogleText", "www.google.com");
 				List<BasicButton> bList = new ArrayList<>();
-				List<List<BasicButton>> bOuterList= new ArrayList<List<BasicButton>>();
+				List<List<BasicButton>> bOuterList = new ArrayList<List<BasicButton>>();
 				bList.add(bB);
 				bOuterList.add(bList);
 				Inline_Keyboard iKeyboard = new Inline_Keyboard(bOuterList);
 				ButtonBuilder builder = new ButtonBuilder("Button list", iKeyboard);
 				System.out.println(new Gson().toJson(builder));
-				 //String jsonString = "{\r\n \"text\": \"Google\",\r\n\"reply_markup\": {\r\n \"inline_keyboard\": [\r\n [\r\n{\r\n \"text\": \"google\",\r\n \"url\": \"www.google.com\"\r\n }\r\n ]\r\n ]\r\n }\r\n }";
-				 JsonParser jsonParser = new JsonParser();
-				 JsonObject jo = (JsonObject)jsonParser.parse(new Gson().toJson(builder));
-				Map<String, JsonElement> map = new HashMap<>();
-				map.put("telegram", jo);
-				output.setData(map);
+				// String jsonString = "{\r\n \"text\":
+				// \"Google\",\r\n\"reply_markup\": {\r\n \"inline_keyboard\":
+				// [\r\n [\r\n{\r\n \"text\": \"google\",\r\n \"url\":
+				// \"www.google.com\"\r\n }\r\n ]\r\n ]\r\n }\r\n }";
+				JsonParser jsonParser = new JsonParser();
+				JsonObject jo = (JsonObject) jsonParser.parse(new Gson().toJson(builder));
+
 				// returnMsg ="exit";
 			}
 			if (intentName.equals("login")) {
@@ -122,10 +135,13 @@ public class AIWebhookServiceImpl implements AIWebbookService {
 
 			if (intentName.equals("getAllLectureResource")) {
 				returnMsg = resourceService.getAllLectureResource(input);
+				addButton(returnMsg, output, telegramMap);
 			} else if (intentName.equals("getLectureResourceByWeek")) {
 				returnMsg = resourceService.getClassMaterialUrlByWeek(input);
+				addButton(returnMsg, output, telegramMap);
 			} else if (intentName.equals("addLectureResourceByWeek")) {
 				returnMsg = resourceService.addClassMaterialUrlByWeek(input);
+				addButton(returnMsg, output, telegramMap);
 			} else if (intentName.equals("deleteLectureResourceByWeek")) {
 				returnMsg = resourceService.deleteLectureResourceByWeek(input);
 			} else if (intentName.equals("changeLectureResourceByWeek")) {
