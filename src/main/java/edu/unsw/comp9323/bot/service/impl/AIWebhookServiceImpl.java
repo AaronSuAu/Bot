@@ -102,6 +102,7 @@ public class AIWebhookServiceImpl implements AIWebbookService {
 			// for assignment
 			if (intentName.equals("getAllAssignment")) {
 				returnMsg = assignmentService.getAllAssignment(input);
+				
 			} else if (intentName.equals("getAssignmentByTitle")) {
 				returnMsg = assignmentService.getAssignmentByTitle(input);
 			} else if (intentName.equals("addAssignmentByTitle")) {
