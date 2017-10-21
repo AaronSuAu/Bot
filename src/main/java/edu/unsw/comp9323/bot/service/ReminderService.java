@@ -13,8 +13,6 @@ public interface ReminderService {
 
 	public String addReminder(AIWebhookRequest input);
 
-	public void remindByEmail();
-
 	public String updateReminder(AIWebhookRequest input);
 
 	public List<Person_info> getReceivers(long id);
