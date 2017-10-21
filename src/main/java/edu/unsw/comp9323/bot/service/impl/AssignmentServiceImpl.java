@@ -62,7 +62,10 @@ public class AssignmentServiceImpl implements AssignmentService {
 	 * return all assignments(list) including assignment name, due date, upload
 	 * time, author and , material url(s)
 	 * 
-	 * TODO refine return format
+	 * @param AIWebhookRequest:
+	 *            JSON form API.AI, intent name: getAllAssignment, context: zid,
+	 *            password
+	 * @return list of links of assignment
 	 */
 	@Override
 	public String getAllAssignment(AIWebhookRequest input) {
@@ -82,7 +85,10 @@ public class AssignmentServiceImpl implements AssignmentService {
 	 * return matched assignments(list) including assignment name, due date, upload
 	 * time, author and , material url(s)
 	 * 
-	 * TODO refine return format
+	 * @param AIWebhookRequest:
+	 *            JSON form API.AI, intent name: getAssignmentByTitle, context: zid,
+	 *            password
+	 * @return list of links of assignment
 	 */
 	@Override
 	public String getAssignmentByTitle(AIWebhookRequest input) throws Exception {
@@ -102,6 +108,11 @@ public class AssignmentServiceImpl implements AssignmentService {
 
 	/**
 	 * generate url for get file
+	 * 
+	 * @param AIWebhookRequest:
+	 *            JSON form API.AI, intent name: addAssignmentByTitle, context: zid,
+	 *            password
+	 * @return link of upload assignment page
 	 */
 	@Override
 	public String addAssignmentByTitle(AIWebhookRequest input) throws Exception {
@@ -118,29 +129,34 @@ public class AssignmentServiceImpl implements AssignmentService {
 			System.out.println("titile name dupl");
 			return "assignment:" + assignment_title + " has exist, do you want to change that assignment info?";
 		}
-		
+
 		String due_date_string = input.getResult().getParameters().get("assignment-due_date").getAsString();
 		String author_zid = userIdentityUtil.getIdentity(input).getZid();
 		String type = "add";
-		List<List<BasicButton>> bOuterList= new ArrayList<List<BasicButton>>();
-		BasicButton bB = new BasicButton("Upload", Constant.DOMAIN_NAME+"/page/upload/assignment_material?type=" + type
-				+ "&assignment_title=" + assignment_title + "&due_date_string=" + due_date_string + "&author_zid="
-				+ author_zid);
+		List<List<BasicButton>> bOuterList = new ArrayList<List<BasicButton>>();
+		BasicButton bB = new BasicButton("Upload",
+				Constant.DOMAIN_NAME + "/page/upload/assignment_material?type=" + type + "&assignment_title="
+						+ assignment_title + "&due_date_string=" + due_date_string + "&author_zid=" + author_zid);
 		List<BasicButton> bList = new ArrayList<>();
 		bList.add(bB);
 		bOuterList.add(bList);
 		Inline_Keyboard iKeyboard = new Inline_Keyboard(bOuterList);
 		ButtonBuilder builder = new ButtonBuilder("Click the following button to add the assignment", iKeyboard);
-//		return "to upload assignment material: http://localhost:8080/page/upload/assignment_material?type=" + type
-//				+ "&assignment_title=" + assignment_title + "&due_date_string=" + due_date_string + "&author_zid="
-//				+ author_zid;
+		// return "to upload assignment material:
+		// http://localhost:8080/page/upload/assignment_material?type=" + type
+		// + "&assignment_title=" + assignment_title + "&due_date_string=" +
+		// due_date_string + "&author_zid="
+		// + author_zid;
 		return new Gson().toJson(builder);
 	}
 
 	/**
 	 * generate url for get file
 	 * 
-	 * TODO change from add assignment
+	 * @param AIWebhookRequest:
+	 *            JSON form API.AI, intent name: changeAssignmentByTitle, context:
+	 *            zid, password
+	 * @return link of upload assignment page
 	 */
 	@Override
 	public String changeAssignmentByTitle(AIWebhookRequest input) throws Exception {
@@ -155,10 +171,10 @@ public class AssignmentServiceImpl implements AssignmentService {
 		String due_date_string = input.getResult().getParameters().get("assignment-due_date").getAsString();
 		String author_zid = userIdentityUtil.getIdentity(input).getZid();
 		String type = "update";
-		List<List<BasicButton>> bOuterList= new ArrayList<List<BasicButton>>();
-		BasicButton bB = new BasicButton("Upload", Constant.DOMAIN_NAME+"/page/upload/assignment_material?type=" + type
-				+ "&assignment_title=" + assignment_title + "&due_date_string=" + due_date_string + "&author_zid="
-				+ author_zid);
+		List<List<BasicButton>> bOuterList = new ArrayList<List<BasicButton>>();
+		BasicButton bB = new BasicButton("Upload",
+				Constant.DOMAIN_NAME + "/page/upload/assignment_material?type=" + type + "&assignment_title="
+						+ assignment_title + "&due_date_string=" + due_date_string + "&author_zid=" + author_zid);
 		List<BasicButton> bList = new ArrayList<>();
 		bList.add(bB);
 		bOuterList.add(bList);
@@ -169,6 +185,11 @@ public class AssignmentServiceImpl implements AssignmentService {
 
 	/**
 	 * delete ass and corresponding materials
+	 * 
+	 * @param AIWebhookRequest:
+	 *            JSON form API.AI, intent name: deleteAssignmentByTitle, context:
+	 *            zid, password
+	 * @return confirmation message of deleting assignment
 	 */
 	@Override
 	public String deleteAssignmentByTitle(AIWebhookRequest input) throws Exception {
@@ -200,6 +221,11 @@ public class AssignmentServiceImpl implements AssignmentService {
 
 	/**
 	 * student submit assignment by group
+	 * 
+	 * @param AIWebhookRequest:
+	 *            JSON form API.AI, intent name: studentSubmitAssignment, context:
+	 *            zid, password
+	 * @return confirmation message of deleting assignment
 	 */
 	@Override
 	public String studentSubmitAssignment(AIWebhookRequest input) throws Exception {
@@ -220,9 +246,9 @@ public class AssignmentServiceImpl implements AssignmentService {
 			ass_id = assignment.getId();
 		}
 		String zid = userIdentityUtil.getIdentity(input).getZid();
-		List<List<BasicButton>> bOuterList= new ArrayList<List<BasicButton>>();
-		BasicButton bB = new BasicButton("Upload", Constant.DOMAIN_NAME+"/page/upload/student_sbumission?ass_id=" + ass_id
-				+ "&zid=" + zid);
+		List<List<BasicButton>> bOuterList = new ArrayList<List<BasicButton>>();
+		BasicButton bB = new BasicButton("Upload",
+				Constant.DOMAIN_NAME + "/page/upload/student_sbumission?ass_id=" + ass_id + "&zid=" + zid);
 		List<BasicButton> bList = new ArrayList<>();
 		bList.add(bB);
 		bOuterList.add(bList);
@@ -323,15 +349,16 @@ public class AssignmentServiceImpl implements AssignmentService {
 
 		List<Ass_student> unmarkedAss_students = ass_studentDao.getAllUnmarkedGroup();
 		String returnMsg = "Unmarked groups:";
-		List<List<BasicButton>> bOuterList= new ArrayList<List<BasicButton>>();
+		List<List<BasicButton>> bOuterList = new ArrayList<List<BasicButton>>();
 		for (Ass_student unmarkedAss_student : unmarkedAss_students) {
 			// id is id of ass_student,instead of group_nb
 			String assignment_title = assignmentDao.getAssignmentTitlesById(unmarkedAss_student.getAss_id());
 			String tmp = " -group" + unmarkedAss_student.getGroup_nb() + " assignment title: " + assignment_title
 					+ " to GET submission:http://localhost:8080/resource/showPDF/submission/"
 					+ unmarkedAss_student.getId();
-			BasicButton bB = new BasicButton("Group: "+ unmarkedAss_student.getGroup_nb() + ", assignment title: "+assignment_title,
-					Constant.DOMAIN_NAME+"/resource/showPDF/submission/"+unmarkedAss_student.getId());
+			BasicButton bB = new BasicButton(
+					"Group: " + unmarkedAss_student.getGroup_nb() + ", assignment title: " + assignment_title,
+					Constant.DOMAIN_NAME + "/resource/showPDF/submission/" + unmarkedAss_student.getId());
 			List<BasicButton> bList = new ArrayList<>();
 			bList.add(bB);
 			bOuterList.add(bList);

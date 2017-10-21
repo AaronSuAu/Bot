@@ -22,9 +22,9 @@ public class AssignmentUtil {
 		String returnMsg = "";
 		String hostStringLocal = "localhost:8080";
 		String hostStringGCloud = "cmbot-b3f5e.appspot.com";
-		List<List<BasicButton>> bOuterList= new ArrayList<List<BasicButton>>();
+		List<List<BasicButton>> bOuterList = new ArrayList<List<BasicButton>>();
 		for (AssignmentInfoDto assignmentInfoDto : assignmentInfoDtoList) {
-			String info = " -" + assignmentInfoDto.toString();
+			String info = assignmentInfoDto.getName() + " Due date:" + assignmentInfoDto.getDue_date();
 			String show_url_localhost = Constant.DOMAIN_NAME + "/file/showPDF/resource/"
 					+ assignmentInfoDto.getMaterial_id();
 			String download_url_localhost = Constant.DOMAIN_NAME + "/file/download/resource/"
@@ -36,7 +36,7 @@ public class AssignmentUtil {
 			returnMsg = returnMsg + info + show_url_localhost + " " + download_url_localhost;
 		}
 		Inline_Keyboard iKeyboard = new Inline_Keyboard(bOuterList);
-		ButtonBuilder builder = new ButtonBuilder("Resource List: ", iKeyboard);
+		ButtonBuilder builder = new ButtonBuilder("Assignment List: ", iKeyboard);
 		return new Gson().toJson(builder);
 		// for (AssignmentInfoDto assignmentInfoDto : assignmentInfoDtoList) {
 		// String info = "-" + assignmentInfoDto.toString();
@@ -64,7 +64,7 @@ public class AssignmentUtil {
 		String hostStringLocal = "localhost:8080";
 		String hostStringGCloud = "cmbot-b3f5e.appspot.com";
 
-		returnMsg += " to get submission: "+Constant.DOMAIN_NAME + "/resource/showPDF/submission/"
+		returnMsg += " to get submission: " + Constant.DOMAIN_NAME + "/resource/showPDF/submission/"
 				+ ass_student.getId();
 
 		return returnMsg;
