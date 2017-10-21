@@ -75,26 +75,6 @@ public class AIWebhookServiceImpl implements AIWebbookService {
 		try {
 
 			// for authorization
-			if (intentName.equals("ExitContent")) {
-				// https://discuss.api.ai/t/send-structured-facebook-message-from-webhook/1174/5
-				// https://dialogflow.com/docs/rich-messages#custom-payload
-				BasicButton bB = new BasicButton("GoogleText", "www.google.com");
-				List<BasicButton> bList = new ArrayList<>();
-				List<List<BasicButton>> bOuterList = new ArrayList<List<BasicButton>>();
-				bList.add(bB);
-				bOuterList.add(bList);
-				Inline_Keyboard iKeyboard = new Inline_Keyboard(bOuterList);
-				ButtonBuilder builder = new ButtonBuilder("Button list", iKeyboard);
-				System.out.println(new Gson().toJson(builder));
-				// String jsonString = "{\r\n \"text\":
-				// \"Google\",\r\n\"reply_markup\": {\r\n \"inline_keyboard\":
-				// [\r\n [\r\n{\r\n \"text\": \"google\",\r\n \"url\":
-				// \"www.google.com\"\r\n }\r\n ]\r\n ]\r\n }\r\n }";
-				JsonParser jsonParser = new JsonParser();
-				JsonObject jo = (JsonObject) jsonParser.parse(new Gson().toJson(builder));
-
-				// returnMsg ="exit";
-			}
 			if (intentName.equals("login")) {
 				returnMsg = authenticationService.isValidUser(input);
 			}
@@ -102,17 +82,23 @@ public class AIWebhookServiceImpl implements AIWebbookService {
 			// for assignment
 			if (intentName.equals("getAllAssignment")) {
 				returnMsg = assignmentService.getAllAssignment(input);
-				
+				addButton(returnMsg, output, telegramMap);
 			} else if (intentName.equals("getAssignmentByTitle")) {
 				returnMsg = assignmentService.getAssignmentByTitle(input);
+				addButton(returnMsg, output, telegramMap);
+
 			} else if (intentName.equals("addAssignmentByTitle")) {
 				returnMsg = assignmentService.addAssignmentByTitle(input);
+				addButton(returnMsg, output, telegramMap);
 			} else if (intentName.equals("changeAssignmentByTitle")) {
 				returnMsg = assignmentService.changeAssignmentByTitle(input);
+				addButton(returnMsg, output, telegramMap);
 			} else if (intentName.equals("deleteAssignmentByTitle")) {
 				returnMsg = assignmentService.deleteAssignmentByTitle(input);
 			} else if (intentName.equals("studentSubmitAssignment")) {
 				returnMsg = assignmentService.studentSubmitAssignment(input);
+				addButton(returnMsg, output, telegramMap);
+
 			} else if (intentName.equals("getUnsubmitingGroup")) {
 				// TODO
 				returnMsg = assignmentService.getUnsubmitingGroup(input);
@@ -122,6 +108,7 @@ public class AIWebhookServiceImpl implements AIWebbookService {
 				returnMsg = assignmentService.getAssMarkByAssTitle(input);
 			} else if (intentName.equals("getAllUnmarkedAssignmentGroup")) {
 				returnMsg = assignmentService.getAllUnmarkedAssignmentGroup(input);
+				addButton(returnMsg, output, telegramMap);
 			} else if (intentName.equals("markAssignmentByGroupNb")) {
 				returnMsg = assignmentService.markAssignmentByGroupNb(input);
 			} else {
