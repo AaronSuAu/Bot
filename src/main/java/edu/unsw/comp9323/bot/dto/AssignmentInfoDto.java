@@ -75,8 +75,9 @@ public class AssignmentInfoDto implements Serializable {
 
 	@Override
 	public String toString() {
-		return "AssignmentInfoDto [name=" + name + ", due_date=" + due_date + ", upload_time=" + upload_time
-				+ ", author_name=" + author_name + ", material_id=" + material_id + "]";
+//		return "AssignmentInfoDto [name=" + name + ", due_date=" + due_date + ", upload_time=" + upload_time
+//				+ ", author_name=" + author_name + ", material_id=" + material_id + "]";
+		return "[name=" + name + ", due_date=" + due_date + "]";
 	}
 
 }

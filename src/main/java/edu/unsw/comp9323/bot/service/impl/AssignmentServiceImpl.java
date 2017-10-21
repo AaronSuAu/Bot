@@ -8,6 +8,8 @@ import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.google.gson.Gson;
+
 import edu.unsw.comp9323.bot.constant.Constant;
 import edu.unsw.comp9323.bot.dao.Ass_studentDao;
 import edu.unsw.comp9323.bot.dao.AssignmentDao;
@@ -21,7 +23,10 @@ import edu.unsw.comp9323.bot.service.AssignmentService;
 import edu.unsw.comp9323.bot.service.EmailService;
 import edu.unsw.comp9323.bot.service.impl.AIWebhookServiceImpl.AIWebhookRequest;
 import edu.unsw.comp9323.bot.util.AssignmentUtil;
+import edu.unsw.comp9323.bot.util.BasicButton;
+import edu.unsw.comp9323.bot.util.ButtonBuilder;
 import edu.unsw.comp9323.bot.util.EmailUtil;
+import edu.unsw.comp9323.bot.util.Inline_Keyboard;
 import edu.unsw.comp9323.bot.util.UserIdentityUtil;
 import edu.unsw.comp9323.bot.util.ValidationUtil;
 
@@ -113,13 +118,23 @@ public class AssignmentServiceImpl implements AssignmentService {
 			System.out.println("titile name dupl");
 			return "assignment:" + assignment_title + " has exist, do you want to change that assignment info?";
 		}
-
+		
 		String due_date_string = input.getResult().getParameters().get("assignment-due_date").getAsString();
 		String author_zid = userIdentityUtil.getIdentity(input).getZid();
 		String type = "add";
-		return "to upload assignment material: http://localhost:8080/page/upload/assignment_material?type=" + type
+		List<List<BasicButton>> bOuterList= new ArrayList<List<BasicButton>>();
+		BasicButton bB = new BasicButton("Upload", Constant.DOMAIN_NAME+"/page/upload/assignment_material?type=" + type
 				+ "&assignment_title=" + assignment_title + "&due_date_string=" + due_date_string + "&author_zid="
-				+ author_zid;
+				+ author_zid);
+		List<BasicButton> bList = new ArrayList<>();
+		bList.add(bB);
+		bOuterList.add(bList);
+		Inline_Keyboard iKeyboard = new Inline_Keyboard(bOuterList);
+		ButtonBuilder builder = new ButtonBuilder("Click the following button to add the assignment", iKeyboard);
+//		return "to upload assignment material: http://localhost:8080/page/upload/assignment_material?type=" + type
+//				+ "&assignment_title=" + assignment_title + "&due_date_string=" + due_date_string + "&author_zid="
+//				+ author_zid;
+		return new Gson().toJson(builder);
 	}
 
 	/**
@@ -138,11 +153,18 @@ public class AssignmentServiceImpl implements AssignmentService {
 
 		String assignment_title = input.getResult().getParameters().get("assignment-title").getAsString();
 		String due_date_string = input.getResult().getParameters().get("assignment-due_date").getAsString();
-		String authro_zid = userIdentityUtil.getIdentity(input).getZid();
+		String author_zid = userIdentityUtil.getIdentity(input).getZid();
 		String type = "update";
-		return "to upload assignment material: http://localhost:8080/page/upload/assignment_material?type=" + type
+		List<List<BasicButton>> bOuterList= new ArrayList<List<BasicButton>>();
+		BasicButton bB = new BasicButton("Upload", Constant.DOMAIN_NAME+"/page/upload/assignment_material?type=" + type
 				+ "&assignment_title=" + assignment_title + "&due_date_string=" + due_date_string + "&author_zid="
-				+ authro_zid;
+				+ author_zid);
+		List<BasicButton> bList = new ArrayList<>();
+		bList.add(bB);
+		bOuterList.add(bList);
+		Inline_Keyboard iKeyboard = new Inline_Keyboard(bOuterList);
+		ButtonBuilder builder = new ButtonBuilder("Click the following button to update the assignment", iKeyboard);
+		return new Gson().toJson(builder);
 	}
 
 	/**
@@ -198,8 +220,15 @@ public class AssignmentServiceImpl implements AssignmentService {
 			ass_id = assignment.getId();
 		}
 		String zid = userIdentityUtil.getIdentity(input).getZid();
-		return "to upload your assignment: http://localhost:8080/page/upload/student_sbumission?ass_id=" + ass_id
-				+ "&zid=" + zid;
+		List<List<BasicButton>> bOuterList= new ArrayList<List<BasicButton>>();
+		BasicButton bB = new BasicButton("Upload", Constant.DOMAIN_NAME+"/page/upload/student_sbumission?ass_id=" + ass_id
+				+ "&zid=" + zid);
+		List<BasicButton> bList = new ArrayList<>();
+		bList.add(bB);
+		bOuterList.add(bList);
+		Inline_Keyboard iKeyboard = new Inline_Keyboard(bOuterList);
+		ButtonBuilder builder = new ButtonBuilder("Click the following button to submit your assignment", iKeyboard);
+		return new Gson().toJson(builder);
 	}
 
 	/**
@@ -253,6 +282,34 @@ public class AssignmentServiceImpl implements AssignmentService {
 	}
 
 	/**
+	 * student get assignment submission by assignment title and group number
+	 */
+	@Override
+	public String getAssMarkByAssTitle(AIWebhookRequest input) throws Exception {
+		System.out.println("getAssMarkByAssTitle()"); // debug
+
+		// Authorization
+		if (!validationUtil.isStudent(input)) {
+			return "Authorization fail";
+		}
+
+		String assignment_title = input.getResult().getParameters().get("assignment-title").getAsString();
+		assignment = assignmentDao.getAssignmentIdByTitle(assignment_title);
+		if (assignment == null) {
+			return "assignment title is wrong";
+		} else {
+			ass_student.setAss_id(assignment.getId());
+		}
+
+		String zid = userIdentityUtil.getIdentity(input).getZid();
+		person_info = person_infoDao.getUserByZid(zid);
+		Long group_nb = person_info.getGroup_nb();
+		ass_student.setGroup_nb(group_nb);
+		ass_student = ass_studentDao.getSubmissionByIdAndGroup(ass_student);
+		return "your assignment of " + assignment_title + "'s mark is " + ass_student.getGrade();
+	}
+
+	/**
 	 * get all not submission groups which submitted their assignments
 	 */
 	@Override
@@ -266,15 +323,23 @@ public class AssignmentServiceImpl implements AssignmentService {
 
 		List<Ass_student> unmarkedAss_students = ass_studentDao.getAllUnmarkedGroup();
 		String returnMsg = "Unmarked groups:";
+		List<List<BasicButton>> bOuterList= new ArrayList<List<BasicButton>>();
 		for (Ass_student unmarkedAss_student : unmarkedAss_students) {
 			// id is id of ass_student,instead of group_nb
 			String assignment_title = assignmentDao.getAssignmentTitlesById(unmarkedAss_student.getAss_id());
 			String tmp = " -group" + unmarkedAss_student.getGroup_nb() + " assignment title: " + assignment_title
 					+ " to GET submission:http://localhost:8080/resource/showPDF/submission/"
 					+ unmarkedAss_student.getId();
+			BasicButton bB = new BasicButton("Group: "+ unmarkedAss_student.getGroup_nb() + ", assignment title: "+assignment_title,
+					Constant.DOMAIN_NAME+"/resource/showPDF/submission/"+unmarkedAss_student.getId());
+			List<BasicButton> bList = new ArrayList<>();
+			bList.add(bB);
+			bOuterList.add(bList);
 			returnMsg += tmp;
 		}
-		return returnMsg;
+		Inline_Keyboard iKeyboard = new Inline_Keyboard(bOuterList);
+		ButtonBuilder builder = new ButtonBuilder("Resource List: ", iKeyboard);
+		return new Gson().toJson(builder);
 	}
 
 	/**

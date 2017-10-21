@@ -1,13 +1,21 @@
 package edu.unsw.comp9323.bot.service.impl;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import ai.api.model.AIResponse;
 import ai.api.model.Fulfillment;
@@ -18,6 +26,9 @@ import edu.unsw.comp9323.bot.service.EmailService;
 import edu.unsw.comp9323.bot.service.LectureService;
 import edu.unsw.comp9323.bot.service.ReminderService;
 import edu.unsw.comp9323.bot.service.ResourceService;
+import edu.unsw.comp9323.bot.util.BasicButton;
+import edu.unsw.comp9323.bot.util.ButtonBuilder;
+import edu.unsw.comp9323.bot.util.Inline_Keyboard;
 import edu.unsw.comp9323.bot.util.ValidationUtil;
 
 @Service
@@ -38,13 +49,23 @@ public class AIWebhookServiceImpl implements AIWebbookService {
 	@Autowired
 	AuthenticationService authenticationService;
 
+	public void addButton(String returnMsg, Fulfillment output, Map<String, JsonElement> telegramMap){
+		if(returnMsg.contains("{")){
+			JsonParser jsonParser = new JsonParser();
+			JsonObject jo = (JsonObject) jsonParser.parse(returnMsg);
+			telegramMap.put("telegram", jo);
+			output.setData(telegramMap);
+		}
+	}
 	public void doWebhook(AIWebhookRequest input, Fulfillment output) {
+
 		// Get intent
 		String intentName = input.getResult().getMetadata().getIntentName();
 
 		// Get parameter
 		HashMap<String, JsonElement> params = input.getResult().getParameters();
-
+		Map<String, JsonElement> telegramMap = new HashMap<>();
+		
 		// return string
 		String returnMsg = null;
 
@@ -61,23 +82,33 @@ public class AIWebhookServiceImpl implements AIWebbookService {
 			// for assignment
 			if (intentName.equals("getAllAssignment")) {
 				returnMsg = assignmentService.getAllAssignment(input);
+				addButton(returnMsg, output, telegramMap);
 			} else if (intentName.equals("getAssignmentByTitle")) {
 				returnMsg = assignmentService.getAssignmentByTitle(input);
+				addButton(returnMsg, output, telegramMap);
+
 			} else if (intentName.equals("addAssignmentByTitle")) {
 				returnMsg = assignmentService.addAssignmentByTitle(input);
+				addButton(returnMsg, output, telegramMap);
 			} else if (intentName.equals("changeAssignmentByTitle")) {
 				returnMsg = assignmentService.changeAssignmentByTitle(input);
+				addButton(returnMsg, output, telegramMap);
 			} else if (intentName.equals("deleteAssignmentByTitle")) {
 				returnMsg = assignmentService.deleteAssignmentByTitle(input);
 			} else if (intentName.equals("studentSubmitAssignment")) {
 				returnMsg = assignmentService.studentSubmitAssignment(input);
+				addButton(returnMsg, output, telegramMap);
+
 			} else if (intentName.equals("getUnsubmitingGroup")) {
 				// TODO
 				returnMsg = assignmentService.getUnsubmitingGroup(input);
 			} else if (intentName.equals("getAssSubmissionByAssTitleAndGroupNb")) {
 				returnMsg = assignmentService.getAssSubmissionByAssTitleAndGroupNb(input);
+			} else if (intentName.equals("getAssMarkByAssTitle")) {
+				returnMsg = assignmentService.getAssMarkByAssTitle(input);
 			} else if (intentName.equals("getAllUnmarkedAssignmentGroup")) {
 				returnMsg = assignmentService.getAllUnmarkedAssignmentGroup(input);
+				addButton(returnMsg, output, telegramMap);
 			} else if (intentName.equals("markAssignmentByGroupNb")) {
 				returnMsg = assignmentService.markAssignmentByGroupNb(input);
 			} else {
@@ -92,10 +123,13 @@ public class AIWebhookServiceImpl implements AIWebbookService {
 
 			if (intentName.equals("getAllLectureResource")) {
 				returnMsg = resourceService.getAllLectureResource(input);
+				addButton(returnMsg, output, telegramMap);
 			} else if (intentName.equals("getLectureResourceByWeek")) {
 				returnMsg = resourceService.getClassMaterialUrlByWeek(input);
+				addButton(returnMsg, output, telegramMap);
 			} else if (intentName.equals("addLectureResourceByWeek")) {
 				returnMsg = resourceService.addClassMaterialUrlByWeek(input);
+				addButton(returnMsg, output, telegramMap);
 			} else if (intentName.equals("deleteLectureResourceByWeek")) {
 				returnMsg = resourceService.deleteLectureResourceByWeek(input);
 			} else if (intentName.equals("changeLectureResourceByWeek")) {

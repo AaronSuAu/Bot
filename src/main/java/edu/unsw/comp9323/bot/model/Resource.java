@@ -90,8 +90,7 @@ public class Resource {
 
 	@Override
 	public String toString() {
-		return "Resource [id=" + id + ", title=" + title + ", path=" + path + ", author_zid=" + author_zid + ", ass_id="
-				+ ass_id + ", class_id=" + class_id + ", upload_time=" + upload_time + "]";
+		return "Resource [title=" + title +", upload_time=" + upload_time + "]";
 	}
 
 }

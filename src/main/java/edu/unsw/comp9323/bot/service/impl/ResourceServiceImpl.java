@@ -1,5 +1,6 @@
 package edu.unsw.comp9323.bot.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -7,7 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.google.gson.Gson;
+
 import ch.qos.logback.core.pattern.parser.Parser;
+import edu.unsw.comp9323.bot.constant.Constant;
 import edu.unsw.comp9323.bot.dao.LectureDao;
 import edu.unsw.comp9323.bot.dao.ResourceDao;
 import edu.unsw.comp9323.bot.dto.AssignmentInfoDto;
@@ -15,6 +19,9 @@ import edu.unsw.comp9323.bot.model.Lecture;
 import edu.unsw.comp9323.bot.model.Resource;
 import edu.unsw.comp9323.bot.service.ResourceService;
 import edu.unsw.comp9323.bot.service.impl.AIWebhookServiceImpl.AIWebhookRequest;
+import edu.unsw.comp9323.bot.util.BasicButton;
+import edu.unsw.comp9323.bot.util.ButtonBuilder;
+import edu.unsw.comp9323.bot.util.Inline_Keyboard;
 import edu.unsw.comp9323.bot.util.ResourceUtil;
 import edu.unsw.comp9323.bot.util.UserIdentityUtil;
 import edu.unsw.comp9323.bot.util.ValidationUtil;
@@ -61,11 +68,11 @@ public class ResourceServiceImpl implements ResourceService {
 			return "Authorization fail";
 		}
 
-		String classId = input.getResult().getParameters().get("week-number").getAsString().replaceAll("\\D+","");;
+		String classId = input.getResult().getParameters().get("week-number").getAsString().replaceAll("\\D+","");
 
 		List<Resource> list = resourceDao.getResourceByClass(Long.parseLong(classId));
 		if(list.size() == 0){
-			return "Wrong week number";
+			return "Wrong week number Or no resources for the week";
 		}
 		return resourceUtil.renderResourceReturnMsg(list);
 	}
@@ -78,15 +85,24 @@ public class ResourceServiceImpl implements ResourceService {
 			return "Authorization fail";
 		}
 
-		String classId = input.getResult().getParameters().get("week-number").getAsString().replaceAll("\\D+","");;
+		String classId = input.getResult().getParameters().get("week-number").getAsString().replaceAll("\\D+","");
 		List<Lecture> list = lectureDao.getLectureByWeek(Integer.parseInt(classId));
 		if(list.size() == 0){
 			return "Wrong lecture number";
 		}
 		String name = input.getResult().getParameters().get("material-title").getAsString();
 		String author_zid = userIdentityUtil.getIdentity(input).getZid();
-		return "To add material, go to http://localhost:8080/page/material/add?"
-				+ "name="+name+"&author_zid="+author_zid+"&class_id="+classId+"&type=add";
+		//
+		List<List<BasicButton>> bOuterList= new ArrayList<List<BasicButton>>();
+		BasicButton bB = new BasicButton("Upload", Constant.DOMAIN_NAME+"/page/material/add?"
+				+ "name="+name+"&author_zid="+author_zid+"&class_id="+classId+"&type=add");
+		List<BasicButton> bList = new ArrayList<>();
+		bList.add(bB);
+		bOuterList.add(bList);
+		Inline_Keyboard iKeyboard = new Inline_Keyboard(bOuterList);
+		ButtonBuilder builder = new ButtonBuilder("Click the following button to add the class material", iKeyboard);
+		//
+		return new Gson().toJson(builder);
 	}
 
 	@Override
@@ -97,7 +113,7 @@ public class ResourceServiceImpl implements ResourceService {
 		if (!validationUtil.isLecturer(input)) {
 			return "Authorization fail";
 		}
-		String classId = input.getResult().getParameters().get("week-number").getAsString().replaceAll("\\D+","");;
+		String classId = input.getResult().getParameters().get("week-number").getAsString().replaceAll("\\D+","");
 
 		if(resourceDao.deleteResourceByClassId(Integer.parseInt(classId)) == 0){
 			return "Fail. Check the week number";
@@ -114,7 +130,7 @@ public class ResourceServiceImpl implements ResourceService {
 			return "Authorization fail";
 		}
 
-		String classId = input.getResult().getParameters().get("week-number").getAsString().replaceAll("\\D+","");;
+		String classId = input.getResult().getParameters().get("week-number").getAsString().replaceAll("\\D+","");
 		List<Lecture> list = lectureDao.getLectureByWeek(Integer.parseInt(classId));
 		if(list.size() == 0){
 			return "Wrong lecture number";
