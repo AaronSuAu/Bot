@@ -81,19 +81,19 @@ public class EmailServiceImpl implements EmailService {
 		if (student.get(0).getAsString().toLowerCase().contains("all")
 				|| student.get(0).getAsString().toLowerCase().contains("class")) {
 
-			trueStatement += "whole class ";
+			trueStatement += "whole class:\n";
 			List<Person_info> list = person_infoDao.findAll();
 			if (list.size() == 0) {
-				System.out.println("Unable to find any student. Please check again");
-				falseStatement += "Unable to find any student. Please check again\n";
+				System.out.println("Unable to find any student.");
+				falseStatement += "Unable to find any student.\n";
 			}
 			for (Person_info person : list) {
 
 				if (person.getEmail() == null) {
-					System.out.println("Unable to find email for student " + person.getZid() + ". Please check again");
-					falseStatement += "Unable to find email for student " + person.getZid() + ". Please check again\n";
+					System.out.println("Unable to find email for student " + person.getZid() + ".");
+					falseStatement += "Unable to find email for student " + person.getZid() + ".\n";
 				} else {
-					trueStatement += person.getZid();
+					trueStatement += person.getZid()+"(group"+person.getGroup_nb()+") ";
 					System.out.println(person.getZid() + ":" + person.getEmail());
 					receiver.add(person.getZid());
 				}
@@ -111,8 +111,8 @@ public class EmailServiceImpl implements EmailService {
 					List<Person_info> list = person_infoDao.getUserByGroupNb(group_nb);
 					for (Person_info person : list) {
 						if (person.getEmail() == null) {
-//							System.out.println("Unable to find email for student " + stu + ". Please check again");
-							falseStatement += "Unable to find email for student " + stu + ". Please check again\n";
+//							System.out.println("Unable to find email for student " + stu + ".");
+							falseStatement += "Unable to find email for student " + stu + ".\n";
 						} else {
 							trueStatement += person.getZid() + "(" + stu + ") ";
 							System.out.println(person.getZid() + ":" + person.getEmail());
@@ -126,12 +126,12 @@ public class EmailServiceImpl implements EmailService {
 
 					List<Person_info> list = person_infoDao.findUserFromZid(find);
 					if (list.size() == 0) {
-						System.out.println("Unable to find student " + stu + ". Please check again");
-						falseStatement += "Unable to find student " + stu + ". Please check again\n";
+						System.out.println("Unable to find student " + stu + ".");
+						falseStatement += "Unable to find student " + stu + ".\n";
 					}
 					for (Person_info person : list) {
 						if (person.getEmail() == null) {
-							falseStatement += "Unable to find email for student " + stu + ". Please check again\n";
+							falseStatement += "Unable to find email for student " + stu + ".\n";
 						} else {
 							System.out.println(person.getZid() + ":" + person.getEmail());
 							receiver.add(person.getZid());
@@ -199,14 +199,14 @@ public class EmailServiceImpl implements EmailService {
 			trueStatement += "whole class ";
 			List<Person_info> list = person_infoDao.findAll();
 			if (list.size() == 0) {
-				System.out.println("Unable to find any student. Please check again");
-				falseStatement += "Unable to find any student. Please check again\n";
+				System.out.println("Unable to find any student.");
+				falseStatement += "Unable to find any student.\n";
 			}
 			for (Person_info person : list) {
 
 				if (person.getEmail() == null) {
-					System.out.println("Unable to find email for student " + person.getZid() + ". Please check again");
-					falseStatement += "Unable to find email for student " + person.getZid() + ". Please check again\n";
+					System.out.println("Unable to find email for student " + person.getZid() + ".");
+					falseStatement += "Unable to find email for student " + person.getZid() + ".\n";
 				} else {
 					trueStatement += person.getZid();
 					System.out.println(person.getZid() + ":" + person.getEmail());
@@ -225,8 +225,8 @@ public class EmailServiceImpl implements EmailService {
 					List<Person_info> list = person_infoDao.getUserByGroupNb(group_nb);
 					for (Person_info person : list) {
 						if (person.getEmail() == null) {
-							System.out.println("Unable to find email for student " + stu + ". Please check again");
-							falseStatement += "Unable to find email for student " + stu + ". Please check again\n";
+							System.out.println("Unable to find email for student " + stu + ".");
+							falseStatement += "Unable to find email for student " + stu + ".\n";
 						} else {
 							trueStatement += person.getZid() + "(" + stu + ") ";
 							System.out.println(person.getZid() + ":" + person.getEmail());
@@ -241,13 +241,13 @@ public class EmailServiceImpl implements EmailService {
 
 					List<Person_info> list = person_infoDao.findUserFromZid(find);
 					if (list.size() == 0) {
-						System.out.println("Unable to find student " + stu + ". Please check again");
-						falseStatement += "Unable to find student " + stu + ". Please check again\n";
+						System.out.println("Unable to find student " + stu + ".");
+						falseStatement += "Unable to find student " + stu + ".\n";
 					}
 					for (Person_info person : list) {
 						if (person.getEmail() == null) {
-							System.out.println("Unable to find email for student " + stu + ". Please check again");
-							falseStatement += "Unable to find email for student " + stu + ". Please check again\n";
+							System.out.println("Unable to find email for student " + stu + ".");
+							falseStatement += "Unable to find email for student " + stu + ".\n";
 						} else {
 							System.out.println(person.getZid() + ":" + person.getEmail());
 							// receiver.add(person.getEmail().toString());

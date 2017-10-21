@@ -78,8 +78,8 @@ public class EmailUtil {
 
 	public Boolean sendFromGMail(ArrayList<String> to, String subject, String body, Person_info from_person) {
 		// throws AddressException, MessagingException, InvalidActivityException {
-		String from = "comp9323bot@gmail.com";
-		String pass = "comp9323";
+		String from = Constant.EMAIL_NAME;
+		String pass =  Constant.EMAIL_PASS;
 		System.out.println("sendFromGMail()");
 
 		Properties props = System.getProperties();
