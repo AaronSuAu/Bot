@@ -14,6 +14,6 @@ public class HelloworldController {
 	public String hello() {
 		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 		Date date = new Date();
-		return "👾" + " at:" + dateFormat.format(date);
+		return "Hello World" + " at:" + dateFormat.format(date);
 	}
 }
