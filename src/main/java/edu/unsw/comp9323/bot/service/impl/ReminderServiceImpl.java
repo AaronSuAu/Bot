@@ -114,7 +114,7 @@ public class ReminderServiceImpl implements ReminderService {
 		newReminder.setTitle(title);
 		try {
 			if (reminderDao.insertReminder(newReminder)) {
-				return addReceivers(reminder_no, newReminder.getId());
+				return addReceivers(reminder_no, newReminder.getId(), zid);
 			} else
 				return "Fail to create the reminder.";
 		} catch (DataIntegrityViolationException e) {
@@ -127,15 +127,22 @@ public class ReminderServiceImpl implements ReminderService {
 	/*
 	 * add receivers to a reminder
 	 */
-	private String addReceivers(JsonArray reminder_no, long reminder_id) {
+	private String addReceivers(JsonArray reminder_no, long reminder_id, String mZid) {
 		// TODO Auto-generated method stub
 		String regEx = "[^0-9]";
 		Pattern p = Pattern.compile(regEx);
 		// get receiver
 		List<String> receivers = getListFromJsonArray(reminder_no);
+		if (receivers.contains("me") || receivers.contains("myself")) {
+			if (!reminderDao.addReceivers(reminder_id, mZid))
+				return "Fail to create a Reminder (cannot add a receiver: " + mZid + ")";
+
+		}
 		if (receivers.contains("all") || receivers.contains("everybody") || receivers.contains("class")
 				|| receivers.contains("everyone") || receivers.contains("whole class")
-				|| receivers.contains("all members")) {
+				|| receivers.contains("all members"))
+
+		{
 			List<Person_info> persons = reminderDao.getAllReceivers();
 			for (Person_info person_info : persons) {
 				if (!reminderDao.addReceivers(reminder_id, person_info.getZid()))
