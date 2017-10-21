@@ -156,7 +156,17 @@
 			<artifactId>smtp</artifactId>
 			<version>1.4.5</version>
 		</dependency>
-		
+
+		<dependency>                        <!-- http://dev.mysql.com/doc/connector-j/en/ -->
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>6.0.5</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.cloud.sql</groupId>
+			<artifactId>mysql-socket-factory-connector-j-6</artifactId>
+			<version>1.0.4</version>
+		</dependency>
 
 	</dependencies>
 
