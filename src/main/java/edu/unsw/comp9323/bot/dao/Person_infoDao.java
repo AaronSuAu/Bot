@@ -49,4 +49,7 @@ public interface Person_infoDao {
 	@Select("select email from person_info where group_nb = #{group_nb}")
 	ArrayList<String> getEmailByGroupNb(@Param("group_nb") Long group_nb);
 
+	@Select("select zid from person_info where group_nb = #{group_nb}")
+	ArrayList<String> getIdByGroupNb(Long group_nb);
+
 }

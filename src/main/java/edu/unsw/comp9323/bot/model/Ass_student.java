@@ -70,22 +70,22 @@ public class Ass_student implements Serializable {
 		return submit_time;
 	}
 
-	public void setSubmit_time(Timestamp timestamp) {
-		this.submit_time = timestamp;
+	public void setSubmit_time(Timestamp submit_time) {
+		this.submit_time = submit_time;
 	}
 
-	public float getGrade() {
+	public Float getGrade() {
 		return grade;
 	}
 
-	public void setGrade(float grade) {
+	public void setGrade(Float grade) {
 		this.grade = grade;
 	}
 
 	@Override
 	public String toString() {
-		return "Ass_student [group_nb=" + group_nb + ", ass_id=" + ass_id + ", path=" + path + ", submit_time="
-				+ submit_time + ", grade=" + grade + "]";
+		return "Ass_student [id=" + id + ", group_nb=" + group_nb + ", ass_id=" + ass_id + ", path=" + path
+				+ ", submit_time=" + submit_time + ", grade=" + grade + "]";
 	}
 
 }

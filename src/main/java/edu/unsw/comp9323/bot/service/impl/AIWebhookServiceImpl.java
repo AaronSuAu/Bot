@@ -90,7 +90,6 @@ public class AIWebhookServiceImpl implements AIWebbookService {
 			} else if (intentName.equals("studentSubmitAssignment")) {
 				returnMsg = assignmentService.studentSubmitAssignment(input);
 				addButton(returnMsg, output, telegramMap);
-
 			} else if (intentName.equals("getUnsubmitingGroup")) {
 				// TODO
 				// returnMsg = assignmentService.getUnsubmitingGroup(input);

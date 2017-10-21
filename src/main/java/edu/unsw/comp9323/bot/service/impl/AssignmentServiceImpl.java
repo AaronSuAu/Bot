@@ -13,11 +13,13 @@ import com.google.gson.Gson;
 import edu.unsw.comp9323.bot.constant.Constant;
 import edu.unsw.comp9323.bot.dao.Ass_studentDao;
 import edu.unsw.comp9323.bot.dao.AssignmentDao;
+import edu.unsw.comp9323.bot.dao.EmailDao;
 import edu.unsw.comp9323.bot.dao.Person_infoDao;
 import edu.unsw.comp9323.bot.dao.ResourceDao;
 import edu.unsw.comp9323.bot.dto.AssignmentInfoDto;
 import edu.unsw.comp9323.bot.model.Ass_student;
 import edu.unsw.comp9323.bot.model.Assignment;
+import edu.unsw.comp9323.bot.model.Email;
 import edu.unsw.comp9323.bot.model.Person_info;
 import edu.unsw.comp9323.bot.service.AssignmentService;
 import edu.unsw.comp9323.bot.service.EmailService;
@@ -57,6 +59,8 @@ public class AssignmentServiceImpl implements AssignmentService {
 	EmailUtil emailUtil;
 	@Autowired
 	Person_info person_info;
+	@Autowired
+	EmailDao emaildao;
 
 	/**
 	 * return all assignments(list) including assignment name, due date, upload
@@ -408,24 +412,37 @@ public class AssignmentServiceImpl implements AssignmentService {
 		Long group_nb = Long.parseLong(input.getResult().getParameters().get("group-nb").getAsString());
 		assignment = assignmentDao.getAssignmentIdByTitle(title);
 		Float grade = Float.parseFloat(input.getResult().getParameters().get("grade").getAsString());
-		ass_student.setId(assignment.getId());
+		ass_student.setAss_id(assignment.getId());
 		ass_student.setGroup_nb(group_nb);
+		ass_student = ass_studentDao.getSubmissionByIdAndGroup(ass_student);
 		ass_student.setGrade(grade);
-		System.out.println(ass_student.toString());
 		if (ass_studentDao.markById(ass_student)) {
 
 			// send email to this group student for inform assignment mark release
-			ArrayList<String> toEmails = person_infoDao.getEmailByGroupNb(group_nb);
+			ArrayList<String> toEmails = person_infoDao.getIdByGroupNb(group_nb);
 			String subject = "Mark for Group" + group_nb.toString() + " is released";
 			String body = "Hi, there\n you get " + grade + " for assignment of " + title + ".";
 			String zid = userIdentityUtil.getIdentity(input).getZid();
 			person_info = person_infoDao.getUserByZid(zid);
 
-			if (emailUtil.sendFromGMail(toEmails, subject, body, person_info)) {
-				return "mark has set, sent to group for inform assignment mark release.";
-			} else {
-				return "fail to send email";
+			// create a email object
+			Email email = new Email(userIdentityUtil.getIdentity(input).getZid(), subject, body, (long) 0);
+			// insert into db
+			emaildao.insertEmail(email);
+			if (toEmails.size() == 0) {
+				return "One or more email is invalid.";
 			}
+			for (String s : toEmails) {
+				System.out.println(email.getId() + ": " + s);
+				emaildao.addReceivers(email.getId(), s);
+			}
+
+			// if (emailUtil.sendFromGMail(toEmails, subject, body, person_info)) {
+			// return "mark has set, sent to group for inform assignment mark release.";
+			// } else {
+			// return "fail to send email";
+			// }
+			return "succeed to email group of " + group_nb;
 
 		} else {
 			return "something wrong, can you mark again";
