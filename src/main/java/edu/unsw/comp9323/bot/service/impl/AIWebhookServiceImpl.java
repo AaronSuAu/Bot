@@ -6,9 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -49,14 +46,15 @@ public class AIWebhookServiceImpl implements AIWebbookService {
 	@Autowired
 	AuthenticationService authenticationService;
 
-	public void addButton(String returnMsg, Fulfillment output, Map<String, JsonElement> telegramMap){
-		if(returnMsg.contains("{")){
+	public void addButton(String returnMsg, Fulfillment output, Map<String, JsonElement> telegramMap) {
+		if (returnMsg.contains("{")) {
 			JsonParser jsonParser = new JsonParser();
 			JsonObject jo = (JsonObject) jsonParser.parse(returnMsg);
 			telegramMap.put("telegram", jo);
 			output.setData(telegramMap);
 		}
 	}
+
 	public void doWebhook(AIWebhookRequest input, Fulfillment output) {
 
 		// Get intent
@@ -65,7 +63,7 @@ public class AIWebhookServiceImpl implements AIWebbookService {
 		// Get parameter
 		HashMap<String, JsonElement> params = input.getResult().getParameters();
 		Map<String, JsonElement> telegramMap = new HashMap<>();
-		
+
 		// return string
 		String returnMsg = null;
 
@@ -194,8 +192,7 @@ public class AIWebhookServiceImpl implements AIWebbookService {
 		/**
 		 * Get original request object
 		 * 
-		 * @return <code>null</code> if original request undefined in request
-		 *         object
+		 * @return <code>null</code> if original request undefined in request object
 		 */
 		public OriginalRequest getOriginalRequest() {
 			return originalRequest;
