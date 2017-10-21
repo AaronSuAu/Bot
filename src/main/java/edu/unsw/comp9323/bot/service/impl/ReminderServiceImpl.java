@@ -37,8 +37,6 @@ public class ReminderServiceImpl implements ReminderService {
 	@Override
 	public String getAllReminders(AIWebhookRequest input) {
 		// TODO Auto-generated method stub
-		// String zid =
-		// input.getResult().getParameters().get("zid").getAsString();
 		String zid = userIdentityUtil.getIdentity(input).getZid();
 		List<Reminder> reminders = null;
 		String returnMsg = "";
@@ -56,6 +54,7 @@ public class ReminderServiceImpl implements ReminderService {
 		if (reminders == null || reminders.size() == 0) {
 			returnMsg += "No reminder found !";
 		} else {
+			returnMsg += "|-ID-|-Title-|-Reminding Date-|\n";
 			for (Reminder r : reminders) {
 				returnMsg += r.getId() + ". " + r.getTitle() + ": " + r.getDate() + ";\n";
 			}
@@ -67,12 +66,15 @@ public class ReminderServiceImpl implements ReminderService {
 	@Override
 	public String deleteReminder(AIWebhookRequest input) {
 		// TODO Auto-generated method stub
-		// String reminder_id =
+		String zid = userIdentityUtil.getIdentity(input).getZid();// get zid
 		JsonArray reminder_ids = input.getResult().getParameters().get("number").getAsJsonArray();
 		if (reminder_ids != null || reminder_ids.size() != 0) {
 			for (int i = 0; i < reminder_ids.size(); i++) {
-				if (reminderDao.findReminderById(Long.parseLong(reminder_ids.get(i).toString())) == null) {
+				List<Reminder> reminders = reminderDao.findReminderById(Long.parseLong(reminder_ids.get(i).toString()));
+				if (reminders == null || reminders.size() == 0) {
 					return "No such reminder";// no such reminder
+				} else if (!reminders.get(0).getOwner().equals(zid)) {
+					return "You are not authorized to delete reminders of other user! ";
 				} else {
 					if (!reminderDao.deleteReminder(Long.parseLong(reminder_ids.get(i).toString())))
 						return "Fail to delete";// fail to delete
