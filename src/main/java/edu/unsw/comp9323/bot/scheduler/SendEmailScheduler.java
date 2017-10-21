@@ -27,7 +27,7 @@ public class SendEmailScheduler {
 	@Autowired
 	Person_info person_info;
 
-	@Scheduled(cron = "*/5 * * * * *")
+	@Scheduled(cron = "*/1 * * * * *")
 	public void scheduleSendEmail() {
 		// System.out.println("here!!!!!!!!!!!!");
 		// get info from db

@@ -23,7 +23,7 @@ public interface AssignmentService {
 
 	public String markAssignmentByGroupNb(AIWebhookRequest input) throws Exception;
 
-	public String getUnsubmitingGroup(AIWebhookRequest input) throws Exception;
+	// public String getUnsubmitingGroup(AIWebhookRequest input) throws Exception;
 
 	public String getAssMarkByAssTitle(AIWebhookRequest input) throws Exception;
 

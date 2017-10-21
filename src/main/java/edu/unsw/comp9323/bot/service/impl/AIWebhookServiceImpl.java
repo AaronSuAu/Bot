@@ -93,7 +93,7 @@ public class AIWebhookServiceImpl implements AIWebbookService {
 
 			} else if (intentName.equals("getUnsubmitingGroup")) {
 				// TODO
-				returnMsg = assignmentService.getUnsubmitingGroup(input);
+				// returnMsg = assignmentService.getUnsubmitingGroup(input);
 			} else if (intentName.equals("getAssSubmissionByAssTitleAndGroupNb")) {
 				returnMsg = assignmentService.getAssSubmissionByAssTitleAndGroupNb(input);
 			} else if (intentName.equals("getAssMarkByAssTitle")) {

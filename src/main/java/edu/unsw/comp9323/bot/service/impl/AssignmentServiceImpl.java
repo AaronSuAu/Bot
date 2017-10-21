@@ -257,30 +257,34 @@ public class AssignmentServiceImpl implements AssignmentService {
 		return new Gson().toJson(builder);
 	}
 
-	/**
-	 * TODO get all unsubmission group
-	 * 
-	 * TODO sql and after action: email group
-	 */
-	@Override
-	public String getUnsubmitingGroup(AIWebhookRequest input) throws Exception {
-		System.out.println("getUnsubmitingGroup()"); // debug
-
-		// Authorization
-		if (!validationUtil.isLecturer(input)) {
-			return "Authorization fail";
-		}
-
-		List<Ass_student> ass_students = ass_studentDao.getAllUnsubmitGroups(); // TODO sql
-		String returnMsg = "";
-		for (Ass_student ass_student : ass_students) {
-			String assignment_title = assignmentDao.getAssignmentTitlesById(ass_student.getAss_id());
-			String tmp = "-Assignment title: " + assignment_title + " unsubmit group: group" + ass_student.getGroup_nb()
-					+ "\n";
-			returnMsg += tmp;
-		}
-		return returnMsg; // TODO send eamil these groups to remind them to submit assignment
-	}
+	// /**
+	// * TODO get all unsubmission group
+	// *
+	// * TODO sql and after action: email group
+	// */
+	// @Override
+	// public String getUnsubmitingGroup(AIWebhookRequest input) throws Exception {
+	// System.out.println("getUnsubmitingGroup()"); // debug
+	//
+	// // Authorization
+	// if (!validationUtil.isLecturer(input)) {
+	// return "Authorization fail";
+	// }
+	//
+	// List<Ass_student> ass_students = ass_studentDao.getAllUnsubmitGroups(); //
+	// TODO sql
+	// String returnMsg = "";
+	// for (Ass_student ass_student : ass_students) {
+	// String assignment_title =
+	// assignmentDao.getAssignmentTitlesById(ass_student.getAss_id());
+	// String tmp = "-Assignment title: " + assignment_title + " unsubmit group:
+	// group" + ass_student.getGroup_nb()
+	// + "\n";
+	// returnMsg += tmp;
+	// }
+	// return returnMsg; // TODO send eamil these groups to remind them to submit
+	// assignment
+	// }
 
 	/**
 	 * get assignment submission by assignment title and group number
@@ -304,7 +308,7 @@ public class AssignmentServiceImpl implements AssignmentService {
 		Long group_nb = Long.parseLong(input.getResult().getParameters().get("group-nb").getAsString());
 		ass_student.setGroup_nb(group_nb);
 		ass_student = ass_studentDao.getSubmissionByIdAndGroup(ass_student);
-		return assignmentUtil.renderSubmissionReturnMsg(ass_student);
+		return assignmentUtil.renderSubmissionReturnMsg(ass_student);// TODO
 	}
 
 	/**

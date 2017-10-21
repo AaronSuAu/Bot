@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonPrimitive;
 
 import edu.unsw.comp9323.bot.dao.AssignmentDao;
 import edu.unsw.comp9323.bot.dao.EmailDao;
@@ -64,17 +63,19 @@ public class EmailServiceImpl implements EmailService {
 		String trueStatement = "Send email to ";
 
 		HashMap<String, JsonElement> result = input.getResult().getParameters();
-		JsonPrimitive subject_sign = result.get("email-subject").getAsJsonObject()
-				.getAsJsonPrimitive("email-subject-sign");
-		JsonPrimitive subject_value = result.get("email-subject").getAsJsonObject().getAsJsonPrimitive("an");
-		String subject_string = subject_value.getAsString();
-
-		JsonPrimitive body_sign = result.get("email-body").getAsJsonObject().getAsJsonPrimitive("email-body-sign");
-		JsonPrimitive body_value = result.get("email-body").getAsJsonObject().getAsJsonPrimitive("an");
-		String body_string = body_value.getAsString();
-
+//		JsonPrimitive subject_sign = result.get("email-subject").getAsJsonObject()
+//				.getAsJsonPrimitive("email-subject-sign");
+//		JsonPrimitive subject_value = result.get("email-subject").getAsJsonObject().getAsJsonPrimitive("an");
+//		String subject_string = subject_value.getAsString();
+//
+//		JsonPrimitive body_sign = result.get("email-body").getAsJsonObject().getAsJsonPrimitive("email-body-sign");
+//		JsonPrimitive body_value = result.get("email-body").getAsJsonObject().getAsJsonPrimitive("an");
+//		String body_string = body_value.getAsString();
+		String subject_string = result.get("email-subject").getAsString();
+		String body_string = result.get("email-body").getAsString();
 		JsonArray student = result.get("student-no").getAsJsonArray();
-
+		System.out.println(subject_string);
+		System.out.println(body_string);
 		// sending to whole class
 		if (student.get(0).getAsString().toLowerCase().contains("all")
 				|| student.get(0).getAsString().toLowerCase().contains("class")) {
