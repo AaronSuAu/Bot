@@ -34,6 +34,13 @@ public class ReminderServiceImpl implements ReminderService {
 	@Autowired
 	UserIdentityUtil userIdentityUtil;
 
+	/**
+	 * List all the reminders of the user
+	 * 
+	 * @param AIWebhookRequest
+	 *            input
+	 * @return lists of the reminders if found, else Not_Found
+	 */
 	@Override
 	public String getAllReminders(AIWebhookRequest input) {
 		// TODO Auto-generated method stub
@@ -63,6 +70,13 @@ public class ReminderServiceImpl implements ReminderService {
 		return returnMsg;
 	}
 
+	/**
+	 * Delete a reminder for the user
+	 * 
+	 * @param AIWebhookRequest
+	 *            input, contains the index of the reminder to be deleted
+	 * @return success, fail or no authorization message
+	 */
 	@Override
 	public String deleteReminder(AIWebhookRequest input) {
 		// TODO Auto-generated method stub
@@ -87,6 +101,13 @@ public class ReminderServiceImpl implements ReminderService {
 
 	}
 
+	/**
+	 * Create a new reminder
+	 * 
+	 * @param AIWebhookRequest
+	 *            input with new reminder details in Json
+	 * @return success or fail message
+	 */
 	@Override
 	public String addReminder(AIWebhookRequest input) {
 		// TODO Auto-generated method stub
@@ -124,8 +145,16 @@ public class ReminderServiceImpl implements ReminderService {
 
 	}
 
-	/*
-	 * add receivers to a reminder
+	/**
+	 * Add receivers after a reminder is created
+	 * 
+	 * @param receivers
+	 *            JsonArray
+	 * @param reminder_id
+	 *            long
+	 * @param mZid
+	 *            String, the user's zid
+	 * @return success or fail message
 	 */
 	private String addReceivers(JsonArray reminder_no, long reminder_id, String mZid) {
 		// TODO Auto-generated method stub
@@ -181,6 +210,12 @@ public class ReminderServiceImpl implements ReminderService {
 		return "Reminder created!";
 	}
 
+	/**
+	 * Turn JsonArray to a ArrayList
+	 * 
+	 * @param JsonArray
+	 * @return ArrayList
+	 */
 	public ArrayList<String> getListFromJsonArray(JsonArray ja) {
 		ArrayList<String> aList = new ArrayList<String>();
 		for (JsonElement element : ja) {
@@ -189,12 +224,13 @@ public class ReminderServiceImpl implements ReminderService {
 		return aList;
 	}
 
-	@Override
-	public void remindByEmail() {
-		// TODO Auto-generated method stu
-		// sendFromGMail(ArrayList<String> to, String subject, String body)
-	}
-
+	/**
+	 * Update a reminder
+	 * 
+	 * @param AIWebhookRequest
+	 *            input
+	 * @return success or fail message
+	 */
 	@Override
 	public String updateReminder(AIWebhookRequest input) {
 		// TODO Auto-generated method stub
@@ -236,10 +272,12 @@ public class ReminderServiceImpl implements ReminderService {
 		}
 	}
 
-	/*
-	 * get receivers
+	/**
+	 * Get all receivers of a reminder
 	 * 
-	 * @see edu.unsw.comp9323.bot.service.ReminderService#getReceivers(long)
+	 * @param reminderId
+	 *            long
+	 * @return List<Person_info>
 	 */
 	@Override
 	public List<Person_info> getReceivers(long rid) {
@@ -247,6 +285,11 @@ public class ReminderServiceImpl implements ReminderService {
 		return reminderDao.getReceivers(rid);
 	}
 
+	/**
+	 * Get all reminders need to be sent now
+	 * 
+	 * @return List<Reminder>
+	 */
 	@Override
 	public List<Reminder> getReminderToSend() {
 		// TODO Auto-generated method stub
@@ -255,18 +298,41 @@ public class ReminderServiceImpl implements ReminderService {
 		return reminderDao.findReminderBySendDate(date);
 	}
 
+	/**
+	 * Get a person's info
+	 * 
+	 * @param zid
+	 *            String
+	 * @return Person_info
+	 */
 	@Override
 	public Person_info getPersonInfo(String zid) {
 		// TODO Auto-generated method stub
 		return reminderDao.getPersonInfo(zid);
 	}
 
+	/**
+	 * Update reminder flag
+	 * 
+	 * @param flag
+	 *            int
+	 * @param id
+	 *            long
+	 * @return true if successes, false if fails
+	 */
 	@Override
 	public boolean updateReminderFlag(int flag, long id) {
 		// TODO Auto-generated method stub
 		return reminderDao.updateReminderFlag(flag, id);
 	}
 
+	/**
+	 * Get details of a reminder
+	 * 
+	 * @param AIWebhookRequest
+	 *            input
+	 * @return reminder details or not found
+	 */
 	@Override
 	public String getReminderDetails(AIWebhookRequest input) {
 		// TODO Auto-generated method stub
