@@ -60,13 +60,15 @@ public class AssignmentUtil {
 	}
 
 	public String renderSubmissionReturnMsg(Ass_student ass_student) {
-		String returnMsg = ass_student.toString();
-		String hostStringLocal = "localhost:8080";
-		String hostStringGCloud = "cmbot-b3f5e.appspot.com";
+		List<List<BasicButton>> bOuterList = new ArrayList<List<BasicButton>>();
+		BasicButton bB = new BasicButton("Assignment submission",
+				Constant.DOMAIN_NAME + "/resource/showPDF/submission/" + ass_student.getId());
+		List<BasicButton> bList = new ArrayList<>();
+		bList.add(bB);
+		bOuterList.add(bList);
+		Inline_Keyboard iKeyboard = new Inline_Keyboard(bOuterList);
+		ButtonBuilder builder = new ButtonBuilder("Click the following button to to get submission", iKeyboard);
+		return new Gson().toJson(builder);
 
-		returnMsg += " to get submission: " + Constant.DOMAIN_NAME + "/resource/showPDF/submission/"
-				+ ass_student.getId();
-
-		return returnMsg;
 	}
 }

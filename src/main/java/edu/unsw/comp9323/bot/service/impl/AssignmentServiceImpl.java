@@ -288,6 +288,11 @@ public class AssignmentServiceImpl implements AssignmentService {
 
 	/**
 	 * get assignment submission by assignment title and group number
+	 * 
+	 * @param AIWebhookRequest:
+	 *            JSON form API.AI, intent name:
+	 *            getAssSubmissionByAssTitleAndGroupNb, context: zid, password
+	 * @return link to assignment submission
 	 */
 	@Override
 	public String getAssSubmissionByAssTitleAndGroupNb(AIWebhookRequest input) throws Exception {
@@ -313,6 +318,11 @@ public class AssignmentServiceImpl implements AssignmentService {
 
 	/**
 	 * student get assignment submission by assignment title and group number
+	 * 
+	 * @param AIWebhookRequest:
+	 *            JSON form API.AI, intent name: getAssMarkByAssTitle, context: zid,
+	 *            password
+	 * @return mark
 	 */
 	@Override
 	public String getAssMarkByAssTitle(AIWebhookRequest input) throws Exception {
@@ -341,6 +351,11 @@ public class AssignmentServiceImpl implements AssignmentService {
 
 	/**
 	 * get all not submission groups which submitted their assignments
+	 * 
+	 * @param AIWebhookRequest:
+	 *            JSON form API.AI, intent name: getAllUnmarkedAssignmentGroup,
+	 *            context: zid, password
+	 * @return link for submission of unmark assignment
 	 */
 	@Override
 	public String getAllUnmarkedAssignmentGroup(AIWebhookRequest input) throws Exception {
@@ -375,6 +390,10 @@ public class AssignmentServiceImpl implements AssignmentService {
 
 	/**
 	 * mark assignment by group nb, set grade in ass_student table
+	 * 
+	 * @param AIWebhookRequest:
+	 *            JSON form API.AI, intent name: markAssignmentByGroupNb, context:
+	 *            zid, password
 	 */
 	@Override
 	public String markAssignmentByGroupNb(AIWebhookRequest input) throws Exception {
@@ -392,6 +411,7 @@ public class AssignmentServiceImpl implements AssignmentService {
 		ass_student.setId(assignment.getId());
 		ass_student.setGroup_nb(group_nb);
 		ass_student.setGrade(grade);
+		System.out.println(ass_student.toString());
 		if (ass_studentDao.markById(ass_student)) {
 
 			// send email to this group student for inform assignment mark release
@@ -400,7 +420,7 @@ public class AssignmentServiceImpl implements AssignmentService {
 			String body = "Hi, there\n you get " + grade + " for assignment of " + title + ".";
 			String zid = userIdentityUtil.getIdentity(input).getZid();
 			person_info = person_infoDao.getUserByZid(zid);
-			// TODO ask if send email
+
 			if (emailUtil.sendFromGMail(toEmails, subject, body, person_info)) {
 				return "mark has set, sent to group for inform assignment mark release.";
 			} else {
