@@ -40,26 +40,47 @@ public class ResourceServiceImpl implements ResourceService {
 	LectureDao lectureDao;
 	@Autowired
 	UserIdentityUtil userIdentityUtil;
-
+	/**
+	 * return all the lecture resource links
+	 * @param input From API.AI webhook
+	 * @return lecture resource link
+	 */
 	@Override
 	public String getAllLectureResource(AIWebhookRequest input) {
 		List<Resource> resources = resourceDao.getAllLectureResource();
 		return resourceUtil.renderResourceReturnMsg(resources);
 	}
-
+	
+	/**
+	 * return the resource for the assignment 
+	 * @param assignId assignment id in database
+	 * @return a list of link that contains assignment ID
+	 */
 	public List<Resource> getResourceByAssignment(Long assignId) {
 		return resourceDao.getResourceByAssignment(assignId);
 	}
-
+	/**
+	 * get the resource for week 12 for instance
+	 * @param classId the class week number
+	 * @return the links of the resource
+	 */
 	public List<Resource> getResourceByClass(Long classId) {
 		return resourceDao.getResourceByClass(classId);
 	}
-
+	/**
+	 * upload assignment resource for 
+	 * @param resource the resource object
+	 * @return 1 if success, 0 if fail
+	 */
 	public Long uploadAssignResource(Resource resource) {
 		return resourceDao.uploadAssignResource(resource);
 	}
 	
-	
+	/**
+	 * get the lectuer material url by week
+	 * @param input from api.ai
+	 * @return wrong information or the links
+	 */
 	public String getClassMaterialUrlByWeek(AIWebhookRequest input){
 		System.out.println("get Class Material by week"); // debug
 
@@ -76,7 +97,11 @@ public class ResourceServiceImpl implements ResourceService {
 		}
 		return resourceUtil.renderResourceReturnMsg(list);
 	}
-	
+	/**
+	 * it will give the user a link, through the website, user can upload
+	 * @param input from api.ai
+	 * @return links to add the class material 
+	 */
 	public String addClassMaterialUrlByWeek(AIWebhookRequest input){
 		System.out.println("add Class Material by week"); // debug
 
@@ -104,7 +129,11 @@ public class ResourceServiceImpl implements ResourceService {
 		//
 		return new Gson().toJson(builder);
 	}
-
+	/**
+	 * delete the lecture resource according to the lecture resource
+	 * @param input from api.ai
+	 * @return success or fail
+	 */
 	@Override
 	public String deleteLectureResourceByWeek(AIWebhookRequest input) {
 		System.out.println("delete Class Material by week"); // debug
@@ -120,7 +149,11 @@ public class ResourceServiceImpl implements ResourceService {
 		}
 		return "Success";
 	}
-
+	/**
+	 * it will return a link, through this link, user will go to a page to update
+	 * @param input from api.ai
+	 * @return fail information or the link
+	 */
 	@Override
 	public String updateClassMaterialUrlByWeek(AIWebhookRequest input) {
 		System.out.println("update Class Material by week"); // debug

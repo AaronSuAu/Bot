@@ -32,7 +32,15 @@ public class ResourceController {
 	ResourceServiceImpl resourceServiceImpl;
 	@Autowired
 	ResourceDao resourceDao;
-
+	
+	/**
+	 * Receive the information from the web page and store the file and info into the database
+	 * @param file
+	 * @param name
+	 * @param class_id
+	 * @param author_zid
+	 * @return success or fail information
+	 */
 	@RequestMapping(value = "/material/add", method = RequestMethod.POST)
 	public String setMaterial(@RequestParam("file") MultipartFile file, @RequestParam("name") String name,
 			@RequestParam("class_id") Long class_id, @RequestParam("author_zid") String author_zid) {
@@ -61,7 +69,14 @@ public class ResourceController {
 			return "fail add new material";
 		}
 	}
-
+	/**
+	 * Receive the information from the web page and store the file and info into the database
+	 * @param file
+	 * @param name
+	 * @param class_id
+	 * @param author_zid
+	 * @return fail or success information
+	 */
 	@RequestMapping(value = "/material/update", method = RequestMethod.POST)
 	public String updateMaterial(@RequestParam("file") MultipartFile file, @RequestParam("name") String name,
 			@RequestParam("class_id") Long class_id, @RequestParam("author_zid") String author_zid) {
