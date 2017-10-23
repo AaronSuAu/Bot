@@ -79,16 +79,16 @@ public class EmailUtil {
 	public Boolean sendFromGMail(ArrayList<String> to, String subject, String body, Person_info from_person) {
 		// throws AddressException, MessagingException, InvalidActivityException {
 		String from = Constant.EMAIL_NAME;
-		String pass = Constant.EMAIL_PASS;
+		String pass =  Constant.EMAIL_PASS;
 		System.out.println("sendFromGMail()");
 
 		Properties props = System.getProperties();
-		String host = "smtp.mailtrap.io";// "smtp.gmail.com";
+		String host = "smtp.gmail.com";
 		props.put("mail.smtp.starttls.enable", "true");
 		props.put("mail.smtp.host", host);
 		props.put("mail.smtp.user", from);
 		props.put("mail.smtp.password", pass);
-		props.put("mail.smtp.port", "2525");// "587"
+		props.put("mail.smtp.port", "587");
 		props.put("mail.smtp.auth", "true");
 
 		try {

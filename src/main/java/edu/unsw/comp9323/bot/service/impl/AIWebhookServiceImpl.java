@@ -61,111 +61,106 @@ public class AIWebhookServiceImpl implements AIWebbookService {
 		// return string
 		String returnMsg = null;
 
-		if ("cancel".equalsIgnoreCase(input.getResult().getResolvedQuery())) {
-			// capture "resolvedQuery": "cancel"
-			output.setSpeech("You can start a new conversation.");
-		} else {
-			/**
-			 * Dispatch to different services
-			 */
-			try {
+		/**
+		 * Dispatch to different services
+		 */
+		try {
 
-				// for authorization
-				if (intentName.equals("login")) {
-					returnMsg = authenticationService.isValidUser(input);
-				}
-
-				// for assignment
-				if (intentName.equals("getAllAssignment")) {
-					returnMsg = assignmentService.getAllAssignment(input);
-					addButton(returnMsg, output, telegramMap);
-				} else if (intentName.equals("getAssignmentByTitle")) {
-					returnMsg = assignmentService.getAssignmentByTitle(input);
-					addButton(returnMsg, output, telegramMap);
-
-				} else if (intentName.equals("addAssignmentByTitle")) {
-					returnMsg = assignmentService.addAssignmentByTitle(input);
-					addButton(returnMsg, output, telegramMap);
-				} else if (intentName.equals("changeAssignmentByTitle")) {
-					returnMsg = assignmentService.changeAssignmentByTitle(input);
-					addButton(returnMsg, output, telegramMap);
-				} else if (intentName.equals("deleteAssignmentByTitle")) {
-					returnMsg = assignmentService.deleteAssignmentByTitle(input);
-				} else if (intentName.equals("studentSubmitAssignment")) {
-					returnMsg = assignmentService.studentSubmitAssignment(input);
-					addButton(returnMsg, output, telegramMap);
-				} else if (intentName.equals("getUnsubmitingGroup")) {
-					// TODO
-					// returnMsg = assignmentService.getUnsubmitingGroup(input);
-				} else if (intentName.equals("getAssSubmissionByAssTitleAndGroupNb")) {
-					returnMsg = assignmentService.getAssSubmissionByAssTitleAndGroupNb(input);
-					addButton(returnMsg, output, telegramMap);
-				} else if (intentName.equals("getAssMarkByAssTitle")) {
-					returnMsg = assignmentService.getAssMarkByAssTitle(input);
-				} else if (intentName.equals("getAllUnmarkedAssignmentGroup")) {
-					returnMsg = assignmentService.getAllUnmarkedAssignmentGroup(input);
-					addButton(returnMsg, output, telegramMap);
-				} else if (intentName.equals("markAssignmentByGroupNb")) {
-					returnMsg = assignmentService.markAssignmentByGroupNb(input);
-				} else {
-					// not for assignment
-				}
-
-				if (intentName.equals("getLectureInfoByWeek")) {
-					returnMsg = lectureService.getLectureInfoByWeek(input);
-				} else {
-					// not for class
-				}
-
-				if (intentName.equals("getAllLectureResource")) {
-					returnMsg = resourceService.getAllLectureResource(input);
-					addButton(returnMsg, output, telegramMap);
-				} else if (intentName.equals("getLectureResourceByWeek")) {
-					returnMsg = resourceService.getClassMaterialUrlByWeek(input);
-					addButton(returnMsg, output, telegramMap);
-				} else if (intentName.equals("addLectureResourceByWeek")) {
-					returnMsg = resourceService.addClassMaterialUrlByWeek(input);
-					addButton(returnMsg, output, telegramMap);
-				} else if (intentName.equals("deleteLectureResourceByWeek")) {
-					returnMsg = resourceService.deleteLectureResourceByWeek(input);
-				} else if (intentName.equals("changeLectureResourceByWeek")) {
-					returnMsg = resourceService.updateClassMaterialUrlByWeek(input);
-				} else {
-					// not for lecture resource
-				}
-
-				// reminder
-				if (intentName.equals("getReminders")) {
-					returnMsg = reminderService.getAllReminders(input);
-				} else if (intentName.equals("deleteReminder")) {
-					returnMsg = reminderService.deleteReminder(input);
-				} else if (intentName.equals("updateReminder")) {
-					returnMsg = reminderService.updateReminder(input);
-				} else if (intentName.equals("createReminder")) {
-					returnMsg = reminderService.addReminder(input);
-				} else if (intentName.equals("getReminderDetails")) {
-					returnMsg = reminderService.getReminderDetails(input);
-				}
-
-				if (intentName.equals("send_email_to_zid")) {
-					returnMsg = emailService.sendEmailToZid(input);
-				} else if (intentName.equals("send-email-template")) {
-					returnMsg = emailService.sendEmailTemplate(input);
-				}
-
-			} catch (Exception e) {
-				e.printStackTrace();
-				returnMsg = "500 check log for detail";
+			// for authorization
+			if (intentName.equals("login")) {
+				returnMsg = authenticationService.isValidUser(input);
 			}
 
-			// DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-			// Date date = new Date();
-			// output.setSpeech("Webhook get: intent name:" + intentName + "return
-			// at" +
-			// dateFormat.format(date));
+			// for assignment
+			if (intentName.equals("getAllAssignment")) {
+				returnMsg = assignmentService.getAllAssignment(input);
+				addButton(returnMsg, output, telegramMap);
+			} else if (intentName.equals("getAssignmentByTitle")) {
+				returnMsg = assignmentService.getAssignmentByTitle(input);
+				addButton(returnMsg, output, telegramMap);
 
-			output.setSpeech(returnMsg);
+			} else if (intentName.equals("addAssignmentByTitle")) {
+				returnMsg = assignmentService.addAssignmentByTitle(input);
+				addButton(returnMsg, output, telegramMap);
+			} else if (intentName.equals("changeAssignmentByTitle")) {
+				returnMsg = assignmentService.changeAssignmentByTitle(input);
+				addButton(returnMsg, output, telegramMap);
+			} else if (intentName.equals("deleteAssignmentByTitle")) {
+				returnMsg = assignmentService.deleteAssignmentByTitle(input);
+			} else if (intentName.equals("studentSubmitAssignment")) {
+				returnMsg = assignmentService.studentSubmitAssignment(input);
+				addButton(returnMsg, output, telegramMap);
+			} else if (intentName.equals("getUnsubmitingGroup")) {
+				// TODO
+				// returnMsg = assignmentService.getUnsubmitingGroup(input);
+			} else if (intentName.equals("getAssSubmissionByAssTitleAndGroupNb")) {
+				returnMsg = assignmentService.getAssSubmissionByAssTitleAndGroupNb(input);
+				addButton(returnMsg, output, telegramMap);
+			} else if (intentName.equals("getAssMarkByAssTitle")) {
+				returnMsg = assignmentService.getAssMarkByAssTitle(input);
+			} else if (intentName.equals("getAllUnmarkedAssignmentGroup")) {
+				returnMsg = assignmentService.getAllUnmarkedAssignmentGroup(input);
+				addButton(returnMsg, output, telegramMap);
+			} else if (intentName.equals("markAssignmentByGroupNb")) {
+				returnMsg = assignmentService.markAssignmentByGroupNb(input);
+			} else {
+				// not for assignment
+			}
+
+			if (intentName.equals("getLectureInfoByWeek")) {
+				returnMsg = lectureService.getLectureInfoByWeek(input);
+			} else {
+				// not for class
+			}
+
+			if (intentName.equals("getAllLectureResource")) {
+				returnMsg = resourceService.getAllLectureResource(input);
+				addButton(returnMsg, output, telegramMap);
+			} else if (intentName.equals("getLectureResourceByWeek")) {
+				returnMsg = resourceService.getClassMaterialUrlByWeek(input);
+				addButton(returnMsg, output, telegramMap);
+			} else if (intentName.equals("addLectureResourceByWeek")) {
+				returnMsg = resourceService.addClassMaterialUrlByWeek(input);
+				addButton(returnMsg, output, telegramMap);
+			} else if (intentName.equals("deleteLectureResourceByWeek")) {
+				returnMsg = resourceService.deleteLectureResourceByWeek(input);
+			} else if (intentName.equals("changeLectureResourceByWeek")) {
+				returnMsg = resourceService.updateClassMaterialUrlByWeek(input);
+			} else {
+				// not for lecture resource
+			}
+
+			// reminder
+			if (intentName.equals("getReminders")) {
+				returnMsg = reminderService.getAllReminders(input);
+			} else if (intentName.equals("deleteReminder")) {
+				returnMsg = reminderService.deleteReminder(input);
+			} else if (intentName.equals("updateReminder")) {
+				returnMsg = reminderService.updateReminder(input);
+			} else if (intentName.equals("createReminder")) {
+				returnMsg = reminderService.addReminder(input);
+			} else if (intentName.equals("getReminderDetails")) {
+				returnMsg = reminderService.getReminderDetails(input);
+			}
+
+			if (intentName.equals("send_email_to_zid")) {
+				returnMsg = emailService.sendEmailToZid(input);
+			} else if (intentName.equals("send-email-template")) {
+				returnMsg = emailService.sendEmailTemplate(input);
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			returnMsg = "500 check log for detail";
 		}
+
+		// DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+		// Date date = new Date();
+		// output.setSpeech("Webhook get: intent name:" + intentName + "return
+		// at" +
+		// dateFormat.format(date));
+
+		output.setSpeech(returnMsg);
 	};
 
 	/**
