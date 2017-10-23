@@ -27,21 +27,24 @@ public class SendEmailScheduler {
 	@Autowired
 	Person_info person_info;
 
-	@Scheduled(cron = "*/1 * * * * *")
+	@Scheduled(cron = "*/10 * * * * *")
 	public void scheduleSendEmail() {
-		// System.out.println("here!!!!!!!!!!!!");
+		System.out.println("CHECKING");
 		// get info from db
 		List<Email> emails = emaildao.findUnsentEmail();
 		// send
 		for (Email email : emails) {
 			Long email_id = email.getId();
+			System.out.println("dealing with email " + email_id);
 			Person_info from_person = person_infoDao.getUserByZid(email.getSender_id());
 			List<String> receivers = emaildao.getReceivers(email_id);
 			ArrayList<String> to_email = new ArrayList<>();
 			for (String zid : receivers) {
 				Person_info person = person_infoDao.getUserByZid(zid);
 				System.out.println("------Schedule to send to " + person.getEmail());
-				to_email.add(person.getEmail());
+				if (person.getEmail() != null) {
+					to_email.add(person.getEmail());
+				}
 			}
 
 			emailUtil.sendFromGMail(to_email, email.getSubject(), email.getBody(), from_person);

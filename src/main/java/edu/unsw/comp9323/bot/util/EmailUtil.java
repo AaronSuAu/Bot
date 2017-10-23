@@ -79,7 +79,7 @@ public class EmailUtil {
 	public Boolean sendFromGMail(ArrayList<String> to, String subject, String body, Person_info from_person) {
 		// throws AddressException, MessagingException, InvalidActivityException {
 		String from = Constant.EMAIL_NAME;
-		String pass =  Constant.EMAIL_PASS;
+		String pass = Constant.EMAIL_PASS;
 		System.out.println("sendFromGMail()");
 
 		Properties props = System.getProperties();
@@ -127,6 +127,7 @@ public class EmailUtil {
 			System.out.println("Send email sucess");
 			return true;
 		} catch (Exception e) {
+			System.out.println("ERROR");
 			return null;
 		}
 	}

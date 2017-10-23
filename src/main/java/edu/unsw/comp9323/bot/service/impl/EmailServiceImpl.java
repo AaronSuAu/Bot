@@ -49,11 +49,13 @@ public class EmailServiceImpl implements EmailService {
 	EmailDao emaildao;
 
 	/**
-	 * put send email task into database, the schedule will check the database and send emails every 1 secound
+	 * put send email task into database, the schedule will check the database and
+	 * send emails every 1 secound
 	 * 
 	 * 
-	 * @param AIWebhookRequest: intent name: send_email_to_zid
-	 * @return Comfirmation message 
+	 * @param AIWebhookRequest:
+	 *            intent name: send_email_to_zid
+	 * @return Comfirmation message
 	 */
 	@Override
 	public String sendEmailToZid(AIWebhookRequest input) {
@@ -73,10 +75,10 @@ public class EmailServiceImpl implements EmailService {
 		String subject_string = result.get("email-subject").getAsString();
 		String body_string = result.get("email-body").getAsString();
 		JsonArray student = result.get("student-no").getAsJsonArray();
-		
+
 		System.out.println(subject_string);
 		System.out.println(body_string);
-		
+
 		// sending to whole class
 		if (student.get(0).getAsString().toLowerCase().contains("all")
 				|| student.get(0).getAsString().toLowerCase().contains("class")) {
@@ -93,7 +95,7 @@ public class EmailServiceImpl implements EmailService {
 					System.out.println("Unable to find email for student " + person.getZid() + ".");
 					falseStatement += "Unable to find email for student " + person.getZid() + ".\n";
 				} else {
-					trueStatement += person.getZid()+"(group"+person.getGroup_nb()+") ";
+					trueStatement += person.getZid() + "(group" + person.getGroup_nb() + ") ";
 					System.out.println(person.getZid() + ":" + person.getEmail());
 					receiver.add(person.getZid());
 				}
@@ -103,7 +105,7 @@ public class EmailServiceImpl implements EmailService {
 			// sending to some of the students
 			for (int i = 0; i < student.size(); i++) {
 				String stu = student.get(i).toString().replace("\"", "");
-				
+
 				// if sending to group
 				if (stu.toLowerCase().contains("group")) {
 					System.out.println("sending to " + stu);
@@ -111,7 +113,7 @@ public class EmailServiceImpl implements EmailService {
 					List<Person_info> list = person_infoDao.getUserByGroupNb(group_nb);
 					for (Person_info person : list) {
 						if (person.getEmail() == null) {
-//							System.out.println("Unable to find email for student " + stu + ".");
+							// System.out.println("Unable to find email for student " + stu + ".");
 							falseStatement += "Unable to find email for student " + stu + ".\n";
 						} else {
 							trueStatement += person.getZid() + "(" + stu + ") ";
@@ -167,11 +169,13 @@ public class EmailServiceImpl implements EmailService {
 	}
 
 	/**
-	 * put send email task into database, the schedule will check the database and send emails every 1 secound
+	 * put send email task into database, the schedule will check the database and
+	 * send emails every 1 secound
 	 * 
 	 * 
-	 * @param AIWebhookRequest: intent name: send_email_to_zid
-	 * @return Comfirmation message 
+	 * @param AIWebhookRequest:
+	 *            intent name: send_email_to_zid
+	 * @return Comfirmation message
 	 */
 	@Override
 	public String sendEmailTemplate(AIWebhookRequest input) {
@@ -208,7 +212,7 @@ public class EmailServiceImpl implements EmailService {
 					System.out.println("Unable to find email for student " + person.getZid() + ".");
 					falseStatement += "Unable to find email for student " + person.getZid() + ".\n";
 				} else {
-					trueStatement += person.getZid();
+					trueStatement += person.getZid() + "(group " + person.getGroup_nb() + ") ";
 					System.out.println(person.getZid() + ":" + person.getEmail());
 					// receiver.add(person.getEmail().toString());
 					receiver.add(person.getZid());
@@ -280,8 +284,8 @@ public class EmailServiceImpl implements EmailService {
 		}
 
 		System.out.println("true: " + trueStatement);
-		System.out.println("false :" + falseStatement );
-		
+		System.out.println("false :" + falseStatement);
+
 		return falseStatement + trueStatement;
 	}
 
@@ -289,7 +293,8 @@ public class EmailServiceImpl implements EmailService {
 	 * Receive the body of the email and process it to a formalized words
 	 * 
 	 * 
-	 * @param String the user input
+	 * @param String
+	 *            the user input
 	 * @return processed and formalised words of the email content
 	 */
 	private String getBodyOfTemplatedEmail(String emailTemplate) {
@@ -307,7 +312,7 @@ public class EmailServiceImpl implements EmailService {
 				result += "next week's ";
 			}
 			result += "class.";
-		} else if (emailTemplate.toLowerCase().contains("sick")||emailTemplate.toLowerCase().contains("ill")) {
+		} else if (emailTemplate.toLowerCase().contains("sick") || emailTemplate.toLowerCase().contains("ill")) {
 			result = "Hello All,\nI'm sorry to inform you I am terribly sick these days so I need to cancel ";
 			if (emailTemplate.toLowerCase().contains("today")) {
 				result += "today's ";
@@ -338,10 +343,9 @@ public class EmailServiceImpl implements EmailService {
 		return person_infoDao.getUserByZid(identity.getZid());
 	}
 
-	
 	@Override
 	public String sendEmailToAllStudent(String subject, String body, Person_info from_person) {
-		ArrayList<String> receiver = person_infoDao.getAllStudentEmails();
+		ArrayList<String> receiver = person_infoDao.getAllStudentZid();
 		System.out.println("insert into email table...");
 		// create a email object
 		Email email = new Email(from_person.getZid(), subject, body, (long) 0);

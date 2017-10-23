@@ -52,4 +52,6 @@ public interface Person_infoDao {
 	@Select("select zid from person_info where group_nb = #{group_nb}")
 	ArrayList<String> getIdByGroupNb(Long group_nb);
 
+	@Select("select zid from person_info where role = 0")
+	ArrayList<String> getAllStudentZid();
 }
