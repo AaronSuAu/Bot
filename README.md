@@ -7,7 +7,7 @@ UNSW COMP9323 e-Enterprise Project 17S2
   1. Download correct version of grok via [ngrok - download](https://ngrok.com/download)
   2. Install ngrok and run http on port 8080: `<ABSOLUTE_PATH_TO_NGROK>/ngrok http 8080`
 2. Copy the URL after *Forwarding* (i.e. : http://77b2f954.ngrok.io in the below example)
-  ![ngrok](/Users/char1ei/GitRepo/Bot/image/ngrok.png)
+  ![ngrok](image/ngrok.png)
 3. Login into Api.ai (now called Dialogflow):
   1. Click this link to login: [Dialogflow](https://console.dialogflow.com/api-client/#/login)
   2. Sign in with Google with username: `comp9323bot@gmail.com` and password `comp9323`
@@ -19,22 +19,22 @@ UNSW COMP9323 e-Enterprise Project 17S2
 5. Configure Database on Google Cloud
   1. Login into Google Cloud via [Google Cloud Platform](https://console.cloud.google.com/) with the account information in Step 3
 
-  2. Check the top left corner that you are under project **cmbot**: ![google cloud platform project](/Users/char1ei/GitRepo/Bot/image/google cloud platform project.png)
+  2. Check the top left corner that you are under project **cmbot**: ![google cloud platform project](image/google cloud platform project.png)
 
-  3. At the left column, click on the section **SQL** under Home -> Storage -> SQL![google cloud sql](/Users/char1ei/GitRepo/Bot/image/google cloud sql.png)
+  3. At the left column, click on the section **SQL** under Home -> Storage -> SQL![google cloud sql](image/google cloud sql.png)
 
-  4. Click on the Instance called **sql4cmbot**:![google cloud sql instance](/Users/char1ei/GitRepo/Bot/image/google cloud sql instance.png)
+  4. Click on the Instance called **sql4cmbot**:![google cloud sql instance](image/google cloud sql instance.png)
 
-  5. Click on AUTHORIZATION:![sql authorization](/Users/char1ei/GitRepo/Bot/image/sql authorization.png)
+  5. Click on AUTHORIZATION:![sql authorization](image/sql authorization.png)
 
-  6. Scroll down and click on **Add network**:![sql add ip](/Users/char1ei/GitRepo/Bot/image/sql add ip.png)
+  6. Scroll down and click on **Add network**:![sql add ip](image/sql add ip.png)
 
-  7. Give yourself a random name and input your current IP Address (just google *IP*): ![find ip](/Users/char1ei/GitRepo/Bot/image/find ip.png)
+  7. Give yourself a random name and input your current IP Address (just google *IP*): ![find ip](image/find ip.png)
 
-     ![add ip](/Users/char1ei/GitRepo/Bot/image/add ip.png)
+     ![add ip](image/add ip.png)
   8. Click **Done** and the blue **Save** bottom, then wait a moment
 6. Download and open Eclipse, import our project.
-  1. Import the zip file via: **Import**  -> **General** -> **Existing project into Workspace**:![import project](/Users/char1ei/GitRepo/Bot/image/import project.png)
+  1. Import the zip file via: **Import**  -> **General** -> **Existing project into Workspace**:![import project](image/import project.png)
 7. Configure Constant data:
   1. Clicking on: **Java Resources** ->  **src/main/java** -> **edu.unsw.comp9323.bot.constant**
   2. Open **Constant.java** under above package
@@ -49,30 +49,30 @@ UNSW COMP9323 e-Enterprise Project 17S2
   3. click on the message *@coursemanager_bot*. It will open a bot message window. Click on **Start** and you can start the conversation.
 
 ### Sample command to run the program:
-1. Login (mentor/ student)![1](/Users/char1ei/GitRepo/Bot/image/1.png)
-2. Interrupt and start new conversation (mentor/ student)![2](/Users/char1ei/GitRepo/Bot/image/2.png)
+1. Login (mentor/ student)![1](image/1.png)
+2. Interrupt and start new conversation (mentor/ student)![2](image/2.png)
 3. Send email functionalities (email certain people including individual, groups or whole class):   
-  1. Interactively: (mentor/ student)![3](/Users/char1ei/GitRepo/Bot/image/3.png)
-  2. With template:  (mentor/ student)![4](/Users/char1ei/GitRepo/Bot/image/4.png)
+  1. Interactively: (mentor/ student)![3](image/3.png)
+  2. With template:  (mentor/ student)![4](image/4.png)
 4. Reminder functionalities (reminder will be sent via email automatically)
-  1. Set new reminder (mentor/ student)![5](/Users/char1ei/GitRepo/Bot/image/5.png)
-  2. Get reminder list (mentor/ student)![6](/Users/char1ei/GitRepo/Bot/image/6.png)
-  3. Reminder details (mentor/ student) ![7](/Users/char1ei/GitRepo/Bot/image/7.png)
-  4. Update a reminder (mentor/ student)![8](/Users/char1ei/GitRepo/Bot/image/8.png)
-  5. Delete a reminder (mentor/ student)![9](/Users/char1ei/GitRepo/Bot/image/9.png)
+  1. Set new reminder (mentor/ student)![5](image/5.png)
+  2. Get reminder list (mentor/ student)![6](image/6.png)
+  3. Reminder details (mentor/ student) ![7](image/7.png)
+  4. Update a reminder (mentor/ student)![8](image/8.png)
+  5. Delete a reminder (mentor/ student)![9](image/9.png)
 5. Assignment functionalities
-  1. Add assignment by title (mentor)![10](/Users/char1ei/GitRepo/Bot/image/10.png)
-  2. Update assignment by title with due date (mentor)![11](/Users/char1ei/GitRepo/Bot/image/11.png)
-  3. Get assignment of phase5 (mentor/ student)![12](/Users/char1ei/GitRepo/Bot/image/12.png)
-  4. Get assignment submission of group number (mentor)![13](/Users/char1ei/GitRepo/Bot/image/13.png)
-  5. Mark assignment by title group number (mentor)![14](/Users/char1ei/GitRepo/Bot/image/14.png)
-  6. Submit assignment (student)![15](/Users/char1ei/GitRepo/Bot/image/15.png)
-  7. Get assignment mark of assignment title (student)![16](/Users/char1ei/GitRepo/Bot/image/16.png)
+  1. Add assignment by title (mentor)![10](image/10.png)
+  2. Update assignment by title with due date (mentor)![11](image/11.png)
+  3. Get assignment of phase5 (mentor/ student)![12](image/12.png)
+  4. Get assignment submission of group number (mentor)![13](image/13.png)
+  5. Mark assignment by title group number (mentor)![14](image/14.png)
+  6. Submit assignment (student)![15](image/15.png)
+  7. Get assignment mark of assignment title (student)![16](image/16.png)
 6. Resources functionalities
-  1. Add class resource (mentor)![17](/Users/char1ei/GitRepo/Bot/image/17.png)
-  2. Update class resource (mentor)![18](/Users/char1ei/GitRepo/Bot/image/18.png)
-  3. Delete class resource (mentor)![19](/Users/char1ei/GitRepo/Bot/image/19.png)
-  4. Get class resource (mentor)![20](/Users/char1ei/GitRepo/Bot/image/20.png)
+  1. Add class resource (mentor)![17](image/17.png)
+  2. Update class resource (mentor)![18](image/18.png)
+  3. Delete class resource (mentor)![19](image/19.png)
+  4. Get class resource (mentor)![20](image/20.png)
 
 ### Author:
 - Lei Zhao,  [Email](zlinaus@gmail.com),  [Github](https://github.com/Char1ei)  
