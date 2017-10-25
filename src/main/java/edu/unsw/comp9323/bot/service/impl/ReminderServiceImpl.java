@@ -234,11 +234,13 @@ public class ReminderServiceImpl implements ReminderService {
 	@Override
 	public String updateReminder(AIWebhookRequest input) {
 		// TODO Auto-generated method stub
-
+		String zid = userIdentityUtil.getIdentity(input).getZid();// get zid
 		BigInteger reminder_id = input.getResult().getParameters().get("number").getAsBigInteger();
 		List<Reminder> reminders = reminderDao.findReminderById((long) reminder_id.intValue());
 		if (reminders == null) {
 			return "No such reminder to update";// no such reminder
+		} else if (!reminders.get(0).getOwner().equals(zid)) {
+			return "You are not authorized to update reminders of other user! ";
 		} else if (reminders.size() > 0) {
 			Reminder reminder = reminders.get(0);
 			// get data from api.ai
