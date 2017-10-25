@@ -2,7 +2,7 @@
 
 UNSW COMP9323 e-Enterprise Project 17S2
 
-### Deploy Instruction
+### Deploy Instruction:
 1. Run *ngrok* (Secure tunnels to localhost) 
 	1. Download correct version of grok via [ngrok - download](https://ngrok.com/download)
 	2. Install ngrok and run http on port 8080: `<ABSOLUTE_PATH_TO_NGROK>/ngrok http 8080`
@@ -48,7 +48,7 @@ UNSW COMP9323 e-Enterprise Project 17S2
 	2. Send yourself a message: `@coursemanager_bot`
 	3. click on the message *@coursemanager_bot*. It will open a bot message window. Click on **Start** and you can start the conversation.
 
-### Sample command to run the program:
+### Sample command:
 1. Login (mentor/ student)![1](image/1.png)
 2. Interrupt and start new conversation (mentor/ student)![2](image/2.png)
 3. Send email functionalities (email certain people including individual, groups or whole class):   
