@@ -262,9 +262,12 @@ public class ReminderServiceImpl implements ReminderService {
 			if (title != null) {
 				reminder.setTitle(title.getAsString());
 			}
-			if (reminderDao.updateReminder(reminder))
+			if (reminderDao.updateReminder(reminder)) {
+				reminderDao.updateReminderFlag(1, reminder.getId());
 				return "Reminder updated";// delete
-											// successfully
+				// successfully
+			}
+
 			else
 				return "Fail to update";// fail to delete
 		} else {
