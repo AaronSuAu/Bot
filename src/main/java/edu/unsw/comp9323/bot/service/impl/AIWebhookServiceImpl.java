@@ -131,6 +131,7 @@ public class AIWebhookServiceImpl implements AIWebbookService {
 					returnMsg = resourceService.deleteLectureResourceByWeek(input);
 				} else if (intentName.equals("changeLectureResourceByWeek")) {
 					returnMsg = resourceService.updateClassMaterialUrlByWeek(input);
+					addButton(returnMsg, output, telegramMap);
 				} else {
 					// not for lecture resource
 				}
