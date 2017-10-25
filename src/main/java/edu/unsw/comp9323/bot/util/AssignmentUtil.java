@@ -22,7 +22,7 @@ public class AssignmentUtil {
 		String returnMsg = "";
 		List<List<BasicButton>> bOuterList = new ArrayList<List<BasicButton>>();
 		for (AssignmentInfoDto assignmentInfoDto : assignmentInfoDtoList) {
-			String info = assignmentInfoDto.getName() + " Due date:" + assignmentInfoDto.getDue_date();
+			String info = assignmentInfoDto.getName() + " Due date:" + assignmentInfoDto.getDue_date().toString();
 			String show_url_localhost = Constant.DOMAIN_NAME + "/file/showPDF/resource/"
 					+ assignmentInfoDto.getMaterial_id();
 			String download_url_localhost = Constant.DOMAIN_NAME + "/file/download/resource/"

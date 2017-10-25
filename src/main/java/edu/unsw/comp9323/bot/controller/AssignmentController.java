@@ -161,6 +161,9 @@ public class AssignmentController {
 		Long ass_id = assignmentDao.getAssignmentIdByTitle(name).getId();
 		assignment.setId(ass_id);
 		assignment.setName(name);
+
+		// java.sql.Date sqlDate = java.sql.Date.valueOf( todayLocalDate );
+
 		assignment.setDue_date(due_date);
 
 		// do insert ass
