@@ -247,7 +247,7 @@ public class ReminderServiceImpl implements ReminderService {
 			JsonElement title = input.getResult().getParameters().get("reminder_title");
 			// update
 			if (dateString != null) {
-				DateFormat sdf = new SimpleDateFormat("yyyy-mm-dd");
+				DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 				try {
 					reminder.setDate(new Date(sdf.parse(dateString.getAsString()).getTime()));
 				} catch (ParseException e) {

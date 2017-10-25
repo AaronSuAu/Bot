@@ -122,7 +122,7 @@ public class AssignmentController {
 			person_info = person_infoDao.getUserByZid(author_zid);
 			emailService.sendEmailToAllStudent(subject, body, person_info);
 
-			return "<h1>success to add new assignment material</h1>";
+			return "<h1>succeed to add new assignment material</h1>";
 		} catch (IOException e) {
 			e.printStackTrace();
 			return "<h1>fail to add new assignment material</h1>";
@@ -149,8 +149,10 @@ public class AssignmentController {
 		try {
 			// due_date need to follow certain formate: "January 2, 2010"
 			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
 			java.util.Date utilDate = simpleDateFormat.parse(due_date_string);
 			due_date = new Date(utilDate.getTime());
+			System.out.println(due_date.toString());
 		} catch (ParseException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -201,7 +203,7 @@ public class AssignmentController {
 			person_info = person_infoDao.getUserByZid(author_zid);
 			emailService.sendEmailToAllStudent(subject, body, person_info);
 
-			return "<h1>success to update new assignment material</h1>";
+			return "<h1>succeed to update new assignment material</h1>";
 		} catch (IOException e) {
 			e.printStackTrace();
 			return "<h1>fail to update new assignment material</h1>";
@@ -243,7 +245,7 @@ public class AssignmentController {
 			System.out.println("inserting ass_student:" + ass_student.toString()); // debug
 			ass_studentDao.setSubmission(ass_student);
 			System.out.println("new ass_student id: " + ass_student.getId().toString());
-			return "<h1>success to submit your assignment</h1>";
+			return "<h1>succeed to submit your assignment</h1>";
 		} catch (IOException e) {
 			e.printStackTrace();
 			return "<h1>fail to submit your assignment</h1>";
