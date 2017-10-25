@@ -4,8 +4,8 @@ UNSW COMP9323 e-Enterprise Project 17S2
 
 ### Deploy Instruction
 1. Run *ngrok* (Secure tunnels to localhost) 
-  1. Download correct version of grok via [ngrok - download](https://ngrok.com/download)
-  2. Install ngrok and run http on port 8080: `<ABSOLUTE_PATH_TO_NGROK>/ngrok http 8080`
+	1. Download correct version of grok via [ngrok - download](https://ngrok.com/download)
+	2. Install ngrok and run http on port 8080: `<ABSOLUTE_PATH_TO_NGROK>/ngrok http 8080`
 2. Copy the URL after *Forwarding* (i.e. : http://77b2f954.ngrok.io in the below example)
   ![ngrok](image/ngrok.png)
 3. Login into Api.ai (now called Dialogflow):
